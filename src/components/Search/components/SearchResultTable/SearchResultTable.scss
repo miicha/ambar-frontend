@@ -1,0 +1,15 @@
+span.emptyResultMessage {
+    color: #999999;
+}
+
+:global {
+    .hiddenWithAnimation {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 1s linear;
+    }
+}
+
+.link, .link:hover,.link:visited {
+    color: #00acc1;
+}

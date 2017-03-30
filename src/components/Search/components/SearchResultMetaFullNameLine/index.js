@@ -1,0 +1,3 @@
+import SearchResultMetaFullNameLine from './SearchResultMetaFullNameLine'
+
+export default SearchResultMetaFullNameLine

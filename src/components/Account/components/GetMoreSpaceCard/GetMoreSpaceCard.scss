@@ -1,0 +1,49 @@
+.accountCard {    
+  margin: 10px;      
+  flex: 1 500px; /* mobile screen starts from 500 * 2 = 1000 px */
+  min-width: 300px;    
+  height: 100%;  
+}
+
+.getSpaceCard {
+  margin-left: 5px;
+  margin-right: 5px;
+  max-width: 33%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 3px;
+  padding-bottom: 10px;
+}
+
+.getSpaceCard p {
+  text-align: center;
+}
+
+.getSpaceCard span {
+  color: rgb(255, 64, 129);  
+}
+
+div .getSpaceCard:first-child {
+  margin-left: 0;
+}
+
+div .getSpaceCard:last-child {
+  margin-right: 0;
+}
+
+.getSpaceCard:hover {
+  background-color: rgba(0,0,0,0.07);
+}
+
+.spaceCardHeader {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.spaceCardHeader > h3 {
+	margin-right: 3px;
+}

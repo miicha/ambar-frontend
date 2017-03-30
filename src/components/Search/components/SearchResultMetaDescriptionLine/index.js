@@ -1,0 +1,3 @@
+import SearchResultMetaDescriptionLine from './SearchResultMetaDescriptionLine'
+
+export default SearchResultMetaDescriptionLine

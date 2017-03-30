@@ -1,0 +1,52 @@
+div.searchResultMetaDescriptionLine {
+    display: flex;
+    margin: 0;
+    align-self: center; 
+    font-size: 12px;
+    color: #9E9E9E;
+    cursor: default; 
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */   
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+div.searchResultMetaDescriptionLine span {
+    margin: 0px 3px;
+}
+
+div.divWithTooltip:hover span.tooltipMessage {
+    visibility: visible;
+    opacity: 1;
+}
+
+span.tooltipMessage {
+    background-color: rgba(100, 100, 100, 0.80);
+    color: #ffffff;
+    text-align: center;
+    padding: 2px 0;
+    border-radius: 4px; 
+    position: absolute;
+    z-index: 5000;
+    width: 150px;
+    top: 0%;
+    left: 81%; 
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    visibility: hidden;
+}
+
+span.clickableSpan:hover {
+    border-radius: 4px;
+    background-color: #B2EBF2;
+    cursor: pointer; cursor: hand;
+}
+
+
+span.clickableSpan:active {
+    border-radius: 4px;
+    background-color: #80DEEA;
+    cursor: pointer; cursor: hand;
+}

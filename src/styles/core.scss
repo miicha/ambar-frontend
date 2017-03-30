@@ -1,0 +1,33 @@
+:global {
+    
+  // Some best-practice CSS that's useful for most apps
+  // Just remove them if they're not what you want
+  html {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+
+  @media  (max-height: 600px ) {
+    div#linkedchat-button {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 768px){
+    div#linkedchat-button {
+      display: none;
+    }
+  }
+}

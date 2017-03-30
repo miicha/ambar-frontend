@@ -1,0 +1,16 @@
+.accountCard {    
+  margin: 10px;      
+  flex: 1 500px; /* mobile screen starts from 500 * 2 = 1000 px */
+  min-width: 300px;    
+  height: 100%;  
+}
+
+.userInfo p {
+  margin: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.userInfo p:first-child {
+  margin-top: 0;
+}

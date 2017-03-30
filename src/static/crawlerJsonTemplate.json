@@ -1,0 +1,25 @@
+{
+  "id": Some id here,
+  "description": Crawler description,
+  "type": Specify smb or dropbox,
+  "locations": [
+    {
+      "host_name": SMB server hostname, specify empty string for Dropbox,
+      "ip_address": SMB server IP address, specify empty string for Dropbox,
+      "location": Location/Share to Crawl (e.g. Docs/Info)
+    }
+  ],
+  "file_regex": "(\\.doc[a-z]*$)|(\\.xls[a-z]*$)|(\\.txt$)|(\\.csv$)|(\\.htm[a-z]*$)|(\\.ppt[a-z]*$)|(\\.pdf$)|(\\.msg$)|(\\.zip$)|(\\.eml$)|(\\.rtf$)|(\\.md$)|(\\.png$)|(\\.bmp$)|(\\.tif[f]*$)|(\\.jp[e]*g$)",
+  "credentials": {
+    "auth_type": Specify ntlm or oauth,
+    "login": Login,
+    "password": Password,
+    "token": Token to use with oauth
+  },
+  "schedule": {
+    "is_active": false,
+    "cron_schedule": "*/15 * * * *"
+  },
+  "max_file_size_bytes": 30000000,
+  "verbose": true
+}
