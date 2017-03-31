@@ -48,7 +48,7 @@ class SearchResultTable extends Component {
                 <li><i>"John Smith"~10</i> - search for files containing both "John" and "Smith" words with maximum distance of 10 words</li>
                 <li><i>John~3</i> - fuzzy search for word "John" in all files with maximum of 3 replacements</li>
                 <li><i>filename:*.txt</i> - search for all ".txt" files, can be combined with other queries</li>
-                <li><i>size>1M</i> - search for all files larger then 1 Mb, can be combined with other queries</li>
+                <li><i>size>1M</i> - search for all files larger than 1 Mb, can be combined with other queries</li>
             </ul>
         </div>)
 
