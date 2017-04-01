@@ -1,9 +1,8 @@
 import { stateValueExtractor } from 'utils/'
 import { hitsModel } from 'models/'
-import { titles, analytics } from 'utils'
+import { titles, analytics, FormDataPolyfill } from 'utils'
 import { handleError, showInfo } from 'routes/CoreLayout/modules/CoreLayout'
 import { startLoadingIndicator, stopLoadingIndicator, loadSources, setQuery } from 'routes/MainLayout/modules/MainLayout'
-import FormData from 'formdata-polyfill'
 import 'whatwg-fetch'
 
 export const START_STOP_HIGHLIGHT_LOADING = 'SEARCH.START_STOP_HIGHLIGHT_LOADING'
@@ -128,7 +127,7 @@ export const uploadFiles = () => {
         }
 
         const uploadPromises = filesToUpload.map(file => new Promise((resolve, reject) => {
-            const form = new FormData()
+            const form = new FormDataPolyfill()
             form.set(file.name, file, file.name)
             
             fetch(urls.ambarWebApiPostFile(bucketName, file.name), {
