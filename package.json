@@ -83,6 +83,7 @@
     "dropbox": "^2.5.2",
     "extract-text-webpack-plugin": "^1.0.0",
     "file-loader": "^0.9.0",
+    "formdata-polyfill": "^1.0.7",
     "fs-extra": "^0.30.0",
     "history": "^2.0.0",
     "html-webpack-plugin": "^2.7.1",

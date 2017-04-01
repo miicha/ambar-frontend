@@ -3,6 +3,7 @@ import { hitsModel } from 'models/'
 import { titles, analytics } from 'utils'
 import { handleError, showInfo } from 'routes/CoreLayout/modules/CoreLayout'
 import { startLoadingIndicator, stopLoadingIndicator, loadSources, setQuery } from 'routes/MainLayout/modules/MainLayout'
+import FormData from 'formdata-polyfill'
 import 'whatwg-fetch'
 
 export const START_STOP_HIGHLIGHT_LOADING = 'SEARCH.START_STOP_HIGHLIGHT_LOADING'
@@ -129,10 +130,10 @@ export const uploadFiles = () => {
         const uploadPromises = filesToUpload.map(file => new Promise((resolve, reject) => {
             const form = new FormData()
             form.set(file.name, file, file.name)
-
+            
             fetch(urls.ambarWebApiPostFile(bucketName, file.name), {
                 method: 'POST',
-                body: form,
+                body: form._blob(),
                 mode: 'cors',
                 credentials: 'include',
                 headers: {
@@ -163,7 +164,9 @@ export const uploadFiles = () => {
                     dispatch(handleError('No free space left in your account', true))
                 } else {
                     dispatch(handleError(errorPayload))
+                    analytics().event('SEARCH.UPLOAD_FILES_ERROR', { error: errorPayload })
                 }
+                
                 console.error('uploadFile', errorPayload)
             })
     }
