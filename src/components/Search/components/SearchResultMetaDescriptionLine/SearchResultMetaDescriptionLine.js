@@ -9,17 +9,11 @@ const SearchResultMetaDescriptionLine = (props) => {
             {content.author && <span>Author: {content.author}&nbsp;</span>}
             {meta.updated_datetime && <span>Modified: {meta.updated_datetime}&nbsp;</span>}
             {meta.indexed_datetime && <span>Indexed: {`${meta.indexed_datetime} UTC`}&nbsp;</span>}
-            {meta.source_id && <div className={classes.divWithTooltip}>
-                <span
+            {meta.source_id && <div
                     onTouchTap={() => searchSelectedSource(meta.source_id)}
                     className={classes.clickableSpan}>
                     Source: {meta.source_id}&nbsp;
-                </span>
-                <span
-                    className={classes.tooltipMessage}>
-                    Search source {meta.source_id}
-                </span>
-            </div>}
+                </div>}
             {content.size && <span>Size: {files.formatFileSize(content.size)}</span>}
         </div>
     )

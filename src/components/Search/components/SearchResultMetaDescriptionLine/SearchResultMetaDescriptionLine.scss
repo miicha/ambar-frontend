@@ -16,36 +16,14 @@ div.searchResultMetaDescriptionLine span {
     margin: 0px 3px;
 }
 
-div.divWithTooltip:hover span.tooltipMessage {
-    visibility: visible;
-    opacity: 1;
-}
-
-span.tooltipMessage {
-    background-color: rgba(100, 100, 100, 0.80);
-    color: #ffffff;
-    text-align: center;
-    padding: 2px 0;
-    border-radius: 4px; 
-    position: absolute;
-    z-index: 5000;
-    width: 150px;
-    top: 0%;
-    left: 81%; 
-    margin-left: -75px;
-    opacity: 0;
-    transition: opacity 0.5s;
-    visibility: hidden;
-}
-
-span.clickableSpan:hover {
+div.clickableSpan:hover {
     border-radius: 4px;
     background-color: #B2EBF2;
     cursor: pointer; cursor: hand;
 }
 
 
-span.clickableSpan:active {
+div.clickableSpan:active {
     border-radius: 4px;
     background-color: #80DEEA;
     cursor: pointer; cursor: hand;
