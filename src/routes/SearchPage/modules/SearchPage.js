@@ -132,7 +132,7 @@ export const uploadFiles = () => {
             
             fetch(urls.ambarWebApiPostFile(bucketName, file.name), {
                 method: 'POST',
-                body: form._blob(),
+                body: form._asNative(),
                 mode: 'cors',
                 credentials: 'include',
                 headers: {
