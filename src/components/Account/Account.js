@@ -9,8 +9,9 @@ import classes from './Account.scss'
 class Account extends Component {
 
     componentDidMount() {
-        const { setAppTitle, loadUserInfo } = this.props
+        const { setAppTitle, loadUserInfo, setHeader } = this.props
         setAppTitle('Account')
+        setHeader('Account')
         loadUserInfo()
     }
 

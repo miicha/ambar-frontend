@@ -40,8 +40,9 @@ const ChartCard = ({ children }) => {
 class Statistics extends Component {
 
     componentDidMount() {
-        const { loadStatistics, setAppTitle, mode } = this.props
+        const { loadStatistics, setAppTitle, setHeader, mode } = this.props
         setAppTitle('Statistics')
+        setHeader('Statistics')
         loadStatistics()
     }
 

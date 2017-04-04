@@ -38,10 +38,8 @@ export const loadConfig = () => {
 }
 
 export const setAppTitle = (title) => {
-    return (dispatch, getState) => {
-        titles.setPageTitle(title)
-        analytics().register({ title: title, location: location.pathname })
-        analytics().event('LOCATION_CHANGED')
+    return (dispatch, getState) => {        
+        titles.setPageTitle(title)        
     }
 }
 

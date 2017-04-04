@@ -1,17 +1,14 @@
 import { connect } from 'react-redux'
 import { performLogout, performPasswordChange, changeOldPassword, changeNewPassword, changeNewPasswordConfirmation, loadUserInfo, loadDropboxCrawler, initDropboxCrawler, deleteDropboxCrawler } from '../modules/AccountPage'
 import Account from 'components/Account'
-import { setAppTitle } from '../../MainLayout/modules/MainLayout'
 
 const mapDispatchToProps = {
-  setAppTitle,
   performLogout,
   performPasswordChange,
   changeOldPassword,
   changeNewPassword,
   changeNewPasswordConfirmation,
   loadUserInfo,
-
   loadDropboxCrawler,
   initDropboxCrawler,
   deleteDropboxCrawler

@@ -13,14 +13,13 @@ import {
   cleanUpSearchResult
 } from '../modules/SearchPage'
 import Search from 'components/Search'
-import { setAppTitle, loadSources, searchSelectedSource, performSearchByPathToFile } from '../../MainLayout/modules/MainLayout'
+import { loadSources, searchSelectedSource, performSearchByPathToFile } from '../../MainLayout/modules/MainLayout'
 
 const mapDispatchToProps = {
   performSearch,
   loadSources,
   loadHighlight,
-  setScrolledDown,
-  setAppTitle,
+  setScrolledDown,  
   toggleUploadModal,
   addFilesToUpload,
   removeFileToUpload,

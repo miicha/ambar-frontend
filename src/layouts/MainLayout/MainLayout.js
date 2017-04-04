@@ -17,7 +17,7 @@ class MainLayout extends Component {
             location,
             toggleSideMenu,
             isSideMenuOpen,
-            title,
+            header,
             showSearchInput,
             query,
             setQuery,
@@ -27,7 +27,9 @@ class MainLayout extends Component {
             isRefineSearchModalOpen,
             toggleRefineSearchModal,
             toggleSourceSelected,
-            allowedRoutes
+            allowedRoutes,
+            setAppTitle,
+            setHeader
         } = this.props
 
         return (
@@ -43,7 +45,7 @@ class MainLayout extends Component {
                     />
                     <AppBar
                         title={<AppBarTitle showSearchInput={showSearchInput}
-                            title={title}
+                            title={header}
                             setQuery={setQuery}
                             query={query}
                             performSearch={performSearch}
@@ -57,7 +59,7 @@ class MainLayout extends Component {
                     />
                     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                         <div className={classes.mainContainer}>
-                            {children}
+                            {React.cloneElement(children, { setAppTitle: setAppTitle, setHeader: setHeader })}                            
                         </div>
                     </div>
                 </div>
@@ -78,7 +80,7 @@ class MainLayout extends Component {
 
         location: React.PropTypes.string.isRequired,
         changeLocation: React.PropTypes.func.isRequired,
-        title: React.PropTypes.string.isRequired,
+        header: React.PropTypes.string.isRequired,
 
         showSearchInput: React.PropTypes.bool.isRequired,
         setQuery: React.PropTypes.func.isRequired,

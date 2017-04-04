@@ -10,7 +10,7 @@ import 'whatwg-fetch'
 export const START_LOADING_INDICATOR = 'MAIN.START_LOADING_INDICATOR'
 export const STOP_LOADING_INDICATOR = 'MAIN.STOP_LOADING_INDICATOR'
 export const CHANGE_SIDE_MENU_STATE = 'MAIN.CHANGE_SIDE_MENU_STATE'
-export const UPDATE_APP_TITLE = 'MAIN.UPDATE_APP_TITLE'
+export const UPDATE_HEADER = 'MAIN.UPDATE_HEADER'
 export const UPDATE_QUERY = 'MAIN.UPDATE_QUERY'
 export const SET_SOURCES = 'MAIN.SET_SOURCES'
 export const SET_IS_REFINE_SEARCH_MODAL_OPEN = 'MAIN.SET_IS_REFINE_SEARCH_MODAL_OPEN'
@@ -47,11 +47,9 @@ export const performSearchByPathToFile = (path) => {
     }
 }
 
-export const setAppTitle = (title, showSearchInput = false, searchQuery = '') => {
-    return (dispatch, getState) => {
-        titles.setPageTitle(title)
-        dispatch(updateAppTitle(title, showSearchInput))
-
+export const setHeader = (header, showSearchInput = false, searchQuery = '') => {
+    return (dispatch, getState) => {              
+        dispatch(updateHeader(header, showSearchInput))
         dispatch(stopLoadingIndicator())
 
         if (showSearchInput) {
@@ -151,10 +149,10 @@ export function stopLoadingIndicator() {
     }
 }
 
-function updateAppTitle(title, showSearchInput) {
+function updateHeader(header, showSearchInput) {
     return {
-        type: UPDATE_APP_TITLE,
-        title,
+        type: UPDATE_HEADER,
+        header,
         showSearchInput
     }
 }
@@ -204,8 +202,8 @@ const ACTION_HANDLERS = {
     [CHANGE_SIDE_MENU_STATE]: (state, action) => {
         return ({ ...state, isSideMenuOpen: action.isSideMenuOpen })
     },
-    [UPDATE_APP_TITLE]: (state, action) => {
-        return ({ ...state, title: action.title, showSearchInput: action.showSearchInput })
+    [UPDATE_HEADER]: (state, action) => {
+        return ({ ...state, header: action.header, showSearchInput: action.showSearchInput })
     },
     [UPDATE_QUERY]: (state, action) => {
         return ({ ...state, query: action.query })
@@ -242,7 +240,7 @@ const initial_state = {
     query: '',
     isSideMenuOpen: false,
     fetching: true,
-    title: 'Loading...',
+    header: 'Loading...',
 
     showSearchInput: false,
     sources: new Map(),

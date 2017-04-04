@@ -10,12 +10,12 @@ class AuthLayout extends Component {
   }
 
   render() {
-    const { fetching, Component, isAuthenticated, allowedRoutes, children} = this.props
+    const { fetching, Component, isAuthenticated, allowedRoutes, setAppTitle, children} = this.props
 
     return (
       <div>
         {!(isAuthenticated && !fetching) && <FullScreenLoader />}
-        {isAuthenticated && !fetching && <Component children={children} isAuthenticated={isAuthenticated} allowedRoutes={allowedRoutes}/>}
+        {isAuthenticated && !fetching && <Component children={children} isAuthenticated={isAuthenticated} allowedRoutes={allowedRoutes} setAppTitle={setAppTitle} />}
       </div>)
   }
 }

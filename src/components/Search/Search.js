@@ -14,8 +14,9 @@ import classes from './Search.scss'
 
 class Search extends Component {
     componentDidMount() {
-        const { setAppTitle, loadSources } = this.props
-        setAppTitle('Search', true)
+        const { setAppTitle, setHeader, loadSources } = this.props
+        setAppTitle('Search')
+        setHeader('Search', true)
         loadSources()
     }
 

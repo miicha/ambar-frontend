@@ -13,7 +13,6 @@ import {
   setSettingsModalOpen,
   setCreateCrawlerModalOpen
 } from '../modules/CrawlersPage'
-import { setAppTitle } from '../../MainLayout/modules/MainLayout'
 
 import Crawlers from 'components/Crawlers'
 
@@ -29,8 +28,7 @@ const mapDispatchToProps = {
   loadPipelineLog,
   setDeleteModalOpen,
   setSettingsModalOpen,
-  setCreateCrawlerModalOpen,
-  setAppTitle
+  setCreateCrawlerModalOpen
 }
 
 const mapStateToProps = (state) => {

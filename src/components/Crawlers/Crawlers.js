@@ -12,8 +12,9 @@ import classes from './Crawlers.scss'
 
 class Crawlers extends Component {
     componentDidMount() {
-        const { loadCrawlers, setNewCrawlerJSON, newCrawler, crawlerJsonTemplate, loadPipelineLog, pipeline, setAppTitle, mode } = this.props
+        const { loadCrawlers, setNewCrawlerJSON, newCrawler, crawlerJsonTemplate, loadPipelineLog, pipeline, setAppTitle, setHeader, mode } = this.props
         setAppTitle('Settings')
+        setHeader('Settings')
         loadCrawlers()
         loadPipelineLog(pipeline)
         setNewCrawlerJSON(newCrawler, crawlerJsonTemplate)

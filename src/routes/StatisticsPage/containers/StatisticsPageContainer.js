@@ -1,11 +1,9 @@
 import { connect } from 'react-redux'
 import { loadStatistics } from '../modules/StatisticsPage'
 import Statistics from 'components/Statistics'
-import { setAppTitle } from '../../MainLayout/modules/MainLayout'
 
 const mapDispatchToProps = {    
-    loadStatistics,
-    setAppTitle
+    loadStatistics    
 }
 
 const mapStateToProps = (state) => {
