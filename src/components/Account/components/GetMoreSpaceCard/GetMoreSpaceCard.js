@@ -18,8 +18,8 @@ const GetMoreSpaceCard = () => (<Paper zDepth={1} className={classes.accountCard
 						<h3>Get&nbsp;Pro</h3>
 						<ProfitIcon/>
 					</div>
-					<p>Subscribe to Pro account and get 10&nbsp;Gb</p>
-					<span>+10&nbsp;Gb</span>
+					<p>Subscribe to Pro account and get 10&nbsp;GB</p>
+					<span>+10&nbsp;GB</span>
 				</div>
 				<div className={classes.getSpaceCard} onClick={() => window.open('mailto:hello@ambar.cloud?subject=Ambar Feedback')}>
 					<div className={classes.spaceCardHeader}>
@@ -27,7 +27,7 @@ const GetMoreSpaceCard = () => (<Paper zDepth={1} className={classes.accountCard
 						<FeedbackIcon/>
 					</div>
 					<p>We'd love to hear your feedback</p>
-					<span>+125&nbsp;Mb</span>
+					<span>+125&nbsp;MB</span>
 				</div>
 				<div className={classes.getSpaceCard} onClick={() => window.open('https://twitter.com/RD17Ambar')}>
 					<div className={classes.spaceCardHeader}>
@@ -35,7 +35,7 @@ const GetMoreSpaceCard = () => (<Paper zDepth={1} className={classes.accountCard
 						<ShareIcon/>
 					</div>
 					<p>Stay up-to-date with the latest Ambar tweets</p>
-					<span>+125&nbsp;Mb</span>
+					<span>+125&nbsp;MB</span>
 				</div>
 			</div>
 		</CardText>
