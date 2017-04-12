@@ -252,20 +252,26 @@ export const updateCrawlerFromUpdateJSON = (crawler) => {
                     method: 'GET',
                     ...defaultSettings
                 })                                           
+                .then((resp) => {
+                    if (resp.status === 200) { return resp.json() }
+                    else { throw `Unrecognized response code ${resp.status}` }
+                })
             }
-            else { throw resp }
+            if (resp.status === 400 || resp.status === 500 ) {
+                return resp.json()
+                    .then((json) => {
+                        throw json.message
+                    })
+            }
+            else { throw `Unrecognized response code ${resp.status}` }
         })               
-        .then((resp) => {
-            if (resp.status === 200) { return resp.json() }
-            else { throw resp }
-        })
         .then((data) => {
             let updatedCrawler = crawlersModel.fromApiSingle(data) 
             updatedCrawler = {...updatedCrawler, displayArgs: {...crawler.displayArgs, isSettingsModalOpen: false}}                                         
             dispatch(loadCrawlerLog(updatedCrawler, false)) 
         })
         .catch((errorPayload) => {
-             dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Server error' }}))
+             dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: errorPayload }}))
              console.error('updateCrawlerFromUpdateJSON', errorPayload)
         })
     }
