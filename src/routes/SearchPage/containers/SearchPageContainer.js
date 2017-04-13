@@ -13,22 +13,23 @@ import {
   cleanUpSearchResult
 } from '../modules/SearchPage'
 import Search from 'components/Search'
-import { loadSources, searchSelectedSource, performSearchByPathToFile } from '../../MainLayout/modules/MainLayout'
+import { loadSources, performSearchBySource, performSearchByPathToFile, performSearchByAuthor } from '../../MainLayout/modules/MainLayout'
 
 const mapDispatchToProps = {
   performSearch,
   loadSources,
   loadHighlight,
-  setScrolledDown,  
+  setScrolledDown,
   toggleUploadModal,
   addFilesToUpload,
   removeFileToUpload,
   setBucketName,
   uploadFiles,
-  searchSelectedSource,
+  performSearchBySource,
   performSearchByPathToFile,
   toggleImagePreview,
-  cleanUpSearchResult
+  cleanUpSearchResult,
+  performSearchByAuthor
 }
 
 const mapStateToProps = (state) => {

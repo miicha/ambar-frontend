@@ -35,7 +35,8 @@ class SearchResultTable extends Component {
             loadHighlight,
             scrolledDown,
             currentPage,
-            searchSelectedSource,
+            performSearchBySource,
+            performSearchByAuthor,
             performSearchByPathToFile,
             toggleImagePreview } = this.props
             
@@ -84,7 +85,8 @@ class SearchResultTable extends Component {
                         searchQuery={searchQuery}
                         loadHighlight={loadHighlight}
                         urls={urls}
-                        searchSelectedSource={searchSelectedSource}
+                        performSearchBySource={performSearchBySource}
+                        performSearchByAuthor={performSearchByAuthor}
                         performSearchByPathToFile={performSearchByPathToFile}
                         toggleImagePreview={toggleImagePreview} />
                 )}
@@ -117,7 +119,8 @@ SearchResultTable.propTypes = {
     urls: React.PropTypes.object.isRequired,
     scrolledDown: React.PropTypes.bool.isRequired,
     setScrolledDown: React.PropTypes.func.isRequired,
-    searchSelectedSource: React.PropTypes.func.isRequired,
+    performSearchBySource: React.PropTypes.func.isRequired,
+    performSearchByAuthor: React.PropTypes.func.isRequired,
     toggleImagePreview: React.PropTypes.func.isRequired
 }
 

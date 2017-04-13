@@ -16,12 +16,30 @@ div.searchResultMetaDescriptionLine span {
     margin: 0px 3px;
 }
 
-div.clickableSpan:hover {
+div.clickableSpanHighlighted {
+    border-radius: 4px;
+    background-color: #fff176;
+    font-size: 12px;
+    color: #707070;
+}
+
+div.clickableSpanHighlighted:hover {
     border-radius: 4px;
     background-color: #B2EBF2;
     cursor: pointer; cursor: hand;
 }
 
+div.clickableSpanHighlighted:active {
+    border-radius: 4px;
+    background-color: #80DEEA;
+    cursor: pointer; cursor: hand;
+}
+
+div.clickableSpan:hover {
+    border-radius: 4px;
+    background-color: #B2EBF2;
+    cursor: pointer; cursor: hand;
+}
 
 div.clickableSpan:active {
     border-radius: 4px;

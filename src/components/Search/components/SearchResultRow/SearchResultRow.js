@@ -23,7 +23,7 @@ class SearchResultRow extends Component {
     }
 
     render() {
-        const { hit: { fetching: fetching, highlight: highlight, meta: meta, content: content, sha256: sha256 }, searchQuery, loadHighlight, urls, searchSelectedSource, performSearchByPathToFile, toggleImagePreview } = this.props
+        const { hit: { fetching: fetching, highlight: highlight, meta: meta, content: content, sha256: sha256 }, searchQuery, loadHighlight, urls, performSearchBySource, performSearchByAuthor, performSearchByPathToFile, toggleImagePreview } = this.props
 
         const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
 
@@ -48,7 +48,7 @@ class SearchResultRow extends Component {
                     {hasMoreThanOneMeta && secondaryMetaList.map((secMeta, idx) =>
                         <CardText key={idx} expandable={true}>
                             <SearchResultMetaFullNameLine meta={secMeta} performSearchByPathToFile={performSearchByPathToFile} />
-                            <SearchResultMetaDescriptionLine content={content} meta={secMeta} searchSelectedSource={searchSelectedSource} />
+                            <SearchResultMetaDescriptionLine content={content} meta={secMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
                         </CardText>
                     )}
                     <div className={classes.searchResultRowCardTextContainer}>
@@ -84,7 +84,7 @@ class SearchResultRow extends Component {
                     </div>
                     <CardActions className={classes.searchResultRowCardFooter}>
                         <FlatButton icon={<DownloadIcon />} label="Download" primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(mainMeta.download_uri)) }} />
-                        <SearchResultMetaDescriptionLine content={content} meta={mainMeta} searchSelectedSource={searchSelectedSource} />
+                        <SearchResultMetaDescriptionLine content={content} meta={mainMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
                     </CardActions>
                 </Card>
             </Paper>
@@ -98,7 +98,8 @@ SearchResultRow.propTypes = {
     searchQuery: React.PropTypes.string.isRequired,
     loadHighlight: React.PropTypes.func.isRequired,
     urls: React.PropTypes.object.isRequired,
-    searchSelectedSource: React.PropTypes.func.isRequired,
+    performSearchBySource: React.PropTypes.func.isRequired,
+    performSearchByAuthor: React.PropTypes.func.isRequired,
     performSearchByPathToFile: React.PropTypes.func.isRequired,
     toggleImagePreview: React.PropTypes.func.isRequired
 }

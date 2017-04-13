@@ -53,7 +53,8 @@ class Search extends Component {
             bucketNameValidationMessage,
             isFilesUploading,
             uploadFiles,
-            searchSelectedSource,
+            performSearchBySource,
+            performSearchByAuthor,
             performSearchByPathToFile,
             toggleImagePreview,
             isImagePreviewOpen,
@@ -72,7 +73,8 @@ class Search extends Component {
                     urls={urls}
                     setScrolledDown={setScrolledDown}
                     scrolledDown={scrolledDown}
-                    searchSelectedSource={searchSelectedSource}
+                    performSearchBySource={performSearchBySource}
+                    performSearchByAuthor={performSearchByAuthor}
                     performSearchByPathToFile={performSearchByPathToFile}
                     toggleImagePreview={toggleImagePreview}
                 />
@@ -128,11 +130,11 @@ Search.propTypes = {
     performSearch: React.PropTypes.func.isRequired,
     loadHighlight: React.PropTypes.func.isRequired,
     performSearchByPathToFile: React.PropTypes.func.isRequired,
+    performSearchByAuthor: React.PropTypes.func.isRequired,
     cleanUpSearchResult: React.PropTypes.func.isRequired,
 
-
     loadSources: React.PropTypes.func.isRequired,
-    searchSelectedSource: React.PropTypes.func.isRequired,
+    performSearchBySource: React.PropTypes.func.isRequired,
 
     urls: React.PropTypes.object.isRequired,
 

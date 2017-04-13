@@ -1,4 +1,4 @@
-import { urls, titles, stateValueExtractor} from 'utils'
+import { urls, titles, stateValueExtractor } from 'utils'
 import { push } from 'react-router-redux'
 import { sourcesModel } from 'models/'
 import { performSearch } from 'routes/SearchPage/modules/SearchPage'
@@ -47,8 +47,18 @@ export const performSearchByPathToFile = (path) => {
     }
 }
 
+export const performSearchByAuthor = (author) => {
+    return (dispatch, getState) => {
+        let query = getState()['global'].query.replace(Regexes.AUTHOR_QUERY_REGEX, '')
+        author = author.replace(' ', '?')
+        query = `${query} author:${author}`
+        dispatch(updateQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
 export const setHeader = (header, showSearchInput = false, searchQuery = '') => {
-    return (dispatch, getState) => {              
+    return (dispatch, getState) => {
         dispatch(updateHeader(header, showSearchInput))
         dispatch(stopLoadingIndicator())
 
@@ -66,14 +76,14 @@ export const toggleSideMenu = () => {
 }
 
 export const changeLocation = (location) => {
-    return (dispatch, getState) => {        
+    return (dispatch, getState) => {
         const currentLocation = getState()['router'].locationBeforeTransitions.pathname
         if (currentLocation !== location) {
             dispatch(startLoadingIndicator())
             dispatch(push(location))
         }
 
-        dispatch(toggleSideMenu())    
+        dispatch(toggleSideMenu())
     }
 }
 
@@ -88,7 +98,7 @@ export const loadSources = () => {
 
         fetch(urls.ambarWebApiGetSources(), {
             method: 'GET',
-            ...defaultSettings            
+            ...defaultSettings
         })
             .then(resp => {
                 if (resp.status == 200) {
@@ -128,7 +138,7 @@ export const toggleSourceSelected = (sourceId) => {
     }
 }
 
-export const searchSelectedSource = (sourceId) => {
+export const performSearchBySource = (sourceId) => {
     return (dispatch, getState) => {
         dispatch(setSources(sourcesModel.fromSourcesDisabled(getState()['global'].sources)))
         dispatch(updateSourceSelected(sourceId))
