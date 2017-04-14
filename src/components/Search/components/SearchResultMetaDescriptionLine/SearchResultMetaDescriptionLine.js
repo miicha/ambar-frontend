@@ -4,6 +4,7 @@ import classes from './SearchResultMetaDescriptionLine.scss'
 
 const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
 const WHEN_QUERY = /((^|\s)when:)((today)|(yesterday)|(thisweek)|(thismonth)|(thisyear))/im
+const SIZE_QUERY = /((^|\s)size(>|<)[=]{0,1})([0-9]*)([k|m]{0,1})/im
 
 const SearchResultMetaDescriptionLine = (props) => {
     const { searchQuery, content, meta, performSearchBySource, performSearchByAuthor } = props
@@ -19,6 +20,7 @@ const SearchResultMetaDescriptionLine = (props) => {
 
     const indexedDatetime = meta.indexed_datetime ? meta.indexed_datetime : null
 
+    const sizeHighlighted = content.size ? SIZE_QUERY.test(searchQuery) : false
     const size = content.size ? content.size : null
 
     return (
@@ -35,7 +37,7 @@ const SearchResultMetaDescriptionLine = (props) => {
                 className={sourceIdHighlighted ? classes.clickableSpanHighlighted : classes.clickableSpan}>
                 Source: {sourceId}
             </div>}
-            {size && <div className={classes.span}>Size: {files.formatFileSize(size)}</div>}
+            {size && <div className={sizeHighlighted ? classes.spanHighlighted : classes.span}>Size: {files.formatFileSize(size)}</div>}
         </div>
     )
 }
