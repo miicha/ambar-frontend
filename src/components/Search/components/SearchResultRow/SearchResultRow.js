@@ -48,7 +48,7 @@ class SearchResultRow extends Component {
                     {hasMoreThanOneMeta && secondaryMetaList.map((secMeta, idx) =>
                         <CardText key={idx} expandable={true}>
                             <SearchResultMetaFullNameLine meta={secMeta} performSearchByPathToFile={performSearchByPathToFile} />
-                            <SearchResultMetaDescriptionLine content={content} meta={secMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
+                            <SearchResultMetaDescriptionLine searchQuery={searchQuery} content={content} meta={secMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
                         </CardText>
                     )}
                     <div className={classes.searchResultRowCardTextContainer}>
@@ -84,7 +84,7 @@ class SearchResultRow extends Component {
                     </div>
                     <CardActions className={classes.searchResultRowCardFooter}>
                         <FlatButton icon={<DownloadIcon />} label="Download" primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(mainMeta.download_uri)) }} />
-                        <SearchResultMetaDescriptionLine content={content} meta={mainMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
+                        <SearchResultMetaDescriptionLine searchQuery={searchQuery} content={content} meta={mainMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
                     </CardActions>
                 </Card>
             </Paper>
