@@ -42,7 +42,6 @@ export const performSearchByPathToFile = (path) => {
     return (dispatch, getState) => {
         let query = getState()['global'].query.replace(Regexes.FILE_NAME_QUERY_REGEX, '')
         query = `${query} filename:${path}`
-        dispatch(updateQuery(query))
         dispatch(performSearch(0, query))
     }
 }
@@ -52,7 +51,6 @@ export const performSearchByAuthor = (author) => {
         let query = getState()['global'].query.replace(Regexes.AUTHOR_QUERY_REGEX, '')
         author = author.replace(' ', '?')
         query = `${query} author:${author}`
-        dispatch(updateQuery(query))
         dispatch(performSearch(0, query))
     }
 }

@@ -41,6 +41,7 @@ export const performSearch = (page, query) => {
         }
 
         setQueryParameter(query)
+        dispatch(setQuery(query))
         titles.setPageTitle(query)
 
         const urls = stateValueExtractor.getUrls(getState())

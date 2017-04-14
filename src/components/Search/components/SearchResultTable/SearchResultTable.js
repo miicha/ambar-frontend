@@ -39,17 +39,51 @@ class SearchResultTable extends Component {
             performSearchByAuthor,
             performSearchByPathToFile,
             toggleImagePreview } = this.props
-            
+
         const hintText = (<div><p>Try these tips to refine your search</p>
             <ul>
-                <li><i>*</i> - show all files</li>
-                <li><i>John</i> - search files containing "John" word</li>
-                <li><i>John Smith</i> - search for files containing both "John" and "Smith" words</li>
-                <li><i>"John Smith"</i> - search for files containing "John Smith" phrase</li>
-                <li><i>"John Smith"~10</i> - search for files containing both "John" and "Smith" words with maximum distance of 10 words</li>
-                <li><i>John~3</i> - fuzzy search for word "John" in all files with maximum of 3 replacements</li>
-                <li><i>filename:*.txt</i> - search for all ".txt" files, can be combined with other queries</li>
-                <li><i>size>1M</i> - search for all files larger than 1 Mb, can be combined with other queries</li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, '*') }}>
+                    *
+                    </span> - show all files
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'John') }}>
+                    John
+                    </span> - search files containing "John" word
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'John Smith') }}>
+                    John Smith
+                    </span> - search for files containing both "John" and "Smith" words
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, '"John Smith"') }}>
+                    "John Smith"
+                    </span> - search for files containing "John Smith" phrase
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, '"John Smith"~10') }}>
+                    "John Smith"~10
+                    </span> - search for files containing both "John" and "Smith" words with maximum distance of 10 words
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'John~3') }}>
+                    John~3
+                    </span> - fuzzy search for word "John" in all files with maximum of 3 replacements
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'filename:*.txt') }}>
+                    filename:*.txt
+                    </span> - search for all ".txt" files, can be combined with other queries
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'size>1M') }}>
+                    size>1M
+                    </span> - search for all files larger than 1 Mb, can be combined with other queries
+                </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:today') }}>
+                    when:today
+                    </span> - search for all files modified today (available options are:&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:today') }}>today</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:yesterday') }}>yesterday</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:thisweek') }}>thisweek</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:thismonth') }}>thismonth</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:thisyear') }}>thisyear</span>
+                    )
+                </li>
             </ul>
         </div>)
 
@@ -58,13 +92,13 @@ class SearchResultTable extends Component {
         </p>)
 
         const nothingFoundText = (<div>
-            <p style={{marginTop: 0}}>Your search - <i>{searchQuery}</i> - did not match any documents</p>
+            <p style={{ marginTop: 0 }}>Your search - <i>{searchQuery}</i> - did not match any documents</p>
             {hintText}
             {emailText}
         </div>)
 
         const tipText = (<div>
-            <p style={{marginTop: 0}}>Just type your query in search input above and hit "Enter"</p>
+            <p style={{ marginTop: 0 }}>Just type your query in search input above and hit "Enter"</p>
             {hintText}
             {emailText}
         </div>)
