@@ -42,6 +42,7 @@ export const performSearchByPathToFile = (path) => {
     return (dispatch, getState) => {
         let query = getState()['global'].query.replace(Regexes.FILE_NAME_QUERY_REGEX, '')
         query = `${query} filename:${path}`
+        dispatch(setQuery(query))
         dispatch(performSearch(0, query))
     }
 }
@@ -51,6 +52,14 @@ export const performSearchByAuthor = (author) => {
         let query = getState()['global'].query.replace(Regexes.AUTHOR_QUERY_REGEX, '')
         author = author.replace(' ', '?')
         query = `${query} author:${author}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchByQuery = (query) => {
+    return (dispatch, getState) => {
+        dispatch(setQuery(query))
         dispatch(performSearch(0, query))
     }
 }
@@ -141,6 +150,7 @@ export const performSearchBySource = (sourceId) => {
         dispatch(setSources(sourcesModel.fromSourcesDisabled(getState()['global'].sources)))
         dispatch(updateSourceSelected(sourceId))
         const query = getState()['global'].query
+        dispatch(setQuery(query))
         dispatch(performSearch(0, query))
     }
 }

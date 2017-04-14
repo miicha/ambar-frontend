@@ -38,50 +38,51 @@ class SearchResultTable extends Component {
             performSearchBySource,
             performSearchByAuthor,
             performSearchByPathToFile,
+            performSearchByQuery,
             toggleImagePreview } = this.props
 
         const hintText = (<div><p>Try these tips to refine your search</p>
             <ul>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, '*') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('*') }}>
                     *
                     </span> - show all files
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'John') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John') }}>
                     John
                     </span> - search files containing "John" word
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'John Smith') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John Smith') }}>
                     John Smith
                     </span> - search for files containing both "John" and "Smith" words
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, '"John Smith"') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('"John Smith"') }}>
                     "John Smith"
                     </span> - search for files containing "John Smith" phrase
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, '"John Smith"~10') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('"John Smith"~10') }}>
                     "John Smith"~10
                     </span> - search for files containing both "John" and "Smith" words with maximum distance of 10 words
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'John~3') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John~3') }}>
                     John~3
                     </span> - fuzzy search for word "John" in all files with maximum of 3 replacements
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'filename:*.txt') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.txt') }}>
                     filename:*.txt
                     </span> - search for all ".txt" files, can be combined with other queries
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'size>1M') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size>1M') }}>
                     size>1M
                     </span> - search for all files larger than 1 Mb, can be combined with other queries
                 </li>
-                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:today') }}>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:today') }}>
                     when:today
                     </span> - search for all files modified today (available options are:&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:today') }}>today</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:yesterday') }}>yesterday</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:thisweek') }}>thisweek</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:thismonth') }}>thismonth</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearch(0, 'when:thisyear') }}>thisyear</span>
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:today') }}>today</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:yesterday') }}>yesterday</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thisweek') }}>thisweek</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thismonth') }}>thismonth</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thisyear') }}>thisyear</span>
                     )
                 </li>
             </ul>
@@ -110,8 +111,7 @@ class SearchResultTable extends Component {
                 loadMore={(newPage) => {
                     performSearch(newPage, searchQuery)
                 }}
-                hasMore={hasMore}
-                fetching={fetching}>
+                hasMore={hasMore}>
                 {hits && hits.size > 0 && Array.from(hits.values()).map((hit, idx) =>
                     <SearchResultRow
                         key={hit.sha256}
@@ -125,13 +125,11 @@ class SearchResultTable extends Component {
                         toggleImagePreview={toggleImagePreview} />
                 )}
                 {(!hits || hits.size == 0)
-                    && !fetching
                     && searchQuery != ''
                     && <EmptyCard
                         title='Nothing found'
                         textElement={nothingFoundText} />}
                 {(!hits || hits.size == 0)
-                    && !fetching
                     && searchQuery === ''
                     && <EmptyCard
                         title='Few tips for search'
@@ -155,6 +153,7 @@ SearchResultTable.propTypes = {
     setScrolledDown: React.PropTypes.func.isRequired,
     performSearchBySource: React.PropTypes.func.isRequired,
     performSearchByAuthor: React.PropTypes.func.isRequired,
+    performSearchByQuery: React.PropTypes.func.isRequired,
     toggleImagePreview: React.PropTypes.func.isRequired
 }
 

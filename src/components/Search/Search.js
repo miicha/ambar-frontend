@@ -56,6 +56,7 @@ class Search extends Component {
             performSearchBySource,
             performSearchByAuthor,
             performSearchByPathToFile,
+            performSearchByQuery,
             toggleImagePreview,
             isImagePreviewOpen,
             imagePreviewUrl } = this.props
@@ -76,6 +77,7 @@ class Search extends Component {
                     performSearchBySource={performSearchBySource}
                     performSearchByAuthor={performSearchByAuthor}
                     performSearchByPathToFile={performSearchByPathToFile}
+                    performSearchByQuery={performSearchByQuery}
                     toggleImagePreview={toggleImagePreview}
                 />
                 <div>
@@ -131,6 +133,7 @@ Search.propTypes = {
     loadHighlight: React.PropTypes.func.isRequired,
     performSearchByPathToFile: React.PropTypes.func.isRequired,
     performSearchByAuthor: React.PropTypes.func.isRequired,
+    performSearchByQuery: React.PropTypes.func.isRequired,
     cleanUpSearchResult: React.PropTypes.func.isRequired,
 
     loadSources: React.PropTypes.func.isRequired,

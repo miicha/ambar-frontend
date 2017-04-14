@@ -8,7 +8,6 @@ import Sources from './components/Sources'
 import classes from './RefineSearchModal.scss'
 
 export const RefineSearchModal = ({isRefineSearchModalOpen, toggleRefineSearchModal, sources, toggleSourceSelected}) => {
-
   const actions = [
     <FlatButton
       label="OK"

@@ -36,11 +36,11 @@ export default class InfiniteScroll extends React.Component {
   }
 
   scrollListener() {
-    const { fetching, hasMore, currentPage } = this.props
+    const { hasMore, currentPage } = this.props
     let el = ReactDOM.findDOMNode(this);
     let scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
     if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < Number(this.props.threshold)) {      
-      {!fetching && hasMore && this.props.loadMore(currentPage + 1)}
+      {hasMore && this.props.loadMore(currentPage + 1)}
     }
   }
 
@@ -63,8 +63,7 @@ InfiniteScroll.defaultProps = {
 };
 
 InfiniteScroll.PropTypes = {
-  currentPage: React.PropTypes.number.isRequired, 
-  fetching: React.PropTypes.bool.isRequired,
+  currentPage: React.PropTypes.number.isRequired,   
   hasMore: React.PropTypes.bool,
   loadMore: React.PropTypes.func.isRequired,
   threshold: React.PropTypes.number

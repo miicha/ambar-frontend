@@ -13,7 +13,7 @@ import {
   cleanUpSearchResult
 } from '../modules/SearchPage'
 import Search from 'components/Search'
-import { loadSources, performSearchBySource, performSearchByPathToFile, performSearchByAuthor } from '../../MainLayout/modules/MainLayout'
+import { loadSources, performSearchBySource, performSearchByPathToFile, performSearchByAuthor, performSearchByQuery } from '../../MainLayout/modules/MainLayout'
 
 const mapDispatchToProps = {
   performSearch,
@@ -29,7 +29,8 @@ const mapDispatchToProps = {
   performSearchByPathToFile,
   toggleImagePreview,
   cleanUpSearchResult,
-  performSearchByAuthor
+  performSearchByAuthor,
+  performSearchByQuery
 }
 
 const mapStateToProps = (state) => {

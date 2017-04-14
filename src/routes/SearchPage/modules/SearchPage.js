@@ -40,15 +40,14 @@ export const performSearch = (page, query) => {
             return
         }
 
-        setQueryParameter(query)
-        dispatch(setQuery(query))
+        setQueryParameter(query)        
         titles.setPageTitle(query)
 
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
         return new Promise((resolve) => {
-            if (page == 0) { dispatch(fillHits(true, new Map(), 0, query, false, page)) }
+            //if (page == 0) { dispatch(fillHits(true, new Map(), 0, query, false, page)) }
             dispatch(startLoadingIndicator())
             fetch(urls.ambarWebApiSearchByStringQuery(query, page, REQUEST_SIZE), {
                 method: 'GET',

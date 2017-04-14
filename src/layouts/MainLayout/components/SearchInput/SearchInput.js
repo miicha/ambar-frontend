@@ -5,41 +5,49 @@ import SearchIcon from 'material-ui/svg-icons/action/search'
 import MediaQuery from 'react-responsive'
 import classes from './SearchInput.scss'
 
-const SearchInput = (props) => {
-    const { query, performSearch, setQuery } = props
+class SearchInput extends Component {
+    timeoutId = null
 
-    const hintText = <span>
-        <MediaQuery query='(min-width: 1024px)'>Type query here and hit "Enter"</MediaQuery>
-        <MediaQuery query='(max-width: 1023px)'>Search</MediaQuery>
-    </span>
+    render() {
+        const { query, performSearch, setQuery } = this.props
 
-    return (
-        <div style={{ display: 'flex', justifyContent: 'flex-start', flexGrow: '2', margin: '15px', background: 'rgba(255, 255, 255, 0.2)', borderRadius: '3px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginRight: '3px' }}>
-                <SearchIcon style={{ color: 'white', height: '100%' }} onTouchTap={() =>  performSearch(0, query)}/>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                <TextField
-                    name='search_input'
-                    style={{ width: '100%' }}
-                    inputStyle={{ color: 'white', width: '100%' }}
-                    hintStyle={{ color: '#EEEEEE' }}
-                    hintText={hintText}
-                    value={query}
-                    spellCheck={false}
-                    onChange={(event, newValue) => {
-                        setQuery(newValue)
-                    } }
-                    onKeyPress={(target) => {
-                        if (target.charCode === 13) {
-                            performSearch(0, query)
-                        }
-                    } }
-                    underlineShow={false}
+        const hintText = <span>
+            <MediaQuery query='(min-width: 1024px)'>Type query here and hit "Enter"</MediaQuery>
+            <MediaQuery query='(max-width: 1023px)'>Search</MediaQuery>
+        </span>
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'flex-start', flexGrow: '2', margin: '15px', background: 'rgba(255, 255, 255, 0.2)', borderRadius: '3px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginRight: '3px' }}>
+                    <SearchIcon style={{ color: 'white', height: '100%' }} onTouchTap={() => performSearch(0, query)} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                    <TextField
+                        name='search_input'
+                        style={{ width: '100%' }}
+                        inputStyle={{ color: 'white', width: '100%' }}
+                        hintStyle={{ color: '#EEEEEE' }}
+                        hintText={hintText}
+                        value={query}
+                        spellCheck={false}
+                        onChange={(event, newValue) => {
+                            setQuery(newValue)
+                        }}
+                        onKeyUp={(event) => {
+                            clearTimeout(this.timeoutId)
+                            if (event.charCode === 13) {
+                                performSearch(0, query)
+                                return
+                            }
+                            const value = event.currentTarget.value
+                            this.timeoutId = setTimeout(() => { performSearch(0, value) }, 200)
+                        }}
+                        underlineShow={false}
                     />
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 SearchInput.propTypes = {
