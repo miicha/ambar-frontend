@@ -8,6 +8,16 @@ import classes from './SearchInput.scss'
 class SearchInput extends Component {
     timeoutId = null
 
+    isMeanfulKeyCode(keyCode) {
+        if (keyCode === 13) {
+            return false
+        }
+        if (keyCode > 36 || keyCode < 33) {
+            return true
+        }
+        return false
+    }
+
     render() {
         const { query, performSearch, setQuery } = this.props
 
@@ -33,14 +43,18 @@ class SearchInput extends Component {
                         onChange={(event, newValue) => {
                             setQuery(newValue)
                         }}
-                        onKeyUp={(event) => {
-                            clearTimeout(this.timeoutId)
+                        onKeyPress={(event) => {
                             if (event.charCode === 13) {
                                 performSearch(0, query)
                                 return
                             }
-                            const value = event.currentTarget.value
-                            this.timeoutId = setTimeout(() => { performSearch(0, value) }, 200)
+                        }}
+                        onKeyUp={(event) => {
+                            if (this.isMeanfulKeyCode(event.keyCode)) {
+                                clearTimeout(this.timeoutId)
+                                const value = event.currentTarget.value
+                                this.timeoutId = setTimeout(() => { performSearch(0, value) }, 200)
+                            }
                         }}
                         underlineShow={false}
                     />
