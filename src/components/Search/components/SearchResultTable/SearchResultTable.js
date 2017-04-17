@@ -69,11 +69,18 @@ class SearchResultTable extends Component {
                 </li>
                 <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.txt') }}>
                     filename:*.txt
-                    </span> - search for all ".txt" files, can be combined with other queries
+                    </span> - search for all ".txt" files, can be combined with other queries (examples:&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.pdf') }}>*.pdf</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.doc*') }}>*.doc*</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.rtf') }}>*.rtf</span>
+                    )
                 </li>
                 <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size>1M') }}>
                     size>1M
-                    </span> - search for all files larger than 1 Mb, can be combined with other queries
+                    </span> - search for all files larger than 1 MB, can be combined with other queries (available options are:&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size<1M') }}>size&lt;1M</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size>100K') }}>size&gt;100K</span>                    
+                    )
                 </li>
                 <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:today') }}>
                     when:today
