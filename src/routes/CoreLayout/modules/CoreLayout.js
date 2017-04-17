@@ -86,7 +86,10 @@ export function showInfo(message) {
     }
 }
 
-export function handleError(error, showErrorMessage = false) {
+export function handleError(error, showErrorMessage = false) {    
+    if (error.constructor === Response) {
+        error = `Response ${error.status} ${error.statusText} at ${error.url}`
+    }    
     analytics().event('ERROR', { description: error ? error.toString() : 'no info' })
     console.error(error)
 
