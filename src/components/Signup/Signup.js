@@ -64,7 +64,9 @@ export class Signup extends React.Component {
           onChange={(event, index, value) => changeLangAnalyzer(value)}>
           <MenuItem value={'ambar_en'} primaryText="English" />
           <MenuItem value={'ambar_ru'} primaryText="Russian" />
+          <MenuItem value={'ambar_de'} primaryText="German" />
           <MenuItem value={'ambar_it'} primaryText="Italian" />
+          <MenuItem value={'ambar_cjk'} primaryText="CJK" />
         </SelectField>}
       </CardText>
       <CardText style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>

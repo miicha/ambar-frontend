@@ -157,7 +157,7 @@ export const initDropboxCrawler = () => {
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
         const integrations = getState()['core'].integrations
-        
+
         window.open(urls.dropboxApiAuthorize(integrations.dropbox), '_self')
         analytics().event('ACCOUNT.START_DROPBOX_INTEGRATION')
     }
@@ -178,13 +178,13 @@ export const deleteDropboxCrawler = () => {
             .then((resp) => {
                 if (resp.status === 200) {
                     dispatch(changeField('dropboxCrawler', undefined))
-                    dispatch(changeField('fetching', false))     
-                    dispatch(stopLoadingIndicator())              
+                    dispatch(changeField('fetching', false))
+                    dispatch(stopLoadingIndicator())
                     analytics().event('ACCOUNT.DISABLE_DROPBOX_INTEGRATION')
                     return
                 }
 
-                throw new Error('Error deleting Dropbox!')                
+                throw new Error('Error deleting Dropbox!')
             })
             .catch((errorPayload) => {
                 dispatch(changeField('fetching', false))
@@ -218,7 +218,11 @@ export const loadUserInfo = () => {
                         ? 'Russian'
                         : data.lang_analyzer === 'ambar_it'
                             ? 'Italian'
-                            : 'Berberian'
+                            : data.lang_analyzer === 'ambar_de'
+                                ? 'German'
+                                : data.lang_analyzer === 'ambar_cjk'
+                                    ? 'CJK'
+                                    : 'Berberian'
 
                 let plan = data.plan === 'unlim'
                     ? 'Unlimited'
