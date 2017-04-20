@@ -22,6 +22,7 @@ export const loadConfig = () => {
                 const urls = stateValueExtractor.getUrls(getState())   
 
                 dispatch(changeField('mode', apiInfo.mode))
+                dispatch(changeField('version', apiInfo.version))
                 dispatch(changeField('integrations', apiInfo.integrations))
                 
                 analytics(apiInfo.analytics.token)
@@ -137,6 +138,7 @@ const initialState = {
     crawlerJsonTemplate: '',
     integrations: {},
     mode: 'ce',
+    version: '0.0',
     fetching: true,
     isNotificationOpen: false,
     notificationMessage: '',

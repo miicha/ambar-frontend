@@ -25,6 +25,7 @@ class MainLayout extends Component {
             setQuery,
             performSearch,
             mode,
+            version,
             sources,
             isRefineSearchModalOpen,
             toggleRefineSearchModal,
@@ -60,8 +61,8 @@ class MainLayout extends Component {
                         zDepth={2}
                         onLeftIconButtonTouchTap={toggleSideMenu}
                         iconElementRight={<div style={{display: 'flex', flexDirection: 'row'}}>
-                            {mode === 'ee' && <MediaQuery query='(min-width: 1024px)'><RateUs isOpen={showRateUsModal} toggle={toggleRateUsModal}/></MediaQuery>}
-                            <AmbarResponsiveLogo />
+                            {mode !== 'ee' && <MediaQuery query='(min-width: 1024px)'><RateUs isOpen={showRateUsModal} toggle={toggleRateUsModal}/></MediaQuery>}
+                            <AmbarResponsiveLogo version={version} mode={mode}/>
                         </div>}
                     />
                     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -76,6 +77,7 @@ class MainLayout extends Component {
 
     static propTypes = {
         mode: React.PropTypes.string.isRequired,
+        version: React.PropTypes.string.isRequired,
         allowedRoutes: React.PropTypes.array.isRequired,
 
         children: React.PropTypes.element.isRequired,

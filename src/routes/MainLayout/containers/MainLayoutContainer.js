@@ -40,6 +40,7 @@ const mapStateToProps = (state, ownProps) => {
     isRefineSearchModalOpen: state['global'].isRefineSearchModalOpen,
 
     mode: state['core'].mode,
+    version: state['core'].version,
     showRateUsModal: state['global'].showRateUsModal
   })
 }
