@@ -1,7 +1,6 @@
 import NotificationIndicator from './NotificationIndicator'
 import InfiniteScroll from './InfiniteScroll'
 import CodeEditor from './CodeEditor'
-import DemoModeCard from './DemoModeCard'
 import AmbarResponsiveLogo from './AmbarResponsiveLogo'
 import FullScreenLoader from './FullScreenLoader'
 import FullScreenPattern from './FullScreenPattern'
@@ -11,8 +10,7 @@ import LoadingIndicator from './LoadingIndicator'
 export {
         NotificationIndicator, 
         InfiniteScroll,
-        CodeEditor,
-        DemoModeCard,
+        CodeEditor,        
         AmbarResponsiveLogo,
         FullScreenLoader,
         FullScreenPattern,

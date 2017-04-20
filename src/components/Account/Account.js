@@ -72,7 +72,7 @@ class Account extends Component {
                     fetching={fetching}
                     deleteDropboxCrawler={deleteDropboxCrawler}
                     initDropboxCrawler={initDropboxCrawler} />}
-                {plan === 'Free' && <GetMoreSpaceCard />}
+                {mode === 'cloud' && plan === 'Free' && <GetMoreSpaceCard />}
             </div>
         )
     }

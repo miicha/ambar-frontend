@@ -1,5 +1,14 @@
 import { connect } from 'react-redux'
-import { postConfigRequest, checkIfAllowed, toggleSideMenu, changeLocation, setQuery, toggleRefineSearchModal, toggleSourceSelected, setHeader } from '../modules/MainLayout'
+import { 
+  postConfigRequest,
+  checkIfAllowed,
+  toggleSideMenu,
+  changeLocation,
+  setQuery,
+  toggleRefineSearchModal,
+  toggleSourceSelected,
+  setHeader,
+  toggleRateUsModal } from '../modules/MainLayout'
 import { performSearch } from 'routes/SearchPage/modules/SearchPage'
 
 import MainLayout from 'layouts/MainLayout/MainLayout'
@@ -12,7 +21,8 @@ const mapDispatchToProps = {
   performSearch,  
   toggleRefineSearchModal,
   toggleSourceSelected,
-  setHeader
+  setHeader,
+  toggleRateUsModal
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -29,7 +39,8 @@ const mapStateToProps = (state, ownProps) => {
     sources: state['global'].sources,
     isRefineSearchModalOpen: state['global'].isRefineSearchModalOpen,
 
-    mode: state['core'].mode
+    mode: state['core'].mode,
+    showRateUsModal: state['global'].showRateUsModal
   })
 }
 

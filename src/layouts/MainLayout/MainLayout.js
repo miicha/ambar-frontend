@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import SideMenu from './components/SideMenu'
 import RefineSearchModal from './components/RefineSearchModal'
+import RateUs from './components/RateUs'
 import { AmbarResponsiveLogo } from 'components/BasicComponents'
 import AppBarTitle from './components/AppBarTitle'
 import AppBar from 'material-ui/AppBar'
+import MediaQuery from 'react-responsive'
 import LinearProgress from 'material-ui/LinearProgress'
 
 import classes from './MainLayout.scss'
@@ -29,7 +31,9 @@ class MainLayout extends Component {
             toggleSourceSelected,
             allowedRoutes,
             setAppTitle,
-            setHeader
+            setHeader,
+            showRateUsModal,
+            toggleRateUsModal
         } = this.props
 
         return (
@@ -55,7 +59,10 @@ class MainLayout extends Component {
                         style={{ position: 'fixed', top: 0, left: 0 }}
                         zDepth={2}
                         onLeftIconButtonTouchTap={toggleSideMenu}
-                        iconElementRight={<AmbarResponsiveLogo />}
+                        iconElementRight={<div style={{display: 'flex', flexDirection: 'row'}}>
+                            {mode === 'ee' && <MediaQuery query='(min-width: 1024px)'><RateUs isOpen={showRateUsModal} toggle={toggleRateUsModal}/></MediaQuery>}
+                            <AmbarResponsiveLogo />
+                        </div>}
                     />
                     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                         <div className={classes.mainContainer}>
@@ -91,7 +98,10 @@ class MainLayout extends Component {
         toggleRefineSearchModal: React.PropTypes.func.isRequired,
 
         sources: React.PropTypes.object.isRequired,
-        toggleSourceSelected: React.PropTypes.func.isRequired
+        toggleSourceSelected: React.PropTypes.func.isRequired,
+
+        showRateUsModal: React.PropTypes.bool.isRequired,
+        toggleRateUsModal: React.PropTypes.func.isRequired
     }
 }
 

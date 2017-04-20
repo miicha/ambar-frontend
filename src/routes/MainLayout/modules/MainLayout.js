@@ -15,6 +15,7 @@ export const UPDATE_QUERY = 'MAIN.UPDATE_QUERY'
 export const SET_SOURCES = 'MAIN.SET_SOURCES'
 export const SET_IS_REFINE_SEARCH_MODAL_OPEN = 'MAIN.SET_IS_REFINE_SEARCH_MODAL_OPEN'
 export const TOGGLE_SOURCE_SELECTED = 'MAIN.TOGGLE_SOURCE_SELECTED'
+const CHANGE_FIELD = 'MAIN.CHANGE_FIELD'
 
 export const setQuery = (query) => {
     return (dispatch, getState) => {
@@ -167,6 +168,10 @@ export function stopLoadingIndicator() {
     }
 }
 
+export const toggleRateUsModal = (value) => {
+    return (dispatch, getState) => dispatch(changeField('showRateUsModal', value))
+}
+
 function updateHeader(header, showSearchInput) {
     return {
         type: UPDATE_HEADER,
@@ -207,6 +212,14 @@ const updateSourceSelected = (sourceId) => {
     return {
         type: TOGGLE_SOURCE_SELECTED,
         sourceId
+    }
+}
+
+const changeField = (fieldName, value) => {
+    return {
+        type: CHANGE_FIELD,
+        fieldName,
+        value
     }
 }
 
@@ -251,6 +264,12 @@ const ACTION_HANDLERS = {
     [SET_IS_REFINE_SEARCH_MODAL_OPEN]: (state, action) => {
         const newState = { ...state, isRefineSearchModalOpen: action.isRefineSearchModalOpen }
         return newState
+    },
+    [CHANGE_FIELD]: (state, action) => {
+        const newState = {...state}
+        newState[action.fieldName] = action.value
+
+        return newState
     }
 }
 
@@ -262,7 +281,9 @@ const initial_state = {
 
     showSearchInput: false,
     sources: new Map(),
-    isRefineSearchModalOpen: false
+    isRefineSearchModalOpen: false,
+
+    showRateUsModal: false
 }
 
 export default function mainLayoutReducer(state = initial_state, action) {

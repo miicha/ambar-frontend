@@ -136,7 +136,7 @@ const initialState = {
     urls: {},
     crawlerJsonTemplate: '',
     integrations: {},
-    mode: 'prod',
+    mode: 'ce',
     fetching: true,
     isNotificationOpen: false,
     notificationMessage: '',
