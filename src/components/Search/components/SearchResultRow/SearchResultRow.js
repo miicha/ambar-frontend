@@ -42,9 +42,9 @@ const getFileAvatarByMeta = (meta) => {
     return <Avatar 
         size={38}        
         style={{
-            'font-size': '12px',
-            'text-transform': 'uppercase',
-            'cursor': 'default'            
+            fontSize: '12px',
+            textTransform: 'uppercase',
+            cursor: 'default'            
         }}      
         backgroundColor={colors[getHashCode(extension) % colors.length]}>{extension}</Avatar>   
 }
@@ -107,7 +107,7 @@ class SearchResultRow extends Component {
                             </CardText>}
                             {!fetching && content.state != 'processed' &&
                                 <CardText className={classes.searchResultRowCardText}>
-                                    <LinearProgress mode="indeterminate"/>
+                                    <LinearProgress mode='indeterminate'/>
                                 </CardText>
                             }
                             {!fetching && content.state === 'processed' && !contentHighlight &&
@@ -132,8 +132,14 @@ class SearchResultRow extends Component {
                             </MediaQuery>}
                     </div>
                     <CardActions className={classes.searchResultRowCardFooter}>
-                        <FlatButton icon={<DownloadIcon />} label="Download" primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(mainMeta.download_uri)) }} />
-                        <SearchResultMetaDescriptionLine searchQuery={searchQuery} content={content} meta={mainMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
+                        <FlatButton icon={<DownloadIcon />} label='Download' primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(mainMeta.download_uri)) }} />
+                        <SearchResultMetaDescriptionLine 
+                            searchQuery={searchQuery}
+                            content={content}
+                            meta={mainMeta}
+                            performSearchByAuthor={performSearchByAuthor}
+                            performSearchBySource={performSearchBySource} 
+                        />
                     </CardActions>
                 </Card>
             </Paper>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { files } from 'utils/'
 import classes from './SearchResultMetaDescriptionLine.scss'
+import moment from 'moment'
 
 const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
 const WHEN_QUERY = /((^|\s)when:)((today)|(yesterday)|(thisweek)|(thismonth)|(thisyear))/im
@@ -16,9 +17,7 @@ const SearchResultMetaDescriptionLine = (props) => {
     const sourceId = meta.source_id ? meta.source_id.replace(EM_TAG_REGEX, '') : null
 
     const updatedDatetimeHighlighted = searchQuery ? WHEN_QUERY.test(searchQuery) : false
-    const updatedDatetime = meta.updated_datetime ? meta.updated_datetime : null
-
-    const indexedDatetime = meta.indexed_datetime ? meta.indexed_datetime : null
+    const updatedDatetime = meta.updated_datetime ? meta.updated_datetime : null       
 
     const sizeHighlighted = content.size ? SIZE_QUERY.test(searchQuery) : false
     const size = content.size ? content.size : null
@@ -30,8 +29,7 @@ const SearchResultMetaDescriptionLine = (props) => {
                 className={authorHighlighted ? classes.clickableSpanHighlighted : classes.clickableSpan}>
                 Author: {author}
             </div>}
-            {updatedDatetime && <div className={updatedDatetimeHighlighted ? classes.spanHighlighted : classes.span}>Modified: {updatedDatetime}</div>}
-            {indexedDatetime && <div className={classes.span}>Indexed: {`${indexedDatetime} UTC`}</div>}
+            {updatedDatetime && <div className={updatedDatetimeHighlighted ? classes.spanHighlighted : classes.span}>Last modified: {moment().to(updatedDatetime)}</div>}            
             {sourceId && <div
                 onTouchTap={() => performSearchBySource(sourceId)}
                 className={sourceIdHighlighted ? classes.clickableSpanHighlighted : classes.clickableSpan}>
