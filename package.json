@@ -103,6 +103,7 @@
     "react-dom": "^15.0.0",
     "react-dropzone": "^3.9.2",
     "react-input-mask": "^0.7.2",
+    "react-motion": "^0.4.8",
     "react-redux": "^4.0.0",
     "react-responsive": "^1.2.6",
     "react-router": "^2.2.0",

@@ -14,52 +14,39 @@ import { Divider, FlatButton } from 'material-ui'
 import DownloadIcon from 'material-ui/svg-icons/file/cloud-download'
 import LinearProgress from 'material-ui/LinearProgress'
 
-const getImageFromMeta = (meta) => {
-     let extension = (typeof meta.extension !== 'string') && meta.extension.length && meta.extension.length > 0 
+const getHashCode = (str) => { 
+    let hash = 0;
+    
+    if (str.length == 0) {
+        return hash
+    }
+    
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i)
+        hash = ((hash<<5)-hash) + char
+        hash = hash & hash // Convert to 32bit integer
+    }
+
+    return hash
+}
+
+const getFileAvatarByMeta = (meta) => {
+    const colors = [
+       '#EF5350', '#E53935', '#D81B60', '#EC407A', '#AB47BC', '#7E57C2', '#5C6BC0', '#2196F3', '#43A047', '#EF6C00', '#A1887F', '#78909C', '#FF4081', '#3949AB']
+    
+    let extension = (typeof meta.extension !== 'string') && meta.extension.length && meta.extension.length > 0 
             ? meta.extension[0]
             : meta.extension
-    extension = extension ? extension.replace('.', '') : 'unknown'
-    
-    switch (extension) {
-        case 'jpg':
-        case 'jpeg':
-        case 'tiff':
-        case 'bmp':
-        case 'png':
-            return 'image'
-        case 'doc':
-        case 'docx':        
-        case 'rtf':                
-        case 'pdf':                
-        case 'odt':                
-        case 'djvu':                
-            return 'document'
-        case 'xls':
-        case 'xlsx':
-        case 'csv':
-        case 'ods':
-            return 'sheet'
-        case 'txt':        
-        case 'htm':
-        case 'html':
-        case 'xml':
-        case 'mobi':
-        case 'epub':
-        case 'json':        
-            return 'text'
-        case 'ppt':
-        case 'pptx':
-        case 'odp':
-            return 'presentation'
-        case 'msg':
-            return 'message'
-        case 'zip':
-        case 'rar':
-        case '7z':
-            return 'archive'
-        default:
-            return 'unknown'
-    }    
+    extension = extension ? extension.replace('.', '') : ''
+
+    return <Avatar 
+        size={38}        
+        style={{
+            'font-size': '12px',
+            'text-transform': 'uppercase',
+            'cursor': 'default'            
+        }}      
+        backgroundColor={colors[getHashCode(extension) % colors.length]}>{extension}</Avatar>   
 }
 
 class SearchResultRow extends Component {
@@ -96,15 +83,13 @@ class SearchResultRow extends Component {
         const secondaryMetaList = sortedMeta.slice(1)
 
         const contentHighlight = highlight && highlight['content.text'] ? highlight['content.text'] : undefined
-        const avatar = <Avatar src={`./mime/${getImageFromMeta(mainMeta)}.svg`} style={{backgroundColor: 'inherit', borderRadius: 0, marginRight: '5px'}} />
-
         return (
             <Paper zDepth={1} className={classes.searchResultRowCard}>
                 <Card>
                     <CardHeader
                         style={{ overflowX: 'hidden' }}
                         title={<span className={classes.searchResultRowCardHeaderTitle} dangerouslySetInnerHTML={{ __html: mainMeta.short_name }} />}
-                        avatar={avatar}
+                        avatar={getFileAvatarByMeta(mainMeta)}
                         subtitle={<SearchResultMetaFullNameLine meta={mainMeta} performSearchByPathToFile={performSearchByPathToFile} />}
                         actAsExpander={hasMoreThanOneMeta}
                         showExpandableButton={hasMoreThanOneMeta}
