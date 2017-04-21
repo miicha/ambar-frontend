@@ -7,23 +7,85 @@ import SearchResultMetaFullNameLine from '../SearchResultMetaFullNameLine'
 import classes from './SearchResultRow.scss'
 
 import { Card, CardActions, CardHeader, CardText, CardTitle } from 'material-ui/Card'
+import Avatar from 'material-ui/Avatar'
 import MediaQuery from 'react-responsive'
 import Paper from 'material-ui/Paper'
 import { Divider, FlatButton } from 'material-ui'
 import DownloadIcon from 'material-ui/svg-icons/file/cloud-download'
 import LinearProgress from 'material-ui/LinearProgress'
 
+const getImageFromMeta = (meta) => {
+     let extension = (typeof meta.extension !== 'string') && meta.extension.length && meta.extension.length > 0 
+            ? meta.extension[0]
+            : meta.extension
+    extension = extension ? extension.replace('.', '') : 'unknown'
+    
+    switch (extension) {
+        case 'jpg':
+        case 'jpeg':
+        case 'tiff':
+        case 'bmp':
+        case 'png':
+            return 'image'
+        case 'doc':
+        case 'docx':        
+        case 'rtf':                
+        case 'pdf':                
+        case 'odt':                
+        case 'djvu':                
+            return 'document'
+        case 'xls':
+        case 'xlsx':
+        case 'csv':
+        case 'ods':
+            return 'sheet'
+        case 'txt':        
+        case 'htm':
+        case 'html':
+        case 'xml':
+        case 'mobi':
+        case 'epub':
+        case 'json':        
+            return 'text'
+        case 'ppt':
+        case 'pptx':
+        case 'odp':
+            return 'presentation'
+        case 'msg':
+            return 'message'
+        case 'zip':
+        case 'rar':
+        case '7z':
+            return 'archive'
+        default:
+            return 'unknown'
+    }    
+}
+
 class SearchResultRow extends Component {
     startLoadingHighlight() {
         const { searchQuery, hit: { sha256: sha256 }, loadHighlight } = this.props
         loadHighlight(sha256, searchQuery)
-    }
+    }    
 
     componentDidMount() {
     }
 
     render() {
-        const { hit: { fetching: fetching, highlight: highlight, meta: meta, content: content, sha256: sha256 }, searchQuery, loadHighlight, urls, performSearchBySource, performSearchByAuthor, performSearchByPathToFile, toggleImagePreview } = this.props
+        const { 
+            hit: { 
+                fetching: fetching,
+                highlight: highlight,
+                meta: meta,
+                content: content,
+                sha256: sha256 }, 
+            searchQuery,
+            loadHighlight,
+            urls,
+            performSearchBySource,
+            performSearchByAuthor,
+            performSearchByPathToFile,
+            toggleImagePreview } = this.props
 
         const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
 
@@ -34,6 +96,7 @@ class SearchResultRow extends Component {
         const secondaryMetaList = sortedMeta.slice(1)
 
         const contentHighlight = highlight && highlight['content.text'] ? highlight['content.text'] : undefined
+        const avatar = <Avatar src={`./mime/${getImageFromMeta(mainMeta)}.svg`} style={{backgroundColor: 'inherit', borderRadius: 0, marginRight: '5px'}} />
 
         return (
             <Paper zDepth={1} className={classes.searchResultRowCard}>
@@ -41,6 +104,7 @@ class SearchResultRow extends Component {
                     <CardHeader
                         style={{ overflowX: 'hidden' }}
                         title={<span className={classes.searchResultRowCardHeaderTitle} dangerouslySetInnerHTML={{ __html: mainMeta.short_name }} />}
+                        avatar={avatar}
                         subtitle={<SearchResultMetaFullNameLine meta={mainMeta} performSearchByPathToFile={performSearchByPathToFile} />}
                         actAsExpander={hasMoreThanOneMeta}
                         showExpandableButton={hasMoreThanOneMeta}
