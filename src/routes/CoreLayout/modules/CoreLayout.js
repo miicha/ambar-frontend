@@ -24,6 +24,7 @@ export const loadConfig = () => {
                 dispatch(changeField('mode', apiInfo.mode))
                 dispatch(changeField('version', apiInfo.version))
                 dispatch(changeField('integrations', apiInfo.integrations))
+                dispatch(changeField('showFilePreview', apiInfo.showFilePreview === 'true'))                
                 
                 analytics(apiInfo.analytics.token)
                 analytics().register({ apiUrl: urls.apiHost })

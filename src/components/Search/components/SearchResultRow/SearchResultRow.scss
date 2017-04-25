@@ -26,10 +26,6 @@
     word-break: break-word;
 }
 
-.searchResultRowCardText{ 
-
-}
-
 .searchResultRowCardTextWithBorder {    
     border-bottom: 1px solid #eeeeee;
 }
@@ -70,4 +66,13 @@ em {
     -moz-user-select: none;
     -ms-user-select: none; 
      user-select: none; 
+}
+
+.resultAvatar:hover {    
+    cursor: pointer !important;
+    filter: brightness(1.1);
+}
+
+.resultAvatar:active {
+    filter: brightness(1.2);
 }

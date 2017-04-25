@@ -32,6 +32,7 @@ class SearchResultTable extends Component {
             hasMore,
             performSearch,
             urls,
+            showFilePreview,
             loadHighlight,
             scrolledDown,
             currentPage,
@@ -129,7 +130,8 @@ class SearchResultTable extends Component {
                         performSearchBySource={performSearchBySource}
                         performSearchByAuthor={performSearchByAuthor}
                         performSearchByPathToFile={performSearchByPathToFile}
-                        toggleImagePreview={toggleImagePreview} />
+                        toggleImagePreview={toggleImagePreview} 
+                        showFilePreview={showFilePreview} />
                 )}
                 {(!hits || hits.size == 0)
                     && searchQuery != ''
@@ -156,6 +158,7 @@ SearchResultTable.propTypes = {
     performSearch: React.PropTypes.func.isRequired,
     performSearchByPathToFile: React.PropTypes.func.isRequired,
     urls: React.PropTypes.object.isRequired,
+    showFilePreview: React.PropTypes.bool.isRequired,
     scrolledDown: React.PropTypes.bool.isRequired,
     setScrolledDown: React.PropTypes.func.isRequired,
     performSearchBySource: React.PropTypes.func.isRequired,

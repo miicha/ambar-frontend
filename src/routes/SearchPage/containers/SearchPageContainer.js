@@ -43,6 +43,7 @@ const mapStateToProps = (state) => {
     currentPage: state['searchPage'].currentPage,
     urls: state['core'].urls,
     mode: state['core'].mode,
+    showFilePreview: state['core'].showFilePreview,
     isUploadModalOpen: state['searchPage'].isUploadModalOpen,
     sources: state['global'].sources,
     filesToUpload: state['searchPage'].filesToUpload,
@@ -50,7 +51,7 @@ const mapStateToProps = (state) => {
     isFilesUploading: state['searchPage'].isFilesUploading,
     bucketNameValidationMessage: state['searchPage'].bucketNameValidationMessage,
     isImagePreviewOpen: state['searchPage'].isImagePreviewOpen,
-    imagePreviewUrl: state['searchPage'].imagePreviewUrl
+    imagePreviewUrl: state['searchPage'].imagePreviewUrl    
   })
 }
 

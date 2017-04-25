@@ -59,7 +59,8 @@ class Search extends Component {
             performSearchByQuery,
             toggleImagePreview,
             isImagePreviewOpen,
-            imagePreviewUrl } = this.props
+            imagePreviewUrl,
+            showFilePreview } = this.props
 
         return (
             <div>
@@ -79,6 +80,7 @@ class Search extends Component {
                     performSearchByPathToFile={performSearchByPathToFile}
                     performSearchByQuery={performSearchByQuery}
                     toggleImagePreview={toggleImagePreview}
+                    showFilePreview={showFilePreview}
                 />
                 <div>
                     <div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', bottom: '10%', right: '20px' }}>
@@ -140,6 +142,7 @@ Search.propTypes = {
     performSearchBySource: React.PropTypes.func.isRequired,
 
     urls: React.PropTypes.object.isRequired,
+    showFilePreview: React.PropTypes.bool.isRequired,
 
     toggleUploadModal: React.PropTypes.func.isRequired,
     isUploadModalOpen: React.PropTypes.bool.isRequired,

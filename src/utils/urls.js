@@ -5,6 +5,7 @@ const init = (apiHost) => {
         ambarWebApiSearchByStringQuery: (query, page, size) => `${apiHost}/api/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`,
         ambarWebApiLoadHightlight: (sha256, query) => `${apiHost}/api/search/${sha256}/?query=${encodeURIComponent(query)}`,
         ambarWebApiGetFile: (metaId) => `${apiHost}/api/files/${metaId}`,
+        ambarWebApiGetFileText: (metaId) => `${apiHost}/api/files/${metaId}/text`,
 
         ambarWebApiGetCrawlers: () => `${apiHost}/api/crawlers`,
         ambarWebApiGetCrawler: (crawlerId) => `${apiHost}/api/crawlers/${crawlerId}`,
@@ -35,6 +36,7 @@ const init = (apiHost) => {
         ambarWebApiSetPassword: () => `${apiHost}/api/users/password/set`,
         ambarWebApiResetPassword: () => `${apiHost}/api/users/password/reset`,
         ambarWebApiChangePassword: () => `${apiHost}/api/users/password/change`,
+        googlePreviewFile: (downloadUri, urls) => `https://docs.google.com/viewer?url=${encodeURI(urls.ambarWebApiGetFile(downloadUri))}`,
 
         getParamsFromQuery: (query) => {
             if (!query) {
