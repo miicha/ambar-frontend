@@ -1,5 +1,18 @@
 import { connect } from 'react-redux'
-import { performLogout, performPasswordChange, changeOldPassword, changeNewPassword, changeNewPasswordConfirmation, loadUserInfo, loadDropboxCrawler, initDropboxCrawler, deleteDropboxCrawler } from '../modules/AccountPage'
+import {
+  performLogout,
+  performPasswordChange,
+  changeOldPassword,
+  changeNewPassword,
+  changeNewPasswordConfirmation,
+  loadUserInfo,
+  loadDropboxCrawler,
+  initDropboxCrawler,
+  deleteDropboxCrawler,
+  toogleDropDataDialog,
+  performDataDrop
+} from '../modules/AccountPage'
+
 import Account from 'components/Account'
 
 const mapDispatchToProps = {
@@ -11,7 +24,9 @@ const mapDispatchToProps = {
   loadUserInfo,
   loadDropboxCrawler,
   initDropboxCrawler,
-  deleteDropboxCrawler
+  deleteDropboxCrawler,
+  toogleDropDataDialog,
+  performDataDrop
 }
 
 const mapStateToProps = (state) => {
@@ -30,7 +45,7 @@ const mapStateToProps = (state) => {
     oldPasswordError: state['accountPage'].oldPasswordError,
     newPasswordError: state['accountPage'].newPasswordError,
     newPasswordConfirmationError: state['accountPage'].newPasswordConfirmationError,
-
+    showDropDataDialog: state['accountPage'].showDropDataDialog,
     dropboxCrawler: state['accountPage'].dropboxCrawler
   })
 }

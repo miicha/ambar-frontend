@@ -45,9 +45,8 @@ class RateUs extends Component {
             <div className={classes.stampIconContainer}>
                 <img className={classes.stampIcon} src='./stamp-icon.png' width='48' height='48' title='Rate Us' onClick={() => toggle(true)} />
                 <Dialog
-                    title="Thanks for choosing Ambar CE!"
-                    actions={actions}
-                    modal={false}
+                    title="Thanks for choosing Ambar!"
+                    actions={actions}                    
                     open={isOpen}
                     actionsContainerStyle={{ textAlign: 'center' }}
                     onRequestClose={() => toggle(false)}

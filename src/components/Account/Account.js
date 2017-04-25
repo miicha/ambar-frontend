@@ -36,10 +36,14 @@ class Account extends Component {
             changeNewPassword,
             changeNewPasswordConfirmation,
             performPasswordChange,
+            showDropDataDialog,
+            toogleDropDataDialog,
+            performDataDrop,
 
             dropboxCrawler,
             initDropboxCrawler,
-            deleteDropboxCrawler
+            deleteDropboxCrawler,
+            
         } = this.props
 
         return (
@@ -53,6 +57,9 @@ class Account extends Component {
                     storageUsed={storageUsed}
                     fetching={fetching}
                     performLogout={performLogout}
+                    showDropDataDialog={showDropDataDialog}
+                    toogleDropDataDialog={toogleDropDataDialog}
+                    performDataDrop={performDataDrop}
                 />
                 <ChangePasswordCard
                     fetching={fetching}
@@ -100,10 +107,14 @@ Account.propTypes = {
     changeOldPassword: React.PropTypes.func.isRequired,
     changeNewPassword: React.PropTypes.func.isRequired,
     changeNewPasswordConfirmation: React.PropTypes.func.isRequired,
+    showDropDataDialog: React.PropTypes.bool.isRequired,
 
     dropboxCrawler: React.PropTypes.object,
     initDropboxCrawler: React.PropTypes.func.isRequired,
-    deleteDropboxCrawler: React.PropTypes.func.isRequired
+    deleteDropboxCrawler: React.PropTypes.func.isRequired,
+
+    toogleDropDataDialog: React.PropTypes.func.isRequired,
+    performDataDrop: React.PropTypes.func.isRequired
 }
 
 export default Account

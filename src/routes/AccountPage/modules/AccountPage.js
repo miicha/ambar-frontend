@@ -115,6 +115,17 @@ export const performLogout = () => {
     }
 }
 
+export const toogleDropDataDialog = () => {
+    return (dispatch, getState) => {
+        const curState = getState()['accountPage'].showDropDataDialog
+        dispatch(changeField('showDropDataDialog', !curState))
+    }
+}
+
+export const performDataDrop = () => {
+    console.log('dropping data....')
+}
+
 export const loadDropboxCrawler = () => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
@@ -336,6 +347,7 @@ const initialState = {
     newPasswordError: '',
     newPasswordConfirmationError: '',
     langAnalyzer: '',
+    showDropDataDialog: false,
 
     dropboxCrawler: undefined
 }
