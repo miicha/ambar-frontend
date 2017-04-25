@@ -9,8 +9,8 @@ import {
   loadDropboxCrawler,
   initDropboxCrawler,
   deleteDropboxCrawler,
-  toogleDropDataDialog,
-  performDataDrop
+  toggleRemoveUserAccountDialog,
+  removeUserAccount
 } from '../modules/AccountPage'
 
 import Account from 'components/Account'
@@ -25,8 +25,8 @@ const mapDispatchToProps = {
   loadDropboxCrawler,
   initDropboxCrawler,
   deleteDropboxCrawler,
-  toogleDropDataDialog,
-  performDataDrop
+  toggleRemoveUserAccountDialog,
+  removeUserAccount
 }
 
 const mapStateToProps = (state) => {
@@ -45,8 +45,9 @@ const mapStateToProps = (state) => {
     oldPasswordError: state['accountPage'].oldPasswordError,
     newPasswordError: state['accountPage'].newPasswordError,
     newPasswordConfirmationError: state['accountPage'].newPasswordConfirmationError,
-    showDropDataDialog: state['accountPage'].showDropDataDialog,
-    dropboxCrawler: state['accountPage'].dropboxCrawler
+    showRemoveUserAccountDialog: state['accountPage'].showRemoveUserAccountDialog,
+    dropboxCrawler: state['accountPage'].dropboxCrawler,
+    isDefaultUser: state['accountPage'].isDefaultUser
   })
 }
 

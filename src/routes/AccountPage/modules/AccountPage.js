@@ -115,15 +115,44 @@ export const performLogout = () => {
     }
 }
 
-export const toogleDropDataDialog = () => {
+export const toggleRemoveUserAccountDialog = () => {
     return (dispatch, getState) => {
-        const curState = getState()['accountPage'].showDropDataDialog
-        dispatch(changeField('showDropDataDialog', !curState))
+        const curState = getState()['accountPage'].showRemoveUserAccountDialog
+        dispatch(changeField('showRemoveUserAccountDialog', !curState))
     }
 }
 
-export const performDataDrop = () => {
-    console.log('dropping data....')
+export const removeUserAccount = () => {
+    return (dispatch, getState) => {
+        const urls = stateValueExtractor.getUrls(getState())
+        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+
+        dispatch(changeField('fetching', true))
+        dispatch(startLoadingIndicator())
+
+        fetch(urls.ambarWebApiDeleteUser(), {
+            ...defaultSettings,
+            method: 'DELETE'
+        })
+            .then((resp) => {
+                if (resp.status === 200) { return }
+                throw resp
+            })
+            .then(() => {
+                dispatch(changeField('fetching', false))
+                dispatch(setAuth(null, null, null))
+                dispatch(push('/signup'))
+                analytics().event('ACCOUNT.DELETE')
+                analytics().reset()
+            })
+            .catch((errorPayload) => {
+                dispatch(changeField('fetching', false))
+                dispatch(stopLoadingIndicator())
+                dispatch(handleError(errorPayload))
+                console.error('deleteUser', errorPayload)
+            })
+
+    }
 }
 
 export const loadDropboxCrawler = () => {
@@ -249,6 +278,7 @@ export const loadUserInfo = () => {
                 dispatch(changeField('storageMax', data.storage_max))
                 dispatch(changeField('storageUsed', data.storage_used))
                 dispatch(changeField('langAnalyzer', lang))
+                dispatch(changeField('isDefaultUser', data.isDefaultUser))
                 dispatch(loadDropboxCrawler())
             })
             .catch((errorPayload) => {
@@ -337,6 +367,7 @@ const initialState = {
     fetching: false,
     email: '',
     name: '',
+    isDefaultUser: true,
     storageMax: 0,
     storageUsed: 0,
     plan: '',
@@ -347,7 +378,7 @@ const initialState = {
     newPasswordError: '',
     newPasswordConfirmationError: '',
     langAnalyzer: '',
-    showDropDataDialog: false,
+    showRemoveUserAccountDialog: false,
 
     dropboxCrawler: undefined
 }

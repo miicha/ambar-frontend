@@ -4,7 +4,7 @@ import Paper from 'material-ui/Paper'
 import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-import DropDataIcon from 'material-ui/svg-icons/action/delete'
+import DeleteIcon from 'material-ui/svg-icons/action/delete'
 
 import { Link } from 'react-router'
 import { files } from 'utils'
@@ -17,24 +17,25 @@ const UserInfoCard = ({
 	langAnalyzer,
 	name,
 	email,
+	isDefaultUser,
 	plan,
 	storageMax,
 	storageUsed,
-	showDropDataDialog,
-	toogleDropDataDialog,
-	performDataDrop
+	showRemoveUserAccountDialog,
+	toggleRemoveUserAccountDialog,
+	removeUserAccount
  }) => {
 	const actions = [
 		<FlatButton
 			label="Cancel"
 			primary={true}
-			onTouchTap={toogleDropDataDialog}
+			onTouchTap={toggleRemoveUserAccountDialog}
 		/>,
 		<FlatButton
-			label="Drop"
+			label="Delete"
 			secondary={true}
-			onTouchTap={performDataDrop}
-			icon={<DropDataIcon />}
+			onTouchTap={removeUserAccount}
+			icon={<DeleteIcon />}
 		/>
 	]
 
@@ -56,27 +57,27 @@ const UserInfoCard = ({
 					disabled={fetching}
 					secondary={true}
 					onTouchTap={performLogout} />
-				<FlatButton
-					label="Drop Data"
+				{!isDefaultUser && <FlatButton
+					label="Delete Account"
 					disabled={fetching}
 					secondary={true}
-					onTouchTap={toogleDropDataDialog}
-					icon={<DropDataIcon />} />
+					onTouchTap={toggleRemoveUserAccountDialog}
+					icon={<DeleteIcon />} /> }
 			</CardActions>
 		</Card>
 		<Dialog
 			title="Are you sure?"
 			actions={actions}			
-			open={showDropDataDialog}			
+			open={showRemoveUserAccountDialog}			
 			bodyStyle={{ paddingBottom: 0 }}
-			onRequestClose={toogleDropDataDialog}
+			onRequestClose={toggleRemoveUserAccountDialog}
 		>
 			<div className={classes.dropDataDescriptionText}>
 				<p>
-					All data will be dropped from your account, and no one even our support team will not be able to recover it.
+					Your Ambar account and all your data will be deleted. Nobody, even Ambar support team will not be able to recover it.
 				</p>
 				<p>
-					Click 'DROP' button to remove everything from your Ambar account.
+					Click 'DELETE' button to delete your Ambar account forever.
 				</p>
 			</div>
 		</Dialog>
@@ -90,11 +91,12 @@ UserInfoCard.propTypes = {
 	name: React.PropTypes.string.isRequired,
 	email: React.PropTypes.string.isRequired,
 	plan: React.PropTypes.string.isRequired,
+	isDefaultUser: React.PropTypes.bool.isRequired,
 	storageUsed: React.PropTypes.number.isRequired,
 	storageMax: React.PropTypes.number.isRequired,
-	showDropDataDialog: React.PropTypes.bool.isRequired,
-	toogleDropDataDialog: React.PropTypes.func.isRequired,
-	performDataDrop: React.PropTypes.func.isRequired
+	showRemoveUserAccountDialog: React.PropTypes.bool.isRequired,
+	toggleRemoveUserAccountDialog: React.PropTypes.func.isRequired,
+	removeUserAccount: React.PropTypes.func.isRequired
 }
 
 export default UserInfoCard

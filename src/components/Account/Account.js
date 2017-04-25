@@ -20,6 +20,7 @@ class Account extends Component {
             mode,
             fetching,
             performLogout,
+            isDefaultUser,
             email,
             name,
             plan,
@@ -36,9 +37,9 @@ class Account extends Component {
             changeNewPassword,
             changeNewPasswordConfirmation,
             performPasswordChange,
-            showDropDataDialog,
-            toogleDropDataDialog,
-            performDataDrop,
+            showRemoveUserAccountDialog,
+            toggleRemoveUserAccountDialog,
+            removeUserAccount,
 
             dropboxCrawler,
             initDropboxCrawler,
@@ -49,6 +50,7 @@ class Account extends Component {
         return (
             <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <UserInfoCard
+                    isDefaultUser={isDefaultUser}
                     email={email}
                     name={name}
                     plan={plan}
@@ -57,9 +59,9 @@ class Account extends Component {
                     storageUsed={storageUsed}
                     fetching={fetching}
                     performLogout={performLogout}
-                    showDropDataDialog={showDropDataDialog}
-                    toogleDropDataDialog={toogleDropDataDialog}
-                    performDataDrop={performDataDrop}
+                    showRemoveUserAccountDialog={showRemoveUserAccountDialog}
+                    toggleRemoveUserAccountDialog={toggleRemoveUserAccountDialog}
+                    removeUserAccount={removeUserAccount}
                 />
                 <ChangePasswordCard
                     fetching={fetching}
@@ -93,6 +95,7 @@ Account.propTypes = {
     email: React.PropTypes.string,
     name: React.PropTypes.string,
     plan: React.PropTypes.string,
+    isDefaultUser: React.PropTypes.bool.isRequired,
     langAnalyzer: React.PropTypes.string,
     storageMax: React.PropTypes.number,
     storageUsed: React.PropTypes.number,
@@ -107,14 +110,14 @@ Account.propTypes = {
     changeOldPassword: React.PropTypes.func.isRequired,
     changeNewPassword: React.PropTypes.func.isRequired,
     changeNewPasswordConfirmation: React.PropTypes.func.isRequired,
-    showDropDataDialog: React.PropTypes.bool.isRequired,
+    showRemoveUserAccountDialog: React.PropTypes.bool.isRequired,
 
     dropboxCrawler: React.PropTypes.object,
     initDropboxCrawler: React.PropTypes.func.isRequired,
     deleteDropboxCrawler: React.PropTypes.func.isRequired,
 
-    toogleDropDataDialog: React.PropTypes.func.isRequired,
-    performDataDrop: React.PropTypes.func.isRequired
+    toggleRemoveUserAccountDialog: React.PropTypes.func.isRequired,
+    removeUserAccount: React.PropTypes.func.isRequired
 }
 
 export default Account

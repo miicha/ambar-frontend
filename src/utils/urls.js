@@ -31,6 +31,7 @@ const init = (apiHost) => {
         ambarWebApiLogout: () => `${apiHost}/api/users/logout`,
         ambarWebApiSignup: () => `${apiHost}/api/users`,
         ambarWebApiUserInfo: () => `${apiHost}/api/users`,
+        ambarWebApiDeleteUser: () => `${apiHost}/api/users`,
         ambarWebApiCheckCredentials: () => `${apiHost}/api/users/check`,
         ambarWebApiCheckSetPasswordLink: () => `${apiHost}/api/users/password/set/allowed`,
         ambarWebApiSetPassword: () => `${apiHost}/api/users/password/set`,
