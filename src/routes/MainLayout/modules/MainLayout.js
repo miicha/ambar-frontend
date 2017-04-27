@@ -1,4 +1,4 @@
-import { urls, titles, stateValueExtractor } from 'utils'
+import { urls, titles, stateValueExtractor, analytics } from 'utils'
 import { push } from 'react-router-redux'
 import { sourcesModel } from 'models/'
 import { performSearch } from 'routes/SearchPage/modules/SearchPage'
@@ -169,7 +169,10 @@ export function stopLoadingIndicator() {
 }
 
 export const toggleRateUsModal = (value) => {
-    return (dispatch, getState) => dispatch(changeField('showRateUsModal', value))
+    return (dispatch, getState) => {      
+      dispatch(changeField('showRateUsModal', value))
+      analytics().event('ACCOUNT.RATE_US_MODAL_OPENED')
+    } 
 }
 
 function updateHeader(header, showSearchInput) {
