@@ -55,10 +55,11 @@ const folderItem = (folder, loadDropboxFolder, toggleOpenDropboxFolder, toggleSe
 
 export class Dropbox extends React.Component {
   componentDidMount() {
-    const { setAppTitle, setDropboxTokenFromGetParams } = this.props
+    const { setAppTitle, setDropboxTokenFromGetParams, stopLoadingIndicator } = this.props
 
     setAppTitle('Ambar Integrations: Dropbox')
     setDropboxTokenFromGetParams()
+    stopLoadingIndicator()
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -90,12 +91,12 @@ export class Dropbox extends React.Component {
       />
     ]
 
-    const title = (<div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around'}}>      
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <img height='32px' src='dropbox.svg' alt='dropbox' style={{marginRight: '10px'}}/>
-        <span>Select folders</span>                
+    const title = (<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around' }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <img height='32px' src='dropbox.svg' alt='dropbox' style={{ marginRight: '10px' }} />
+        <span>Select folders</span>
       </div>
-      <p style={{textAlign: 'center', fontSize:'12px', color: '#aaaaaa', lineHeight: '18px', marginBottom: '0'}}>Ambar will collect and index your documents from selected Dropbox folders</p>
+      <p style={{ textAlign: 'center', fontSize: '12px', color: '#aaaaaa', lineHeight: '18px', marginBottom: '0' }}>Ambar will collect and index your documents from selected Dropbox folders</p>
     </div>)
 
     return (
@@ -103,7 +104,7 @@ export class Dropbox extends React.Component {
         <Dialog
           contentStyle={{ maxWidth: '500px' }}
           title={title}
-          titleStyle={{padding: '15px'}}
+          titleStyle={{ padding: '15px' }}
           actionsContainerClassName={classes.dropboxActionsContainer}
           modal={true}
           open={true}
@@ -133,7 +134,9 @@ Dropbox.propTypes = {
   loadDropboxFolder: React.PropTypes.func.isRequired,
   toggleOpenDropboxFolder: React.PropTypes.func.isRequired,
   toggleSelectDropboxFolder: React.PropTypes.func.isRequired,
-  connectDropbox: React.PropTypes.func.isRequired
+  connectDropbox: React.PropTypes.func.isRequired,
+  startLoadingIndicator: React.PropTypes.func.isRequired,
+  stopLoadingIndicator: React.PropTypes.func.isRequired
 }
 
 export default Dropbox
