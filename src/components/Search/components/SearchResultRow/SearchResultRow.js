@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { LoadingIndicator } from 'components/BasicComponents'
-
 import SearchResultMetaDescriptionLine from '../SearchResultMetaDescriptionLine'
 import SearchResultMetaFullNameLine from '../SearchResultMetaFullNameLine'
-
-import classes from './SearchResultRow.scss'
 
 import { Card, CardActions, CardHeader, CardText, CardTitle } from 'material-ui/Card'
 import Avatar from 'material-ui/Avatar'
@@ -16,16 +13,18 @@ import PreviewIcon from 'material-ui/svg-icons/action/open-in-new'
 import TextDownloadIcon from 'material-ui/svg-icons/action/subject'
 import LinearProgress from 'material-ui/LinearProgress'
 
-const getHashCode = (str) => { 
+import classes from './SearchResultRow.scss'
+
+const getHashCode = (str) => {
     let hash = 0;
-    
+
     if (str.length == 0) {
         return hash
     }
-    
+
     for (let i = 0; i < str.length; i++) {
         const char = str.charCodeAt(i)
-        hash = ((hash<<5)-hash) + char
+        hash = ((hash << 5) - hash) + char
         hash = hash & hash // Convert to 32bit integer
     }
 
@@ -33,54 +32,59 @@ const getHashCode = (str) => {
 }
 
 const getExtension = (meta) => {
-    let extension = (typeof meta.extension !== 'string') && meta.extension.length && meta.extension.length > 0 
-            ? meta.extension[0]
-            : meta.extension
+    let extension = (typeof meta.extension !== 'string') && meta.extension.length && meta.extension.length > 0
+        ? meta.extension[0]
+        : meta.extension
     return extension ? extension.replace('.', '').toLowerCase() : ''
 }
 
 const getFileAvatarByMeta = (meta, searchFunction) => {
     const colors = [
-       '#EF5350', '#E53935', '#D81B60', '#EC407A', '#AB47BC', '#7E57C2', '#5C6BC0', '#2196F3', '#43A047', '#EF6C00', '#A1887F', '#78909C', '#FF4081', '#3949AB']
-    
+        '#EF5350', '#E53935', '#D81B60', '#EC407A', '#AB47BC', '#7E57C2', '#5C6BC0', '#2196F3', '#43A047', '#EF6C00', '#A1887F', '#78909C', '#FF4081', '#3949AB']
+
     let extension = getExtension(meta)
 
-    return <Avatar 
+    return <Avatar
         className={classes.resultAvatar}
         onTouchTap={() => searchFunction(`*.${extension}`)}
-        size={38}        
+        size={38}
         style={{
             fontSize: '12px',
             textTransform: 'uppercase',
-            cursor: 'default'                        
-        }}              
-        backgroundColor={colors[getHashCode(extension) % colors.length]}>{extension}</Avatar>   
+            cursor: 'default'
+        }}
+        backgroundColor={colors[getHashCode(extension) % colors.length]}>{extension}</Avatar>
 }
 
 const shouldShowPreviewButton = (showFilePreview, size, extension) => {
     const MAX_FILE_SIZE_FOR_PREVIEW = 3 * 1024 * 1024 // 3MB
-    const GOOGLE_ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'ppt', 'pptx', 'rtf', 'txt', 'xls', 'xlsx', 'csv', 'pdf']    
+    const GOOGLE_ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'ppt', 'pptx', 'rtf', 'txt', 'xls', 'xlsx', 'csv', 'pdf']
 
     return showFilePreview && size < MAX_FILE_SIZE_FOR_PREVIEW && GOOGLE_ALLOWED_FILE_EXTENSIONS.indexOf(extension) !== -1
+}
+
+const shouldShowTextButton = (extension) => {
+    const ARCHIVE_EXTENSIONS = ['zip']
+    return ARCHIVE_EXTENSIONS.indexOf(extension) == -1
 }
 
 class SearchResultRow extends Component {
     startLoadingHighlight() {
         const { searchQuery, hit: { sha256: sha256 }, loadHighlight } = this.props
         loadHighlight(sha256, searchQuery)
-    }    
+    }
 
     componentDidMount() {
     }
 
     render() {
-        const { 
-            hit: { 
+        const {
+            hit: {
                 fetching: fetching,
-                highlight: highlight,
-                meta: meta,
-                content: content,
-                sha256: sha256 }, 
+            highlight: highlight,
+            meta: meta,
+            content: content,
+            sha256: sha256 },
             searchQuery,
             loadHighlight,
             urls,
@@ -93,12 +97,12 @@ class SearchResultRow extends Component {
         const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
 
         const hasMoreThanOneMeta = meta.length > 1 ? true : false
-
-        const sortedMeta = meta.sort((a,b) => EM_TAG_REGEX.test(b.full_name) ? 1 : -1)
+        const sortedMeta = meta.sort((a, b) => EM_TAG_REGEX.test(b.full_name) ? 1 : -1)
         const mainMeta = sortedMeta[0]
         const secondaryMetaList = sortedMeta.slice(1)
 
         const contentHighlight = highlight && highlight['content.text'] ? highlight['content.text'] : undefined
+
         return (
             <Paper zDepth={1} className={classes.searchResultRowCard}>
                 <Card>
@@ -120,24 +124,26 @@ class SearchResultRow extends Component {
                         <div className={classes.searchResultRowCardTextDiv}>
                             {fetching && <CardText>
                                 <LoadingIndicator />
-                            </CardText>}
+                            </CardText>
+                            }
                             {!fetching && content.state != 'processed' &&
                                 <CardText>
-                                    <LinearProgress mode='indeterminate'/>
+                                    <LinearProgress mode='indeterminate' />
                                 </CardText>
                             }
                             {!fetching && content.state === 'processed' && !contentHighlight &&
                                 <CardText onMouseEnter={() => this.startLoadingHighlight()}>
                                     <span className={classes.blurred}>Если у общества нет цветовой дифференциации штанов - то у общества</span><br />
                                     <span className={classes.blurred}>нет цели, а если нет цели - то...</span>
-                                </CardText>}
+                                </CardText>
+                            }
                             {!fetching && contentHighlight && contentHighlight.map((hl, idx) =>
                                 <CardText key={idx}
                                     className={classes.searchResultRowCardTextWithBorder}
                                     dangerouslySetInnerHTML={{ __html: hl }}
-                                />)}
+                                />)
+                            }
                         </div>
-
                         {!fetching && contentHighlight && content.thumb_available &&
                             <MediaQuery query='(min-width: 1024px)'>
                                 <div className={classes.searchResultRowCardTextThumbnailContainer} >
@@ -145,26 +151,31 @@ class SearchResultRow extends Component {
                                         className={classes.searchResultRowCardTextThumbnailImage}
                                         src={urls.ambarWebApiGetThumbnail(sha256)} />
                                 </div>
-                            </MediaQuery>}
+                            </MediaQuery>
+                        }
                     </div>
                     <CardActions className={classes.searchResultRowCardFooter}>
-                        <div style={{display: 'flex'}}>
+                        <div style={{ display: 'flex' }}>
                             <FlatButton icon={<FileDownloadIcon />} label='Original' primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(mainMeta.download_uri)) }} />
-                            <FlatButton icon={<TextDownloadIcon />} label='Text' primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFileText(mainMeta.download_uri)) }} />
-                            {shouldShowPreviewButton(showFilePreview, content.size, getExtension(mainMeta)) && <FlatButton                                 
-                                icon={<PreviewIcon />} 
+                            {shouldShowTextButton(getExtension(mainMeta)) && <FlatButton
+                                icon={<TextDownloadIcon />}
+                                label='Text'
+                                primary={true}
+                                onTouchTap={() => { window.open(urls.ambarWebApiGetFileText(mainMeta.download_uri)) }} />
+                            }
+                            {shouldShowPreviewButton(showFilePreview, content.size, getExtension(mainMeta)) && <FlatButton
+                                icon={<PreviewIcon />}
                                 label='Preview'
                                 primary={true}
                                 onTouchTap={() => { window.open(urls.googlePreviewFile(mainMeta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600px,height=600px') }} />
                             }
-
                         </div>
-                        <SearchResultMetaDescriptionLine 
+                        <SearchResultMetaDescriptionLine
                             searchQuery={searchQuery}
                             content={content}
                             meta={mainMeta}
                             performSearchByAuthor={performSearchByAuthor}
-                            performSearchBySource={performSearchBySource} 
+                            performSearchBySource={performSearchBySource}
                         />
                     </CardActions>
                 </Card>
