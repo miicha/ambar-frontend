@@ -224,6 +224,7 @@ export const updateCrawlerFromUpdateJSON = (crawler) => {
         dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: true }}))
 
         let crawlerSettings = null
+
         try { crawlerSettings = JSON.parse(crawler.meta.updateJSON) } 
         catch(errorPayload) {            
             dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Specified JSON is invalid!' }}))
@@ -235,9 +236,8 @@ export const updateCrawlerFromUpdateJSON = (crawler) => {
             return
         }
 
-
-        if ((crawlerSettings.credentials.password === '******' || crawlerSettings.credentials.password == '') && (crawlerSettings.credentials.token === '******' || crawlerSettings.credentials.token == '')) {
-            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Please provide password or token!' }}))
+        if ((crawlerSettings.credentials.password === '******' || crawlerSettings.credentials.password == '') && (crawlerSettings.credentials.token === '******' || crawlerSettings.credentials.token == '') && (crawlerSettings.credentials.auth_type != 'basic')) {
+            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Please provide password or token for ntlm or oauth authentication!' }}))
             return
         }       
         
