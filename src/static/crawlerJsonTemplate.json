@@ -1,7 +1,7 @@
 {
   "id": Some id here,
   "description": Crawler description,
-  "type": Specify smb, ftp or dropbox,
+  "type": Specify smb, ftp, imap or dropbox,
   "locations": [
     {
       "host_name": server hostname, specify empty string for Dropbox,
@@ -11,7 +11,7 @@
   ],
   "file_regex": "(\\.doc[a-z]*$)|(\\.xls[a-z]*$)|(\\.txt$)|(\\.csv$)|(\\.htm[a-z]*$)|(\\.ppt[a-z]*$)|(\\.pdf$)|(\\.msg$)|(\\.zip$)|(\\.eml$)|(\\.rtf$)|(\\.md$)|(\\.png$)|(\\.bmp$)|(\\.tif[f]*$)|(\\.jp[e]*g$)",
   "credentials": {
-    "auth_type": Specify ntlm for smb, basic for ftp or oauth for dropbox,
+    "auth_type": Specify ntlm for smb, basic for ftp and imap, or oauth for dropbox,
     "login": Login,
     "password": Password,
     "token": Token to use with oauth or empty string
