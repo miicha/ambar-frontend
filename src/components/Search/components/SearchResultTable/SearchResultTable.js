@@ -93,6 +93,10 @@ class SearchResultTable extends Component {
                     <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thisyear') }}>thisyear</span>
                     )
                 </li>
+                <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('author:*') }}>
+                    author:*
+                    </span> - search for all files with specified author                    
+                </li>
             </ul>
         </div>)
 
