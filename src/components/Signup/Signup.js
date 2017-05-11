@@ -68,8 +68,6 @@ export class Signup extends React.Component {
           <MenuItem value={'ambar_it'} primaryText="Italian" />
           <MenuItem value={'ambar_pl'} primaryText="Polish" />
           <MenuItem value={'ambar_cjk'} primaryText="CJK" />
-          <MenuItem value={'ik_max_word'} primaryText="Chinese (ik_max_word)" />
-          <MenuItem value={'ik_smart'} primaryText="Chinese (ik_smart)" />
         </SelectField>}
       </CardText>
       <CardText style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
