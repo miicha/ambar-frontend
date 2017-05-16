@@ -10,10 +10,17 @@ import {
   setBucketName,
   uploadFiles,
   toggleImagePreview,
-  cleanUpSearchResult
+  cleanUpSearchResult,
+  toggleRefineSearchModal,
+  toggleSourceSelected,
+  loadSources,
+  performSearchBySource,
+  performSearchByPathToFile,
+  performSearchByAuthor,
+  performSearchByQuery,
+  setQueryFromGetParam
 } from '../modules/SearchPage'
 import Search from 'components/Search'
-import { loadSources, performSearchBySource, performSearchByPathToFile, performSearchByAuthor, performSearchByQuery } from '../../MainLayout/modules/MainLayout'
 
 const mapDispatchToProps = {
   performSearch,
@@ -30,11 +37,15 @@ const mapDispatchToProps = {
   toggleImagePreview,
   cleanUpSearchResult,
   performSearchByAuthor,
-  performSearchByQuery
+  performSearchByQuery,
+  toggleRefineSearchModal,
+  toggleSourceSelected,
+  setQueryFromGetParam,
+  setQuery
 }
 
 const mapStateToProps = (state) => {
-  return ({
+  return ({    
     hasMore: state['searchPage'].hasMore,
     searchQuery: state['searchPage'].searchQuery,
     fetching: state['global'].fetching,
@@ -45,13 +56,14 @@ const mapStateToProps = (state) => {
     mode: state['core'].mode,
     showFilePreview: state['core'].showFilePreview,
     isUploadModalOpen: state['searchPage'].isUploadModalOpen,
-    sources: state['global'].sources,
     filesToUpload: state['searchPage'].filesToUpload,
     bucketName: state['searchPage'].bucketName,
     isFilesUploading: state['searchPage'].isFilesUploading,
     bucketNameValidationMessage: state['searchPage'].bucketNameValidationMessage,
     isImagePreviewOpen: state['searchPage'].isImagePreviewOpen,
-    imagePreviewUrl: state['searchPage'].imagePreviewUrl    
+    imagePreviewUrl: state['searchPage'].imagePreviewUrl,
+    sources: state['searchPage'].sources,
+    isRefineSearchModalOpen: state['searchPage'].isRefineSearchModalOpen,
   })
 }
 

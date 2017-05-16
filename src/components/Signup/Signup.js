@@ -12,8 +12,8 @@ import classes from './Signup.scss'
 
 export class Signup extends React.Component {
   componentDidMount() {
-    const { setAppTitle, tryToIdentifyUser, location } = this.props
-    setAppTitle('Ambar Signup')    
+    const { setPageTitle, tryToIdentifyUser, location } = this.props
+    setPageTitle('Ambar Signup')    
     tryToIdentifyUser(location.query.id)
 
     if (this.refs.emailInputField) {

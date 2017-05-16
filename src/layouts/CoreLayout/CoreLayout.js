@@ -15,7 +15,7 @@ class CoreLayout extends Component {
       fetching,
       isError,
       errorMessage,
-      setAppTitle,
+      setPageTitle,
       isNotificationOpen,
       notificationMessage,
       notificationReason,
@@ -24,7 +24,7 @@ class CoreLayout extends Component {
     return (
       <div>
         {fetching && <FullScreenLoader />}
-        {!fetching && React.cloneElement(this.props.children, { setAppTitle: setAppTitle })}
+        {!fetching && React.cloneElement(this.props.children, { setPageTitle: setPageTitle })}
         <NotificationIndicator
           isOpen={isNotificationOpen}
           message={!notificationMessage ? '' : notificationMessage}

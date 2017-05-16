@@ -3,21 +3,42 @@ import { titles } from 'utils/'
 import SearchResultTable from './components/SearchResultTable'
 import UploadFileModal from './components/UploadFileModal'
 import ImagePreview from './components/ImagePreview'
+import SearchInput from './components/SearchInput'
+import RefineSearchModal from './components/RefineSearchModal'
 
+import { cyan100, cyan300, cyan400 } from 'material-ui/styles/colors'
+import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
+import MediaQuery from 'react-responsive'
 import UploadIcon from 'material-ui/svg-icons/editor/attach-file'
 import ArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import Scroll from 'react-scroll'
 
 import classes from './Search.scss'
 
 class Search extends Component {
+
+    timeoutId = null
+
     componentDidMount() {
-        const { setAppTitle, setHeader, loadSources } = this.props
-        setAppTitle('Search')
-        setHeader('Search', true)
+        const { setPageTitle, setAppHeader, loadSources, performSearch, toggleRefineSearchModal, searchQuery, setQueryFromGetParam, setQuery } = this.props
+
+        setPageTitle('Search')
+        setAppHeader({
+            left: <MediaQuery query='(min-width: 1024px)'>Search</MediaQuery>,
+            center: <SearchInput setQuery={setQuery} query={searchQuery} performSearch={performSearch} />,
+            right: <FlatButton
+                style={{ height: '34px', 'lineHeight': '10px', width: '34px', 'minWidth': '34px' }}
+                backgroundColor={cyan300}
+                hoverColor={cyan400}
+                onTouchTap={() => toggleRefineSearchModal()}
+                icon={<MoreHoriz color={cyan100} />}
+            />
+        })
         loadSources()
+        setQueryFromGetParam()
     }
 
     componentWillUnmount() {
@@ -27,10 +48,12 @@ class Search extends Component {
 
     scrollToTop() {
         Scroll.animateScroll.scrollToTop()
-    }
+    }   
 
     render() {
-        const { fetching,
+        const {
+            query,
+            fetching,
             hits,
             searchQuery,
             performSearch,
@@ -39,7 +62,7 @@ class Search extends Component {
             urls,
             scrolledDown,
             setScrolledDown,
-            setAppTitle,
+            setPageTitle,
             currentPage,
             mode,
             toggleUploadModal,
@@ -60,10 +83,21 @@ class Search extends Component {
             toggleImagePreview,
             isImagePreviewOpen,
             imagePreviewUrl,
-            showFilePreview } = this.props
+            showFilePreview,
+            isRefineSearchModalOpen,
+            toggleRefineSearchModal,
+            toggleSourceSelected,
+            setAppHeader,
+         } = this.props
 
         return (
             <div>
+                <RefineSearchModal
+                    isRefineSearchModalOpen={isRefineSearchModalOpen}
+                    toggleRefineSearchModal={toggleRefineSearchModal}
+                    sources={sources}
+                    toggleSourceSelected={toggleSourceSelected}
+                />
                 <SearchResultTable
                     currentPage={currentPage}
                     fetching={fetching}
@@ -119,7 +153,7 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-    setAppTitle: React.PropTypes.func.isRequired,
+    setPageTitle: React.PropTypes.func.isRequired,
 
     setScrolledDown: React.PropTypes.func.isRequired,
     scrolledDown: React.PropTypes.bool.isRequired,
@@ -158,7 +192,15 @@ Search.propTypes = {
 
     toggleImagePreview: React.PropTypes.func.isRequired,
     isImagePreviewOpen: React.PropTypes.bool.isRequired,
-    imagePreviewUrl: React.PropTypes.string.isRequired
+    imagePreviewUrl: React.PropTypes.string.isRequired,
+
+    isRefineSearchModalOpen: React.PropTypes.bool.isRequired,
+    toggleRefineSearchModal: React.PropTypes.func.isRequired,
+
+    sources: React.PropTypes.object.isRequired,
+    toggleSourceSelected: React.PropTypes.func.isRequired,
+
+    setQuery: React.PropTypes.func.isRequired
 }
 
 export default Search

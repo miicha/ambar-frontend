@@ -10,8 +10,8 @@ import classes from './SetPassword.scss'
 
 export class SetPassword extends React.Component {
   componentDidMount() {
-    const {setAppTitle} = this.props
-    setAppTitle('Set Password')
+    const {setPageTitle} = this.props
+    setPageTitle('Set Password')
     
     if (this.refs.passwordInputField) {
       this.refs.passwordInputField.focus()

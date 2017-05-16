@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import SideMenu from './components/SideMenu'
-import RefineSearchModal from './components/RefineSearchModal'
 import RateUs from './components/RateUs'
 import { AmbarResponsiveLogo } from 'components/BasicComponents'
 import AppBarTitle from './components/AppBarTitle'
@@ -20,19 +19,11 @@ class MainLayout extends Component {
             toggleSideMenu,
             isSideMenuOpen,
             header,
-            showSearchInput,
-            query,
-            setQuery,
-            performSearch,
             mode,
             version,
-            sources,
-            isRefineSearchModalOpen,
-            toggleRefineSearchModal,
-            toggleSourceSelected,
             allowedRoutes,
-            setAppTitle,
-            setHeader,
+            setPageTitle,
+            setAppHeader,
             showRateUsModal,
             toggleRateUsModal
         } = this.props
@@ -41,33 +32,31 @@ class MainLayout extends Component {
             <div>
                 <div>
                     {fetching && <LinearProgress style={{ position: 'fixed', top: '64px', zIndex: '2000' }} color="#FFAB00" />}
-                    <SideMenu isOpen={isSideMenuOpen} currentLocation={location} toggleSideMenu={toggleSideMenu} changeLocation={changeLocation} mode={mode} allowedRoutes={allowedRoutes} />
-                    <RefineSearchModal
-                        isRefineSearchModalOpen={isRefineSearchModalOpen}
-                        toggleRefineSearchModal={toggleRefineSearchModal}
-                        sources={sources}
-                        toggleSourceSelected={toggleSourceSelected}
-                    />
+                    <SideMenu
+                        isOpen={isSideMenuOpen}
+                        currentLocation={location}
+                        toggleSideMenu={toggleSideMenu}
+                        changeLocation={changeLocation}
+                        mode={mode}
+                        allowedRoutes={allowedRoutes} />
                     <AppBar
-                        title={<AppBarTitle showSearchInput={showSearchInput}
-                            title={header}
-                            setQuery={setQuery}
-                            query={query}
-                            performSearch={performSearch}
+                        title={<AppBarTitle
+                            data={header}
                             fetching={fetching}
-                            toggleRefineSearchModal={toggleRefineSearchModal}
                             mode={mode} />}
                         style={{ position: 'fixed', top: 0, left: 0 }}
                         zDepth={2}
                         onLeftIconButtonTouchTap={toggleSideMenu}
-                        iconElementRight={<div style={{display: 'flex', flexDirection: 'row'}}>
-                            {mode !== 'ee' && <MediaQuery query='(min-width: 1024px)'><RateUs isOpen={showRateUsModal} toggle={toggleRateUsModal}/></MediaQuery>}
-                            <AmbarResponsiveLogo version={version} mode={mode}/>
+                        iconElementRight={<div style={{ display: 'flex', flexDirection: 'row' }}>
+                            {mode !== 'ee' && <MediaQuery query='(min-width: 1024px)'>
+                                <RateUs isOpen={showRateUsModal} toggle={toggleRateUsModal} />
+                            </MediaQuery>}
+                            <AmbarResponsiveLogo version={version} mode={mode} />
                         </div>}
                     />
                     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                         <div className={classes.mainContainer}>
-                            {React.cloneElement(children, { setAppTitle: setAppTitle, setHeader: setHeader })}                            
+                            {React.cloneElement(children, { setPageTitle: setPageTitle, setAppHeader: setAppHeader })}
                         </div>
                     </div>
                 </div>
@@ -89,21 +78,13 @@ class MainLayout extends Component {
 
         location: React.PropTypes.string.isRequired,
         changeLocation: React.PropTypes.func.isRequired,
-        header: React.PropTypes.string.isRequired,
-
-        showSearchInput: React.PropTypes.bool.isRequired,
-        setQuery: React.PropTypes.func.isRequired,
-        performSearch: React.PropTypes.func.isRequired,
-        query: React.PropTypes.string.isRequired,
-
-        isRefineSearchModalOpen: React.PropTypes.bool.isRequired,
-        toggleRefineSearchModal: React.PropTypes.func.isRequired,
-
-        sources: React.PropTypes.object.isRequired,
-        toggleSourceSelected: React.PropTypes.func.isRequired,
+        header: React.PropTypes.object.isRequired,
 
         showRateUsModal: React.PropTypes.bool.isRequired,
-        toggleRateUsModal: React.PropTypes.func.isRequired
+        toggleRateUsModal: React.PropTypes.func.isRequired,
+
+        setAppHeader: React.PropTypes.func.isRequired,
+        setPageTitle: React.PropTypes.func.isRequired
     }
 }
 

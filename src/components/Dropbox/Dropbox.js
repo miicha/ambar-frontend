@@ -55,9 +55,9 @@ const folderItem = (folder, loadDropboxFolder, toggleOpenDropboxFolder, toggleSe
 
 export class Dropbox extends React.Component {
   componentDidMount() {
-    const { setAppTitle, setDropboxTokenFromGetParams, stopLoadingIndicator } = this.props
+    const { setPageTitle, setDropboxTokenFromGetParams, stopLoadingIndicator } = this.props
 
-    setAppTitle('Ambar Integrations: Dropbox')
+    setPageTitle('Ambar Integrations: Dropbox')
     setDropboxTokenFromGetParams()
     stopLoadingIndicator()
   }

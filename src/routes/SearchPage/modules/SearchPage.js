@@ -1,8 +1,9 @@
 import { stateValueExtractor } from 'utils/'
-import { hitsModel } from 'models/'
+import { hitsModel, sourcesModel } from 'models/'
 import { titles, analytics, FormDataPolyfill } from 'utils'
 import { handleError, showInfo } from 'routes/CoreLayout/modules/CoreLayout'
-import { startLoadingIndicator, stopLoadingIndicator, loadSources, setQuery } from 'routes/MainLayout/modules/MainLayout'
+import { startLoadingIndicator, stopLoadingIndicator } from 'routes/MainLayout/modules/MainLayout'
+import * as Regexes from 'utils/regexes'
 import 'whatwg-fetch'
 
 export const START_STOP_HIGHLIGHT_LOADING = 'SEARCH.START_STOP_HIGHLIGHT_LOADING'
@@ -17,6 +18,10 @@ export const FILES_UPLOADING = 'SEARCH.FILES_UPLOADING'
 export const CLEAN_FILES_TO_UPLOAD = 'SEARCH.CLEAN_FILES_TO_UPLOAD'
 export const SET_BUCKET_NAME_VALIDATION_MESSAGE = 'SEARCH.SET_BUCKET_NAME_VALIDATION_MESSAGE'
 export const TOGGLE_IMAGE_PREVIEW_MODAL = 'SEARCH.TOGGLE_IMAGE_PREVIEW_MODAL'
+export const SET_SOURCES = 'SEARCH.SET_SOURCES'
+export const SET_IS_REFINE_SEARCH_MODAL_OPEN = 'SEARCH.SET_IS_REFINE_SEARCH_MODAL_OPEN'
+export const TOGGLE_SOURCE_SELECTED = 'SEARCH.TOGGLE_SOURCE_SELECTED'
+export const UPDATE_QUERY = 'SEARCH.UPDATE_QUERY'
 
 const REQUEST_SIZE = 10
 
@@ -37,11 +42,11 @@ export const performSearch = (page, query) => {
     return (dispatch, getState) => {
         const fetching = getState()['global'].fetching
 
-        if (fetching){
+        if (fetching) {
             return
         }
 
-        setQueryParameter(query)        
+        setQueryParameter(query)
         titles.setPageTitle(query != '' ? query : 'Search')
 
         if ((!query) || (query == '')) {
@@ -68,8 +73,8 @@ export const performSearch = (page, query) => {
                     const clean = (page == 0)
                     dispatch(stopLoadingIndicator())
                     dispatch(fillHits(clean, hits, data.found, query, hasMore, page))
-                    
-                    if (page === 0) { analytics().event('SEARCH.PERFORM', {query: query }) }            
+
+                    if (page === 0) { analytics().event('SEARCH.PERFORM', { query: query }) }
                 })
                 .catch((errorPayload) => {
                     dispatch(stopLoadingIndicator())
@@ -104,7 +109,7 @@ export const loadHighlight = (sha256, query) => {
                 .then((resp) => {
                     dispatch(setContentHighlight(sha256, resp.highlight))
                     dispatch(startStopHighlightLoadingIndicator(sha256, false))
-                    analytics().event('SEARCH.LOAD_HIGHLIGHT')             
+                    analytics().event('SEARCH.LOAD_HIGHLIGHT')
                 })
                 .catch((errorPayload) => {
                     dispatch(startStopHighlightLoadingIndicator(sha256, false))
@@ -134,7 +139,7 @@ export const uploadFiles = () => {
         const uploadPromises = filesToUpload.map(file => new Promise((resolve, reject) => {
             const form = new FormDataPolyfill()
             form.set(file.name, file, file.name)
-            
+
             fetch(urls.ambarWebApiPostFile(bucketName, file.name), {
                 method: 'POST',
                 body: form._asNative(),
@@ -144,12 +149,12 @@ export const uploadFiles = () => {
                     ...authHeaders
                 }
             }).then((resp) => {
-                if (resp.status >= 400) { 
-                    throw resp 
+                if (resp.status >= 400) {
+                    throw resp
                 }
                 else { resolve() }
             })
-            .catch((errorPayload) => reject(errorPayload))
+                .catch((errorPayload) => reject(errorPayload))
         }))
 
         Promise.all(uploadPromises)
@@ -158,9 +163,9 @@ export const uploadFiles = () => {
                 dispatch(loadSources())
                 dispatch(toggleUploadModal())
                 dispatch(cleanFilesToUpload())
-                dispatch(showInfo('Files succesfully uploaded'))   
-                analytics().event('SEARCH.UPLOAD_FILES', { count: uploadPromises.length })             
-            })            
+                dispatch(showInfo('Files succesfully uploaded'))
+                analytics().event('SEARCH.UPLOAD_FILES', { count: uploadPromises.length })
+            })
             .catch((errorPayload) => {
                 dispatch(filesUploading(false))
 
@@ -170,7 +175,7 @@ export const uploadFiles = () => {
                     dispatch(handleError(errorPayload))
                     analytics().event('SEARCH.UPLOAD_FILES_ERROR', { error: errorPayload })
                 }
-                
+
                 console.error('uploadFile', errorPayload)
             })
     }
@@ -266,9 +271,144 @@ export const filesUploading = (isUploading) => {
     }
 }
 
+export const performSearchByPathToFile = (path) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.FILE_NAME_QUERY_REGEX, '')
+        path = path.replace(/\s/gim, '?')
+        query = `${query} filename:${path}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchByAuthor = (author) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.AUTHOR_QUERY_REGEX, '')
+        author = author.replace(/\s/gim, '?')
+        query = `${query} author:${author}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchByQuery = (query) => {
+    return (dispatch, getState) => {
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const loadSources = () => {
+    return (dispatch, getState) => {
+        const urls = stateValueExtractor.getUrls(getState())
+        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+
+        const query = getState()['searchPage'].searchQuery
+
+        dispatch(startLoadingIndicator())
+
+        fetch(urls.ambarWebApiGetSources(), {
+            method: 'GET',
+            ...defaultSettings
+        })
+            .then(resp => {
+                if (resp.status == 200) {
+                    return resp.json()
+                }
+                else { throw resp }
+            })
+            .then(sources => {
+                const sourcesMap = sourcesModel.fromApi(sources, query)
+                dispatch(setSources(sourcesMap))
+                dispatch(stopLoadingIndicator())
+            })
+            .catch((errorPayload) => {
+                dispatch(stopLoadingIndicator())
+                dispatch(handleError(errorPayload))
+                console.error('loadSources', errorPayload)
+            })
+
+        dispatch(stopLoadingIndicator())
+    }
+}
+
 export const cleanFilesToUpload = () => {
     return {
         type: CLEAN_FILES_TO_UPLOAD
+    }
+}
+
+export const toggleRefineSearchModal = () => {
+    return (dispatch, getState) => {
+        const isRefineSearchModalOpen = !getState()['searchPage'].isRefineSearchModalOpen
+        dispatch(setIsRefineSearchModalOpen(isRefineSearchModalOpen))
+        if (!isRefineSearchModalOpen) {
+            const query = getState()['searchPage'].searchQuery
+            dispatch(performSearch(0, query))
+        }
+    }
+}
+
+export const toggleSourceSelected = (sourceId) => {
+    return (dispatch, getState) => {
+        dispatch(updateSourceSelected(sourceId))
+    }
+}
+
+export const performSearchBySource = (sourceId) => {
+    return (dispatch, getState) => {
+        dispatch(setSources(sourcesModel.fromSourcesDisabled(getState()['searchPage'].sources)))
+        dispatch(updateSourceSelected(sourceId))
+        const query = getState()['searchPage'].searchQuery
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const setQuery = (query) => {
+    return (dispatch, getState) => {
+        dispatch(updateQuery(query))
+        dispatch(setSources(sourcesModel.fromSources(getState()['searchPage'].sources, query)))
+    }
+}
+
+const setSources = (sources) => {
+    return {
+        type: SET_SOURCES,
+        sources
+    }
+}
+
+const setIsRefineSearchModalOpen = (isRefineSearchModalOpen) => {
+    return {
+        type: SET_IS_REFINE_SEARCH_MODAL_OPEN,
+        isRefineSearchModalOpen
+    }
+}
+
+const updateSourceSelected = (sourceId) => {
+    return {
+        type: TOGGLE_SOURCE_SELECTED,
+        sourceId
+    }
+}
+
+export const setQueryFromGetParam = () => {
+    return (dispatch, getState) => {
+        const query = getState().router.locationBeforeTransitions.query.query
+        const doSearch = getState().router.locationBeforeTransitions.query.doSearch
+
+        const safeQuery = !query ? '' : query
+
+        dispatch(updateQuery(safeQuery))
+        dispatch(performSearch(0, safeQuery))
+    }
+}
+
+function updateQuery(query) {
+    return {
+        type: UPDATE_QUERY,
+        query
     }
 }
 
@@ -336,10 +476,39 @@ const ACTION_HANDLERS = {
     [TOGGLE_IMAGE_PREVIEW_MODAL]: (state, action) => {
         const newState = { ...state, isImagePreviewOpen: !state.isImagePreviewOpen, imagePreviewUrl: action.imageUrl ? action.imageUrl : state.imagePreviewUrl }
         return newState
+    },
+    [SET_IS_REFINE_SEARCH_MODAL_OPEN]: (state, action) => {
+        const newState = { ...state, isRefineSearchModalOpen: action.isRefineSearchModalOpen }
+        return newState
+    },
+    [TOGGLE_SOURCE_SELECTED]: (state, action) => {
+        const sourceId = action.sourceId
+        const sources = new Map(state.sources)
+        const source = sources.get(sourceId)
+        sources.set(sourceId, { ...source, selected: !source.selected })
+
+        const selectedSourceIdList = Array.from(sources.values()).filter(source => source.selected).map(source => source.id)
+        let query = state.searchQuery
+        query = query.replace(Regexes.SOURCE_QUERY_REGEX, '').trim()
+
+        if (selectedSourceIdList.length > 0 && selectedSourceIdList.length != sources.size) {
+            query = `${query} source:${selectedSourceIdList.join(',')}`
+        }
+
+        const newState = { ...state, sources: sources, searchQuery: query }
+
+        return newState
+    },
+    [SET_SOURCES]: (state, action) => {
+        const newState = { ...state, sources: action.sources }
+        return newState
+    },
+    [UPDATE_QUERY]: (state, action) => {
+        return ({ ...state, searchQuery: action.query })
     }
 }
 
-const initialState = {
+const initialState = {    
     searchQuery: '',
     currentPage: 0,
     hits: new Map(),
@@ -351,7 +520,9 @@ const initialState = {
     bucketNameValidationMessage: '',
     isFilesUploading: false,
     isImagePreviewOpen: false,
-    imagePreviewUrl: ''
+    imagePreviewUrl: '',
+    sources: new Map(),
+    isRefineSearchModalOpen: false
 }
 
 export default function searchPageReducer(state = initialState, action) {

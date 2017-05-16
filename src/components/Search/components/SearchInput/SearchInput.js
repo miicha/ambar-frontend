@@ -17,9 +17,9 @@ class SearchInput extends Component {
         }
         return false
     }
-
-    render() {
-        const { query, performSearch, setQuery } = this.props
+    
+    render() {       
+        const { performSearch, setQuery, query} = this.props
 
         const hintText = <span>
             <MediaQuery query='(min-width: 1024px)'>Type query here and hit "Enter"</MediaQuery>
@@ -32,28 +32,30 @@ class SearchInput extends Component {
                     <SearchIcon style={{ color: 'white', height: '100%' }} onTouchTap={() => performSearch(0, query)} />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                    <TextField
+                    <TextField                        
                         name='search_input'
                         style={{ width: '100%' }}
                         inputStyle={{ color: 'white', width: '100%' }}
                         hintStyle={{ color: '#EEEEEE' }}
-                        hintText={hintText}
-                        value={query}
+                        hintText={hintText}                        
                         spellCheck={false}
                         onChange={(event, newValue) => {
-                            setQuery(newValue)
+                            setQuery(newValue)                            
                         }}
                         onKeyPress={(event) => {
-                            if (event.charCode === 13) {
+                            if (event.charCode === 13) {                                
                                 performSearch(0, query)
                                 return
                             }
                         }}
+                        defaultValue={query}                        
                         onKeyUp={(event) => {
-                            if (this.isMeanfulKeyCode(event.keyCode)) {
+                            if (this.isMeanfulKeyCode(event.keyCode)) {                                
                                 clearTimeout(this.timeoutId)
-                                const value = event.currentTarget.value
-                                this.timeoutId = setTimeout(() => { performSearch(0, value) }, 200)
+                                const value = event.currentTarget.value                                
+                                this.timeoutId = setTimeout(() => { 
+                                    performSearch(0, value) 
+                                }, 200)
                             }
                         }}
                         underlineShow={false}

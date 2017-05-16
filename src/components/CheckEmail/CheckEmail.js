@@ -6,8 +6,8 @@ import classes from './CheckEmail.scss'
 
 export class CheckEmail extends React.Component {
   componentDidMount() {
-    const {setAppTitle} = this.props
-    setAppTitle('Check Your Inbox')
+    const {setPageTitle} = this.props
+    setPageTitle('Check Your Inbox')
   }
 
   render() {

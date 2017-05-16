@@ -9,13 +9,13 @@ import classes from './Login.scss'
 
 export class Login extends React.Component {
   componentDidMount() {
-    const { setAppTitle } = this.props
+    const { setPageTitle } = this.props
 
     if (this.refs.emailInputField) {
       this.refs.emailInputField.focus()
     }
 
-    setAppTitle('Ambar Login')
+    setPageTitle('Ambar Login')
   }
 
   render() {

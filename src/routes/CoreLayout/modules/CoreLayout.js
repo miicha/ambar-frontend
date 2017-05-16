@@ -39,7 +39,7 @@ export const loadConfig = () => {
     }
 }
 
-export const setAppTitle = (title) => {
+export const setPageTitle = (title) => {
     return (dispatch, getState) => {        
         titles.setPageTitle(title)        
     }

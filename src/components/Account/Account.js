@@ -9,9 +9,9 @@ import classes from './Account.scss'
 class Account extends Component {
 
     componentDidMount() {
-        const { setAppTitle, loadUserInfo, setHeader } = this.props
-        setAppTitle('Account')
-        setHeader('Account')
+        const { setPageTitle, loadUserInfo, setAppHeader } = this.props
+        setPageTitle('Account')
+        setAppHeader({left: 'Account'})
         loadUserInfo()
     }
 
@@ -89,7 +89,7 @@ class Account extends Component {
 
 Account.propTypes = {
     mode: React.PropTypes.string.isRequired,
-    setAppTitle: React.PropTypes.func.isRequired,
+    setPageTitle: React.PropTypes.func.isRequired,
     loadUserInfo: React.PropTypes.func.isRequired,
     performLogout: React.PropTypes.func.isRequired,
     email: React.PropTypes.string,

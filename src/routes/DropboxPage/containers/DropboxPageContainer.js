@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import { setDropboxTokenFromGetParams, loadDropboxFolder, toggleOpenDropboxFolder, toggleSelectDropboxFolder, connectDropbox } from '../modules/DropboxPage'
 import Dropbox from 'components/Dropbox'
-import { setAppTitle, startLoadingIndicator, stopLoadingIndicator } from '../../MainLayout/modules/MainLayout'
+import { setPageTitle, startLoadingIndicator, stopLoadingIndicator } from '../../MainLayout/modules/MainLayout'
 
 const mapDispatchToProps = {
-  setAppTitle,
+  setPageTitle,
   setDropboxTokenFromGetParams,
   loadDropboxFolder,
   toggleOpenDropboxFolder,

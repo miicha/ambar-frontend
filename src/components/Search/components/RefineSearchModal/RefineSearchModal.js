@@ -4,7 +4,6 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 
 import Sources from './components/Sources'
-
 import classes from './RefineSearchModal.scss'
 
 export const RefineSearchModal = ({isRefineSearchModalOpen, toggleRefineSearchModal, sources, toggleSourceSelected}) => {

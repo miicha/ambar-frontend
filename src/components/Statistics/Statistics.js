@@ -40,9 +40,9 @@ const ChartCard = ({ children }) => {
 class Statistics extends Component {
 
     componentDidMount() {
-        const { loadStatistics, setAppTitle, setHeader, mode } = this.props
-        setAppTitle('Statistics')
-        setHeader('Statistics')
+        const { loadStatistics, setPageTitle, setAppHeader, mode } = this.props
+        setPageTitle('Statistics')
+        setAppHeader({left: 'Statistics'})
         loadStatistics()
     }
 
@@ -108,7 +108,7 @@ Statistics.propTypes = {
     fetching: React.PropTypes.bool.isRequired,
     data: React.PropTypes.object.isRequired,
     loadStatistics: React.PropTypes.func.isRequired,
-    setAppTitle: React.PropTypes.func.isRequired,
+    setPageTitle: React.PropTypes.func.isRequired,
     mode: React.PropTypes.string.isRequired
 }
 

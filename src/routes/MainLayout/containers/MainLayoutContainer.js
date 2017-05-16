@@ -4,12 +4,8 @@ import {
   checkIfAllowed,
   toggleSideMenu,
   changeLocation,
-  setQuery,
-  toggleRefineSearchModal,
-  toggleSourceSelected,
-  setHeader,
+  setAppHeader,
   toggleRateUsModal } from '../modules/MainLayout'
-import { performSearch } from 'routes/SearchPage/modules/SearchPage'
 
 import MainLayout from 'layouts/MainLayout/MainLayout'
 
@@ -17,11 +13,7 @@ const mapDispatchToProps = {
   postConfigRequest,
   toggleSideMenu,
   changeLocation,
-  setQuery,
-  performSearch,  
-  toggleRefineSearchModal,
-  toggleSourceSelected,
-  setHeader,
+  setAppHeader,
   toggleRateUsModal
 }
 
@@ -32,13 +24,6 @@ const mapStateToProps = (state, ownProps) => {
     location: state['router'].locationBeforeTransitions.pathname,
     isSideMenuOpen: state['global'].isSideMenuOpen,
     header: state['global'].header,
-    
-    showSearchInput: state['global'].showSearchInput,
-    query: state['global'].query,
-    
-    sources: state['global'].sources,
-    isRefineSearchModalOpen: state['global'].isRefineSearchModalOpen,
-
     mode: state['core'].mode,
     version: state['core'].version,
     showRateUsModal: state['global'].showRateUsModal

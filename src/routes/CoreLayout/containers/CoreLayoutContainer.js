@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
-import { loadConfig, setAppTitle, closeNotification } from '../modules/CoreLayout'
+import { loadConfig, setPageTitle, closeNotification } from '../modules/CoreLayout'
 import CoreLayout from 'layouts/CoreLayout/CoreLayout'
 
 const mapDispatchToProps = {
   loadConfig,
-  setAppTitle,
+  setPageTitle,
   closeNotification
 }
 
