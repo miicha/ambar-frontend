@@ -32,3 +32,6 @@ export const fromApi = (resp) => {
     return hits
 }
 
+export const highlightFromApi = (resp) => {
+    return { 'content.text': resp.highlight.text }
+}

@@ -107,7 +107,7 @@ export const loadHighlight = (sha256, query) => {
                     else { throw resp }
                 })
                 .then((resp) => {
-                    dispatch(setContentHighlight(sha256, resp.highlight))
+                    dispatch(setContentHighlight(sha256, hitsModel.highlightFromApi(resp)))
                     dispatch(startStopHighlightLoadingIndicator(sha256, false))
                     analytics().event('SEARCH.LOAD_HIGHLIGHT')
                 })
@@ -508,7 +508,7 @@ const ACTION_HANDLERS = {
     }
 }
 
-const initialState = {    
+const initialState = {
     searchQuery: '',
     currentPage: 0,
     hits: new Map(),
