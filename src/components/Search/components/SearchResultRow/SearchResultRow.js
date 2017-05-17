@@ -81,10 +81,10 @@ class SearchResultRow extends Component {
         const {
             hit: {
                 fetching: fetching,
-            highlight: highlight,
-            meta: meta,
-            content: content,
-            sha256: sha256 },
+                meta: meta,
+                content: content,
+                sha256: sha256
+            },
             searchQuery,
             loadHighlight,
             urls,
@@ -94,14 +94,12 @@ class SearchResultRow extends Component {
             toggleImagePreview,
             showFilePreview } = this.props
 
-        const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
-
         const hasMoreThanOneMeta = meta.length > 1 ? true : false
-        const sortedMeta = meta.sort((a, b) => EM_TAG_REGEX.test(b.full_name) ? 1 : -1)
+        const sortedMeta = meta.sort((a, b) => b.highlight ? 1 : -1)
         const mainMeta = sortedMeta[0]
         const secondaryMetaList = sortedMeta.slice(1)
 
-        const contentHighlight = highlight && highlight['content.text'] ? highlight['content.text'] : undefined
+        const contentHighlight = content && content.highlight && content.highlight.text ? content.highlight.text : undefined
 
         return (
             <Paper zDepth={1} className={classes.searchResultRowCard}>

@@ -67,6 +67,7 @@ export class Signup extends React.Component {
           <MenuItem value={'ambar_de'} primaryText="German" />
           <MenuItem value={'ambar_it'} primaryText="Italian" />
           <MenuItem value={'ambar_pl'} primaryText="Polish" />
+          <MenuItem value={'ambar_cn'} primaryText="Chinese" />
           <MenuItem value={'ambar_cjk'} primaryText="CJK" />
         </SelectField>}
       </CardText>
