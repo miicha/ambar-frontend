@@ -18,6 +18,10 @@ class SearchInput extends Component {
         return false
     }
     
+    shouldComponentUpdate(nextProp) {        
+        return this.props.query !== nextProp.query
+    }
+
     render() {       
         const { performSearch, setQuery, query} = this.props
 
@@ -39,24 +43,23 @@ class SearchInput extends Component {
                         hintStyle={{ color: '#EEEEEE' }}
                         hintText={hintText}                        
                         spellCheck={false}
+                        value={query}
                         onChange={(event, newValue) => {
-                            setQuery(newValue)                            
+                            clearTimeout(this.timeoutId)
+                            setQuery(newValue)
+                            
+                            this.timeoutId = setTimeout(() => { 
+                                performSearch(0, newValue) 
+                            }, 200)
                         }}
-                        onKeyPress={(event) => {
+                        onKeyPress={(event) => {    
                             if (event.charCode === 13) {                                
                                 performSearch(0, query)
                                 return
                             }
-                        }}
-                        defaultValue={query}                        
-                        onKeyUp={(event) => {
-                            if (this.isMeanfulKeyCode(event.keyCode)) {                                
-                                clearTimeout(this.timeoutId)
-                                const value = event.currentTarget.value                                
-                                this.timeoutId = setTimeout(() => { 
-                                    performSearch(0, value) 
-                                }, 200)
-                            }
+                        }}                                                
+                        onKeyDown={(event) => {
+                            clearTimeout(this.timeoutId)                            
                         }}
                         underlineShow={false}
                     />

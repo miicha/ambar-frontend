@@ -26,7 +26,8 @@ const mapStateToProps = (state, ownProps) => {
     header: state['global'].header,
     mode: state['core'].mode,
     version: state['core'].version,
-    showRateUsModal: state['global'].showRateUsModal
+    showRateUsModal: state['global'].showRateUsModal,
+    state: state // DUMB SOLUTION
   })
 }
 

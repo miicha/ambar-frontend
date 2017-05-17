@@ -14,7 +14,7 @@ class Crawlers extends Component {
     componentDidMount() {
         const { loadCrawlers, setNewCrawlerJSON, newCrawler, crawlerJsonTemplate, loadPipelineLog, pipeline, setPageTitle, setAppHeader, mode } = this.props
         setPageTitle('Settings')
-        setAppHeader({left: 'Settings'})
+        setAppHeader({left: () => 'Settings'})
         loadCrawlers()
         loadPipelineLog(pipeline)
         setNewCrawlerJSON(newCrawler, crawlerJsonTemplate)

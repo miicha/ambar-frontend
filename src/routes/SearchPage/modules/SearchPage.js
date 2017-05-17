@@ -25,7 +25,7 @@ export const UPDATE_QUERY = 'SEARCH.UPDATE_QUERY'
 
 const REQUEST_SIZE = 10
 
-const setQueryParameter = (query) => {
+const changeBrowserAddressStringToQuery = (query) => {
     if (history.pushState) {
         var newUri = `${window.location.protocol}//${window.location.host}${window.location.pathname}?query=${encodeURIComponent(query)}`;
         window.history.pushState({ path: newUri }, '', newUri);
@@ -46,11 +46,11 @@ export const performSearch = (page, query) => {
             return
         }
 
-        setQueryParameter(query)
+        changeBrowserAddressStringToQuery(query)
         titles.setPageTitle(query != '' ? query : 'Search')
 
         if ((!query) || (query == '')) {
-            dispatch(fillHits(true, new Map(), 0, '', false, page))
+            dispatch(cleanUpSearchResult())
             return
         }
 
@@ -437,8 +437,7 @@ const ACTION_HANDLERS = {
         else {
             newState.hits = new Map([...state.hits, ...action.hits])
         }
-        newState.fetching = false
-        newState.searchQuery = action.searchQuery
+        newState.fetching = false        
         newState.hasMore = action.hasMore
         newState.currentPage = action.currentPage
         return newState

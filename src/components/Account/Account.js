@@ -11,7 +11,7 @@ class Account extends Component {
     componentDidMount() {
         const { setPageTitle, loadUserInfo, setAppHeader } = this.props
         setPageTitle('Account')
-        setAppHeader({left: 'Account'})
+        setAppHeader({left: () => 'Account'})
         loadUserInfo()
     }
 

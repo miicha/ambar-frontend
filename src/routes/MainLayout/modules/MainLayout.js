@@ -95,7 +95,7 @@ const initial_state = {
     isSideMenuOpen: false,
     fetching: true,
     header: {
-        left: 'Loading...'
+        left: () => 'Loading...'
     },    
     showRateUsModal: false
 }

@@ -42,7 +42,7 @@ class Statistics extends Component {
     componentDidMount() {
         const { loadStatistics, setPageTitle, setAppHeader, mode } = this.props
         setPageTitle('Statistics')
-        setAppHeader({left: 'Statistics'})
+        setAppHeader({left: () => 'Statistics'})
         loadStatistics()
     }
 

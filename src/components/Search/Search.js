@@ -27,9 +27,16 @@ class Search extends Component {
 
         setPageTitle('Search')
         setAppHeader({
-            left: <MediaQuery query='(min-width: 1024px)'>Search</MediaQuery>,
-            center: <SearchInput setQuery={setQuery} query={searchQuery} performSearch={performSearch} />,
-            right: <FlatButton
+            left: () => <MediaQuery query='(min-width: 1024px)'>Search</MediaQuery>,
+            center: (state) => {
+                return (
+                    <SearchInput 
+                        setQuery={setQuery}
+                        query={state['searchPage'].searchQuery}
+                        performSearch={performSearch}
+                    />)
+            },
+            right: () => <FlatButton
                 style={{ height: '34px', 'lineHeight': '10px', width: '34px', 'minWidth': '34px' }}
                 backgroundColor={cyan300}
                 hoverColor={cyan400}
@@ -48,7 +55,7 @@ class Search extends Component {
 
     scrollToTop() {
         Scroll.animateScroll.scrollToTop()
-    }   
+    }
 
     render() {
         const {

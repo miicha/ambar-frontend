@@ -25,7 +25,8 @@ class MainLayout extends Component {
             setPageTitle,
             setAppHeader,
             showRateUsModal,
-            toggleRateUsModal
+            toggleRateUsModal,
+            state
         } = this.props
 
         return (
@@ -43,7 +44,8 @@ class MainLayout extends Component {
                         title={<AppBarTitle
                             data={header}
                             fetching={fetching}
-                            mode={mode} />}
+                            currentApplicationState={state}
+                            />}
                         style={{ position: 'fixed', top: 0, left: 0 }}
                         zDepth={2}
                         onLeftIconButtonTouchTap={toggleSideMenu}
@@ -84,7 +86,9 @@ class MainLayout extends Component {
         toggleRateUsModal: React.PropTypes.func.isRequired,
 
         setAppHeader: React.PropTypes.func.isRequired,
-        setPageTitle: React.PropTypes.func.isRequired
+        setPageTitle: React.PropTypes.func.isRequired,
+
+        state: React.PropTypes.object.isRequired
     }
 }
 
