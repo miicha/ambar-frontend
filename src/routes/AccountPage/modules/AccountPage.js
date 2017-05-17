@@ -264,7 +264,9 @@ export const loadUserInfo = () => {
                                     ? 'Polish'
                                     : data.lang_analyzer === 'ambar_cjk'
                                         ? 'CJK'
-                                        : 'Berberian'
+                                        : data.lang_analyzer === 'ambar_cn'
+                                            ? 'Chinese'
+                                                : 'Berberian'
 
                 let plan = data.plan === 'unlim'
                     ? 'Unlimited'
