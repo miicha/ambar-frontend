@@ -98,7 +98,7 @@ export const loadHighlight = (sha256, query) => {
 
         return new Promise((resolve) => {
             dispatch(startStopHighlightLoadingIndicator(sha256, true))
-            fetch(urls.ambarWebApiLoadHightlight(sha256, query), {
+            fetch(urls.ambarWebApiLoadContentHightlight(sha256, query), {
                 method: 'GET',
                 ...defaultSettings
             })
@@ -107,7 +107,7 @@ export const loadHighlight = (sha256, query) => {
                     else { throw resp }
                 })
                 .then((resp) => {
-                    dispatch(setContentHighlight(sha256, hitsModel.highlightFromApi(resp)))
+                    dispatch(setContentHighlight(sha256, hitsModel.contentHighlightFromApi(resp)))
                     dispatch(startStopHighlightLoadingIndicator(sha256, false))
                     analytics().event('SEARCH.LOAD_HIGHLIGHT')
                 })
@@ -425,7 +425,7 @@ const ACTION_HANDLERS = {
         let newState = { ...state }
         newState.hits = new Map(state.hits)
         let hit = { ...newState.hits.get(action.sha256) }
-        hit.highlight = action.highlight
+        hit.content.highlight = action.highlight
         newState.hits.set(action.sha256, hit)
         return newState
     },

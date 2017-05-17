@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import classes from './SearchResultMetaFullNameLine.scss'
 
-const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
-
 const SearchResultMetaFullNameLine = (props) => {
     const { meta, performSearchByPathToFile } = props
 
-    const fullPath = meta.full_name.replace(EM_TAG_REGEX, '')
+    const fullPath = meta.full_name
+
     const fullPathParts = fullPath.split('/')
         .filter(part => part != '')
     const fullPathPartsExtended = fullPathParts
@@ -20,7 +19,7 @@ const SearchResultMetaFullNameLine = (props) => {
             }
         })
 
-    const isHighlighted = EM_TAG_REGEX.test(meta.full_name)
+    const isHighlighted = meta.highlight && meta.highlight.full_name
 
     return (
         <div className={isHighlighted ? classes.metaFullNameLineContainerHighlighted : classes.metaFullNameLineContainer}>

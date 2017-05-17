@@ -3,21 +3,20 @@ import { files } from 'utils/'
 import classes from './SearchResultMetaDescriptionLine.scss'
 import moment from 'moment'
 
-const EM_TAG_REGEX = /<[\/]{0,1}em>/gim
 const WHEN_QUERY = /((^|\s)when:)((today)|(yesterday)|(thisweek)|(thismonth)|(thisyear))/im
 const SIZE_QUERY = /((^|\s)size(>|<)[=]{0,1})([0-9]*)([k|m]{0,1})/im
 
 const SearchResultMetaDescriptionLine = (props) => {
     const { searchQuery, content, meta, performSearchBySource, performSearchByAuthor } = props
 
-    const authorHighlighted = content.author ? EM_TAG_REGEX.test(content.author) : false
-    const author = content.author ? content.author.replace(EM_TAG_REGEX, '') : null
+    const authorHighlighted = content.highlight && content.highlight.author
+    const author = content.author
 
-    const sourceIdHighlighted = meta.source_id ? EM_TAG_REGEX.test(meta.source_id) : false
-    const sourceId = meta.source_id ? meta.source_id.replace(EM_TAG_REGEX, '') : null
+    const sourceIdHighlighted = meta.highlight && meta.highlight.source_id
+    const sourceId = meta.source_id
 
     const updatedDatetimeHighlighted = searchQuery ? WHEN_QUERY.test(searchQuery) : false
-    const updatedDatetime = meta.updated_datetime ? meta.updated_datetime : null       
+    const updatedDatetime = meta.updated_datetime
 
     const sizeHighlighted = content.size ? SIZE_QUERY.test(searchQuery) : false
     const size = content.size ? content.size : null
@@ -29,7 +28,7 @@ const SearchResultMetaDescriptionLine = (props) => {
                 className={authorHighlighted ? classes.clickableSpanHighlighted : classes.clickableSpan}>
                 Author: {author}
             </div>}
-            {updatedDatetime && <div className={updatedDatetimeHighlighted ? classes.spanHighlighted : classes.span}>Last modified: {moment().to(updatedDatetime)}</div>}            
+            {updatedDatetime && <div className={updatedDatetimeHighlighted ? classes.spanHighlighted : classes.span}>Last modified: {moment().to(updatedDatetime)}</div>}
             {sourceId && <div
                 onTouchTap={() => performSearchBySource(sourceId)}
                 className={sourceIdHighlighted ? classes.clickableSpanHighlighted : classes.clickableSpan}>
