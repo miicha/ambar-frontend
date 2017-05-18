@@ -81,9 +81,9 @@ class SearchResultRow extends Component {
         const {
             hit: {
                 fetching: fetching,
-                meta: meta,
-                content: content,
-                sha256: sha256
+            meta: meta,
+            content: content,
+            sha256: sha256
             },
             searchQuery,
             loadHighlight,
@@ -94,11 +94,6 @@ class SearchResultRow extends Component {
             toggleImagePreview,
             showFilePreview } = this.props
 
-        const hasMoreThanOneMeta = meta.length > 1 ? true : false
-        const sortedMeta = meta.sort((a, b) => b.highlight ? 1 : -1)
-        const mainMeta = sortedMeta[0]
-        const secondaryMetaList = sortedMeta.slice(1)
-
         const contentHighlight = content && content.highlight && content.highlight.text ? content.highlight.text : undefined
 
         return (
@@ -106,18 +101,12 @@ class SearchResultRow extends Component {
                 <Card>
                     <CardHeader
                         style={{ overflowX: 'hidden' }}
-                        title={<span className={classes.searchResultRowCardHeaderTitle} dangerouslySetInnerHTML={{ __html: mainMeta.short_name }} />}
-                        avatar={getFileAvatarByMeta(mainMeta, performSearchByPathToFile)}
-                        subtitle={<SearchResultMetaFullNameLine meta={mainMeta} performSearchByPathToFile={performSearchByPathToFile} />}
-                        actAsExpander={hasMoreThanOneMeta}
-                        showExpandableButton={hasMoreThanOneMeta}
+                        title={<span className={classes.searchResultRowCardHeaderTitle} dangerouslySetInnerHTML={{ __html: meta.short_name }} />}
+                        avatar={getFileAvatarByMeta(meta, performSearchByPathToFile)}
+                        subtitle={<SearchResultMetaFullNameLine meta={meta} performSearchByPathToFile={performSearchByPathToFile} />}
+                        actAsExpander={false}
+                        showExpandableButton={false}
                     />
-                    {hasMoreThanOneMeta && secondaryMetaList.map((secMeta, idx) =>
-                        <CardText key={idx} expandable={true}>
-                            <SearchResultMetaFullNameLine meta={secMeta} performSearchByPathToFile={performSearchByPathToFile} />
-                            <SearchResultMetaDescriptionLine searchQuery={searchQuery} content={content} meta={secMeta} performSearchByAuthor={performSearchByAuthor} performSearchBySource={performSearchBySource} />
-                        </CardText>
-                    )}
                     <div className={classes.searchResultRowCardTextContainer}>
                         <div className={classes.searchResultRowCardTextDiv}>
                             {fetching && <CardText>
@@ -154,24 +143,24 @@ class SearchResultRow extends Component {
                     </div>
                     <CardActions className={classes.searchResultRowCardFooter}>
                         <div style={{ display: 'flex' }}>
-                            <FlatButton icon={<FileDownloadIcon />} label='Original' primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(mainMeta.download_uri)) }} />
-                            {shouldShowTextButton(getExtension(mainMeta)) && <FlatButton
+                            <FlatButton icon={<FileDownloadIcon />} label='Original' primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(meta.download_uri)) }} />
+                            {shouldShowTextButton(getExtension(meta)) && <FlatButton
                                 icon={<TextDownloadIcon />}
                                 label='Text'
                                 primary={true}
-                                onTouchTap={() => { window.open(urls.ambarWebApiGetFileText(mainMeta.download_uri)) }} />
+                                onTouchTap={() => { window.open(urls.ambarWebApiGetFileText(meta.download_uri)) }} />
                             }
-                            {shouldShowPreviewButton(showFilePreview, content.size, getExtension(mainMeta)) && <FlatButton
+                            {shouldShowPreviewButton(showFilePreview, content.size, getExtension(meta)) && <FlatButton
                                 icon={<PreviewIcon />}
                                 label='Preview'
                                 primary={true}
-                                onTouchTap={() => { window.open(urls.googlePreviewFile(mainMeta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600px,height=600px') }} />
+                                onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600px,height=600px') }} />
                             }
                         </div>
                         <SearchResultMetaDescriptionLine
                             searchQuery={searchQuery}
                             content={content}
-                            meta={mainMeta}
+                            meta={meta}
                             performSearchByAuthor={performSearchByAuthor}
                             performSearchBySource={performSearchBySource}
                         />
