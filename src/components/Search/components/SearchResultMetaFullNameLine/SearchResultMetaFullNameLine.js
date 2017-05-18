@@ -15,7 +15,7 @@ const SearchResultMetaFullNameLine = (props) => {
             const trailingAsterisk = isLast ? '' : '*'
             return {
                 part: `${part}${trailingSymbol}`,
-                pathToPart: `//${fullPathParts.filter((part, innerIdx) => innerIdx <= idx).join('/')}${trailingSymbol}${trailingAsterisk}`
+                pathToPart: `//${fullPathParts.filter((part, innerIdx) => innerIdx <= idx).join('/')}${trailingAsterisk}`
             }
         })
 
