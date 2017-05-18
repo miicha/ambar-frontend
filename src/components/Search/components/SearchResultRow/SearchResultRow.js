@@ -126,7 +126,7 @@ class SearchResultRow extends Component {
                             }
                             {!fetching && contentHighlight && contentHighlight.map((hl, idx) =>
                                 <CardText key={idx}
-                                    className={classes.searchResultRowCardTextWithBorder}
+                                    className={idx != contentHighlight.length - 1 ? classes.searchResultRowCardTextWithBorder : undefined}
                                     dangerouslySetInnerHTML={{ __html: hl }}
                                 />)
                             }
