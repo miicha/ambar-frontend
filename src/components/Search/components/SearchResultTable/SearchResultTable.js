@@ -1,41 +1,19 @@
 import React, { Component } from 'react'
-import { InfiniteScroll } from 'components/BasicComponents'
 import SearchResultRow from '../SearchResultRow'
 import EmptyCard from '../EmptyCard'
 
 import classes from './SearchResultTable.scss'
 
 class SearchResultTable extends Component {
-
-    componentDidMount() {
-        window.addEventListener('scroll', (eventArgs) => this.handleScroll(eventArgs, this.props))
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', (eventArgs) => this.handleScroll(eventArgs, this.props))
-    }
-
-    handleScroll(eventArgs, props) {
-        const { scrolledDown, setScrolledDown } = props
-        const scrollPosition = event.srcElement.body.scrollTop
-        const showScrollToTopButton = scrollPosition > 1000 ? true : false
-        if (scrolledDown != showScrollToTopButton) {
-            setScrolledDown(showScrollToTopButton)
-        }
-    }
-
     render() {
         const {
             hits,
             searchQuery,
             fetching,
-            hasMore,
             performSearch,
             urls,
             showFilePreview,
             loadHighlight,
-            scrolledDown,
-            currentPage,
             performSearchBySource,
             performSearchByAuthor,
             performSearchByPathToFile,
@@ -80,7 +58,7 @@ class SearchResultTable extends Component {
                     size>1M
                     </span> - search for all files larger than 1 MB, can be combined with other queries (available options are:&nbsp;
                     <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size<1M') }}>size&lt;1M</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size>100K') }}>size&gt;100K</span>                    
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size>100K') }}>size&gt;100K</span>
                     )
                 </li>
                 <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:today') }}>
@@ -95,7 +73,7 @@ class SearchResultTable extends Component {
                 </li>
                 <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('author:*') }}>
                     author:*
-                    </span> - search for all files with specified author                    
+                    </span> - search for all files with specified author
                 </li>
             </ul>
         </div>)
@@ -117,13 +95,7 @@ class SearchResultTable extends Component {
         </div>)
 
         return (
-            <InfiniteScroll
-                currentPage={currentPage}
-                threshold={500}
-                loadMore={(newPage) => {
-                    performSearch(newPage, searchQuery)
-                }}
-                hasMore={hasMore}>
+            <div>
                 {hits && hits.size > 0 && Array.from(hits.values()).map((hit, idx) =>
                     <SearchResultRow
                         key={hit.sha256}
@@ -134,7 +106,7 @@ class SearchResultTable extends Component {
                         performSearchBySource={performSearchBySource}
                         performSearchByAuthor={performSearchByAuthor}
                         performSearchByPathToFile={performSearchByPathToFile}
-                        toggleImagePreview={toggleImagePreview} 
+                        toggleImagePreview={toggleImagePreview}
                         showFilePreview={showFilePreview} />
                 )}
                 {(!hits || hits.size == 0)
@@ -147,15 +119,13 @@ class SearchResultTable extends Component {
                     && <EmptyCard
                         title='Few tips for search'
                         textElement={tipText}
-                    />}
-            </InfiniteScroll>
+                    />}                
+            </div>
         )
     }
 }
 
 SearchResultTable.propTypes = {
-    currentPage: React.PropTypes.number.isRequired,
-    hasMore: React.PropTypes.bool.isRequired,
     fetching: React.PropTypes.bool.isRequired,
     searchQuery: React.PropTypes.string.isRequired,
     loadHighlight: React.PropTypes.func.isRequired,
@@ -163,8 +133,6 @@ SearchResultTable.propTypes = {
     performSearchByPathToFile: React.PropTypes.func.isRequired,
     urls: React.PropTypes.object.isRequired,
     showFilePreview: React.PropTypes.bool.isRequired,
-    scrolledDown: React.PropTypes.bool.isRequired,
-    setScrolledDown: React.PropTypes.func.isRequired,
     performSearchBySource: React.PropTypes.func.isRequired,
     performSearchByAuthor: React.PropTypes.func.isRequired,
     performSearchByQuery: React.PropTypes.func.isRequired,

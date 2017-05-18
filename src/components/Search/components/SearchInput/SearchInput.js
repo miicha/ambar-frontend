@@ -8,11 +8,7 @@ import classes from './SearchInput.scss'
 
 class SearchInput extends Component {
     timeoutId = null
-
-    componentDidMount() {
-        this.refs.search_input.focus()
-    }
-
+    
     getSuggestions(currentValue) {
         const possibleCommands = [
             'filename:',
@@ -44,6 +40,10 @@ class SearchInput extends Component {
                 )
             }
         })
+    }
+
+    componentDidMount() {
+        this.refs.search_input.focus()
     }
 
     shouldComponentUpdate(nextProp) {
@@ -94,7 +94,7 @@ class SearchInput extends Component {
                             }, 200)
                         }}
                         textFieldStyle={{ display: 'block' }}
-                        onClose={(event) => {
+                        onNewRequest={() => {
                             if (this.refs.search_input) {
                                 this.refs.search_input.focus()
                             }

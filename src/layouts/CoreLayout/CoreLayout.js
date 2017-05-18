@@ -22,7 +22,7 @@ class CoreLayout extends Component {
       closeNotification } = this.props
 
     return (
-      <div>
+      <div style={{height: '100%'}}>
         {fetching && <FullScreenLoader />}
         {!fetching && React.cloneElement(this.props.children, { setPageTitle: setPageTitle })}
         <NotificationIndicator
