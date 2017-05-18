@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import AutoComplete from 'material-ui/AutoComplete'
+import TextField from 'material-ui/TextField'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 import SearchIcon from 'material-ui/svg-icons/action/search'
@@ -8,39 +8,6 @@ import classes from './SearchInput.scss'
 
 class SearchInput extends Component {
     timeoutId = null
-    
-    getSuggestions(currentValue) {
-        const possibleCommands = [
-            'filename:',
-            'source:',
-            'size>',
-            'size<',
-            'when:today',
-            'when:thisweek',
-            'when:thismonth',
-            'when:thisyear',
-            'author:'
-        ]
-
-        const lastSpaceSymbol = currentValue.lastIndexOf(' ')
-        const prefix = lastSpaceSymbol === -1 ? '' : `${currentValue.slice(0, lastSpaceSymbol)} `
-
-        return possibleCommands.map(val => {
-            const text = `${prefix}${val}`
-            return {
-                text: text,
-                value: (
-                    <MenuItem
-                        primaryText={text}
-                        leftIcon={<SearchIcon />}                        
-                        innerDivStyle={{
-                            padding: '0px 16px 0px 43px',                            
-                        }}
-                    />
-                )
-            }
-        })
-    }
 
     componentDidMount() {
         this.refs.search_input.focus()
@@ -59,13 +26,15 @@ class SearchInput extends Component {
         </span>
 
         return (
-            <div ref='search_container' style={{ display: 'flex', justifyContent: 'flex-start', flexGrow: '2', margin: '15px', background: 'rgba(255, 255, 255, 0.2)', borderRadius: '3px' }}>
+            <div
+                style={{ display: 'flex', justifyContent: 'flex-start', flexGrow: '2', margin: '15px', background: 'rgba(255, 255, 255, 0.2)', borderRadius: '3px' }}
+                ref={(container) => this.search_container = container}
+            >
                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginRight: '3px' }}>
                     <SearchIcon style={{ color: 'white', height: '100%' }} onTouchTap={() => performSearch(0, query)} />
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                    <AutoComplete
-                        animated={false}
+                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }} >
+                    <TextField                        
                         ref='search_input'
                         name='search_input'
                         fullWidth={true}
@@ -74,8 +43,7 @@ class SearchInput extends Component {
                         hintStyle={{ color: '#EEEEEE' }}
                         hintText={hintText}
                         spellCheck={false}
-                        searchText={query}
-                        dataSource={this.getSuggestions(query)}
+                        value={query}                        
                         onKeyPress={(event) => {
                             if (event.charCode === 13) {
                                 performSearch(0, query)
@@ -85,30 +53,15 @@ class SearchInput extends Component {
                         onKeyDown={(event) => {
                             clearTimeout(this.timeoutId)
                         }}
-                        onUpdateInput={(newValue, dataSource, params) => {
+                        onChange={(event, newValue) => {
                             clearTimeout(this.timeoutId)
                             setQuery(newValue)
 
                             this.timeoutId = setTimeout(() => {
                                 performSearch(0, newValue)
                             }, 200)
-                        }}
-                        textFieldStyle={{ display: 'block' }}
-                        onNewRequest={() => {
-                            if (this.refs.search_input) {
-                                this.refs.search_input.focus()
-                            }
-                        }}
-                        underlineShow={false}
-                        popoverProps={{
-                            anchorEl: this.refs.search_container
-                        }}
-                        menuCloseDelay={100}
-                        listStyle={{
-                            padding: '0 !important',
-                            paddingBottom: '0 !important',
-                            paddingTop: '0 !important',
-                        }}
+                        }}                        
+                        underlineShow={false}                                                      
                     />
                 </div>
             </div>

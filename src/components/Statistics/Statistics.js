@@ -52,7 +52,7 @@ class Statistics extends Component {
         const chartCardStyle = { display: 'flex', minWidth: '50%', maxWidth: '100%' }
 
         return (
-            <div>
+            <div className='pageContainer'>
                 {!fetching && data.procTotal.totalCount > 0 &&
                     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
                         <div style={{ display: 'flex', width: '100%' }}>

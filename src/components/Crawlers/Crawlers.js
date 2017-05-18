@@ -40,7 +40,7 @@ class Crawlers extends Component {
             mode } = this.props
 
         return (
-            <div>
+            <div className='pageContainer'>
                 {!fetching &&
                     <PipelineCard pipeline={pipeline} loadPipelineLog={loadPipelineLog} />
                 }

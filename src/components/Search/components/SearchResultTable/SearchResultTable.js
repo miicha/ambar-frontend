@@ -95,7 +95,7 @@ class SearchResultTable extends Component {
         </div>)
 
         return (
-            <div>
+            <div className='pageContainer'>
                 {hits && hits.size > 0 && Array.from(hits.values()).map((hit, idx) =>
                     <SearchResultRow
                         key={hit.sha256}

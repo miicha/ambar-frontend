@@ -101,7 +101,8 @@ class Search extends Component {
                     sources={sources}
                     toggleSourceSelected={toggleSourceSelected}
                 />
-                <div style={{ height: '100%', overflowY: 'auto' }} ref={(container) => { this.containerNode = container }}>
+                <div style={{ height: '100%', overflowY: 'auto' }} 
+                    ref={(container) => { this.containerNode = container }}>
                     <SearchResultTable
                         fetching={fetching}
                         performSearch={performSearch}
@@ -128,7 +129,7 @@ class Search extends Component {
                     />}
                 </div>
                 <div>
-                    <div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', bottom: '10%', right: '20px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', bottom: '10%', right: '30px' }}>
                         <FloatingActionButton
                             zDepth={4}
                             onTouchTap={() => { this.containerNode.scrollTop = 0 }}

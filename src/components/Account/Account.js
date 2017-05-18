@@ -48,7 +48,7 @@ class Account extends Component {
         } = this.props
 
         return (
-            <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+            <div className='pageContainer' style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <UserInfoCard
                     isDefaultUser={isDefaultUser}
                     email={email}

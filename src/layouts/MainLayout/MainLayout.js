@@ -56,7 +56,7 @@ class MainLayout extends Component {
                             <AmbarResponsiveLogo version={version} mode={mode} />
                         </div>}
                     />
-                    <div style={{ maxWidth: '1200px', margin: '0 auto', height: '100%', overflowY: 'hidden', paddingTop: '70px' }}>
+                    <div style={{ width: '100%', height: '100%', overflowY: 'hidden', paddingTop: '64px' }}>
                         <div style={{height: '100%', overflowY: 'auto'}}>
                             {React.cloneElement(children, { setPageTitle: setPageTitle, setAppHeader: setAppHeader })}
                         </div>
