@@ -13,7 +13,7 @@ class AuthLayout extends Component {
     const { fetching, Component, isAuthenticated, allowedRoutes, setPageTitle, children} = this.props
 
     return (
-      <div>
+      <div style={{height: '100%'}}>
         {!(isAuthenticated && !fetching) && <FullScreenLoader />}
         {isAuthenticated && !fetching && <Component children={children} isAuthenticated={isAuthenticated} allowedRoutes={allowedRoutes} setPageTitle={setPageTitle} />}
       </div>)

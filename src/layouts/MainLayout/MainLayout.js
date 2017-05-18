@@ -30,8 +30,8 @@ class MainLayout extends Component {
         } = this.props
 
         return (
-            <div>
-                <div>
+            <div style={{height: '100%'}}>
+                <div style={{height: '100%'}}>
                     {fetching && <LinearProgress style={{ position: 'fixed', top: '64px', zIndex: '2000' }} color="#FFAB00" />}
                     <SideMenu
                         isOpen={isSideMenuOpen}
@@ -56,8 +56,8 @@ class MainLayout extends Component {
                             <AmbarResponsiveLogo version={version} mode={mode} />
                         </div>}
                     />
-                    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                        <div className={classes.mainContainer}>
+                    <div style={{ maxWidth: '1200px', margin: '0 auto', height: '100%', overflowY: 'hidden', paddingTop: '70px' }}>
+                        <div style={{height: '100%', overflowY: 'auto'}}>
                             {React.cloneElement(children, { setPageTitle: setPageTitle, setAppHeader: setAppHeader })}
                         </div>
                     </div>

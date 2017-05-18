@@ -5,6 +5,7 @@ import UploadFileModal from './components/UploadFileModal'
 import ImagePreview from './components/ImagePreview'
 import SearchInput from './components/SearchInput'
 import RefineSearchModal from './components/RefineSearchModal'
+import { InfiniteScroll } from 'components/BasicComponents'
 
 import { cyan100, cyan300, cyan400 } from 'material-ui/styles/colors'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
@@ -14,7 +15,6 @@ import ArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
-import Scroll from 'react-scroll'
 
 import classes from './Search.scss'
 
@@ -30,7 +30,7 @@ class Search extends Component {
             left: () => <MediaQuery query='(min-width: 1024px)'>Search</MediaQuery>,
             center: (state) => {
                 return (
-                    <SearchInput 
+                    <SearchInput
                         setQuery={setQuery}
                         query={state['searchPage'].searchQuery}
                         performSearch={performSearch}
@@ -51,10 +51,6 @@ class Search extends Component {
     componentWillUnmount() {
         const { cleanUpSearchResult } = this.props
         cleanUpSearchResult()
-    }
-
-    scrollToTop() {
-        Scroll.animateScroll.scrollToTop()
     }
 
     render() {
@@ -98,36 +94,44 @@ class Search extends Component {
          } = this.props
 
         return (
-            <div>
+            <div style={{ height: '100%' }}>
                 <RefineSearchModal
                     isRefineSearchModalOpen={isRefineSearchModalOpen}
                     toggleRefineSearchModal={toggleRefineSearchModal}
                     sources={sources}
                     toggleSourceSelected={toggleSourceSelected}
                 />
-                <SearchResultTable
-                    currentPage={currentPage}
-                    fetching={fetching}
-                    performSearch={performSearch}
-                    loadHighlight={loadHighlight}
-                    hits={hits}
-                    searchQuery={searchQuery}
-                    hasMore={hasMore}
-                    urls={urls}
-                    setScrolledDown={setScrolledDown}
-                    scrolledDown={scrolledDown}
-                    performSearchBySource={performSearchBySource}
-                    performSearchByAuthor={performSearchByAuthor}
-                    performSearchByPathToFile={performSearchByPathToFile}
-                    performSearchByQuery={performSearchByQuery}
-                    toggleImagePreview={toggleImagePreview}
-                    showFilePreview={showFilePreview}
-                />
+                <div style={{ height: '100%', overflowY: 'auto' }} ref={(container) => { this.containerNode = container }}>
+                    <SearchResultTable
+                        fetching={fetching}
+                        performSearch={performSearch}
+                        loadHighlight={loadHighlight}
+                        hits={hits}
+                        searchQuery={searchQuery}
+                        urls={urls}                        
+                        performSearchBySource={performSearchBySource}
+                        performSearchByAuthor={performSearchByAuthor}
+                        performSearchByPathToFile={performSearchByPathToFile}
+                        performSearchByQuery={performSearchByQuery}
+                        toggleImagePreview={toggleImagePreview}
+                        showFilePreview={showFilePreview}
+                    />
+                    {this.containerNode && <InfiniteScroll
+                        anchorEl={this.containerNode}
+                        currentPage={currentPage}
+                        threshold={100}
+                        loadMore={(newPage) => {
+                            performSearch(newPage, searchQuery)
+                        }}
+                        hasMore={hasMore}
+                        onScrollDown={(isFirstPage) => setScrolledDown(!isFirstPage)}
+                    />}
+                </div>
                 <div>
                     <div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', bottom: '10%', right: '20px' }}>
                         <FloatingActionButton
                             zDepth={4}
-                            onTouchTap={this.scrollToTop}
+                            onTouchTap={() => { this.containerNode.scrollTop = 0 }}
                             className={scrolledDown ? '' : 'hiddenWithAnimation'}>
                             <ArrowUpward />
                         </FloatingActionButton>

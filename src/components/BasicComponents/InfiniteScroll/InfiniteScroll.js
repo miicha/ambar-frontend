@@ -3,13 +3,6 @@ import ReactDOM from 'react-dom'
 import deepEqual from 'deep-equal'
 import { bindMethods } from './bindMethods.js'
 
-const topPosition = (domElt) => {
-  if (!domElt) {
-    return 0
-  }
-  return domElt.offsetTop + topPosition(domElt.offsetParent)
-}
-
 export default class InfiniteScroll extends React.Component {
   constructor(props) {
     super(props)
@@ -24,35 +17,44 @@ export default class InfiniteScroll extends React.Component {
     return !deepEqual(this.props.children, nextProps.children)
   }
 
-  componentDidUpdate() {
-  }
-
   componentWillUnmount() {
     this.detachScrollListener()
   }
 
-  render() {
-    return React.DOM.div(null, this.props.children)
+  render() {    
+    return null
+  }
+
+  safeCallOnScrollDown(isFirstPage) {
+    if (this.props.onScrollDown) {
+        this.props.onScrollDown(isFirstPage)
+      }
   }
 
   scrollListener() {
-    const { hasMore, currentPage } = this.props
-    let el = ReactDOM.findDOMNode(this);
-    let scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-    if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < Number(this.props.threshold)) {      
-      {hasMore && this.props.loadMore(currentPage + 1)}
+    const { hasMore, currentPage, anchorEl, threshold, loadMore } = this.props
+    let el = anchorEl
+
+    this.safeCallOnScrollDown(el.scrollTop < el.offsetHeight * 0.75)
+
+    if (el.scrollHeight > 0 && (el.scrollHeight - el.scrollTop - el.offsetHeight < threshold)) {
+      { hasMore && loadMore(currentPage + 1) }
     }
   }
 
   attachScrollListener() {
-    window.addEventListener('scroll', this.scrollListener)
-    window.addEventListener('resize', this.scrollListener)
-    this.scrollListener();
+    const el = this.props.anchorEl
+
+    el.addEventListener('scroll', this.scrollListener)
+    el.addEventListener('resize', this.scrollListener)
+    this.scrollListener()
   }
 
   detachScrollListener() {
-    window.removeEventListener('scroll', this.scrollListener)
-    window.removeEventListener('resize', this.scrollListener)
+    const el = this.props.anchorEl
+
+    el.removeEventListener('scroll', this.scrollListener)
+    el.removeEventListener('resize', this.scrollListener)
   }
 }
 
@@ -60,11 +62,13 @@ InfiniteScroll.defaultProps = {
   currentPage: 0,
   hasMore: true,
   threshold: 250
-};
+}
 
 InfiniteScroll.PropTypes = {
-  currentPage: React.PropTypes.number.isRequired,   
+  currentPage: React.PropTypes.number.isRequired,
   hasMore: React.PropTypes.bool,
   loadMore: React.PropTypes.func.isRequired,
-  threshold: React.PropTypes.number
-};
+  threshold: React.PropTypes.number,
+  onScrollDown: React.PropTypes.func,
+  anchorEl: React.PropTypes.object.isRequired
+}
