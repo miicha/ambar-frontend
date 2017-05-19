@@ -3,7 +3,7 @@ import EmptyCard from '../EmptyCard'
 import classes from './HintCard.scss'
 
 const HintCard = (props) => {
-    const { title, description } = props
+    const { title, description, performSearchByQuery } = props
 
     const hintText = (<div><p>Try these tips to refine your search</p>
         <ul>
@@ -82,7 +82,8 @@ const HintCard = (props) => {
 
 HintCard.propTypes = {
     title: React.PropTypes.string.isRequired,
-    description: React.PropTypes.object.isRequired
+    description: React.PropTypes.object.isRequired,
+    performSearchByQuery: React.PropTypes.func.isRequired
 }
 
 export default HintCard

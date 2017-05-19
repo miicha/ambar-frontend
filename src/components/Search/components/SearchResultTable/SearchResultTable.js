@@ -40,12 +40,14 @@ class SearchResultTable extends Component {
                     && <HintCard
                         title='Nothing found'
                         description={<span>Your search - <i>{searchQuery}</i> - did not match any documents</span>}
+                        performSearchByQuery={performSearchByQuery}
                     />}
                 {(!hits || hits.size == 0)
                     && searchQuery === ''
                     && <HintCard
                         title='Few tips for search'
                         description={<span>Just type your query in search input above and hit "Enter"</span>}
+                        performSearchByQuery={performSearchByQuery}
                     />}
             </div>
         )
