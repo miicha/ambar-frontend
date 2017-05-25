@@ -303,6 +303,11 @@ export const loadSources = () => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
+        //Do nothing if Search page hasn't been loaded yet
+        if (!getState()['searchPage']) {
+            return
+        }
+
         const query = getState()['searchPage'].searchQuery
 
         dispatch(startLoadingIndicator())

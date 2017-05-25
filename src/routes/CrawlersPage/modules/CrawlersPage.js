@@ -1,7 +1,8 @@
 import { stateValueExtractor } from 'utils/'
 import { crawlersModel } from 'models/'
 import { handleError } from 'routes/CoreLayout/modules/CoreLayout'
-import { startLoadingIndicator, stopLoadingIndicator, loadSources } from 'routes/MainLayout/modules/MainLayout'
+import { startLoadingIndicator, stopLoadingIndicator } from 'routes/MainLayout/modules/MainLayout'
+import { loadSources } from 'routes/SearchPage/modules/SearchPage'
 import 'whatwg-fetch'
 
 const UPDATE_CRAWLER = 'SETTINGS.UPDATE_CRAWLER'
@@ -13,10 +14,10 @@ const REQUEST_SIZE = 10
 const CRAWLER_LOG_SIZE = 10
 const PIPELINE_LOG_SIZE = 30
 
-export const loadCrawlers = () => {    
+export const loadCrawlers = () => {
     return (dispatch, getState) => {
         return new Promise((resolve) => {
-            const urls = stateValueExtractor.getUrls(getState()) 
+            const urls = stateValueExtractor.getUrls(getState())
             const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
             dispatch(startLoadingIndicator())
@@ -25,79 +26,79 @@ export const loadCrawlers = () => {
                 method: 'GET',
                 ...defaultSettings
             })
-            .then((resp) => {
-                if (resp.status === 200) { return resp.json() }
-                else { throw resp }
-            })    
-            .then((data) => {
-                const crawlers = crawlersModel.fromApi(data)
-                dispatch(stopLoadingIndicator())
-                dispatch(fillCrawlers(crawlers))
+                .then((resp) => {
+                    if (resp.status === 200) { return resp.json() }
+                    else { throw resp }
+                })
+                .then((data) => {
+                    const crawlers = crawlersModel.fromApi(data)
+                    dispatch(stopLoadingIndicator())
+                    dispatch(fillCrawlers(crawlers))
 
-                crawlers.forEach((crawler, crawlerId, mapObject) => {
-                    dispatch(loadCrawlerLog(crawler))
-                }); 
-            })        
-            .catch((errorPayload) => {
-                dispatch(stopLoadingIndicator())
-                dispatch(handleError(errorPayload))
-                console.error('loadCrawlers', errorPayload)
-            })
-    })
+                    crawlers.forEach((crawler, crawlerId, mapObject) => {
+                        dispatch(loadCrawlerLog(crawler))
+                    });
+                })
+                .catch((errorPayload) => {
+                    dispatch(stopLoadingIndicator())
+                    dispatch(handleError(errorPayload))
+                    console.error('loadCrawlers', errorPayload)
+                })
+        })
     }
 }
 
 export const loadCrawlerLog = (crawler, preserveDisplayArgs = true) => {
-     return (dispatch, getState) => {
+    return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-        fetch(urls.ambarWebApiGetCrawlerLog(crawler.settings.uid, CRAWLER_LOG_SIZE) , {
+        fetch(urls.ambarWebApiGetCrawlerLog(crawler.settings.uid, CRAWLER_LOG_SIZE), {
             method: 'GET',
             ...defaultSettings
         })
-        .then ((resp) => {
-            if (resp.status == 200) { return resp.json() }
-            else { throw resp }            
-        })
-        .then((receivedLogs) => {
-            if (preserveDisplayArgs) {
-                const crawlerId = crawler.settings.id
-                const crawlerFromState = getState().crawlersPage.crawlers.get(crawlerId)
-                dispatch(updateCrawler({ ...crawler, log: { records: receivedLogs }, displayArgs: crawlerFromState.displayArgs }))
-            }
-            else {
-                dispatch(updateCrawler({ ...crawler, log: { records: receivedLogs } }))
-            }
-        })
-        .catch((errorPayload) => {
-            dispatch(updateCrawler({ ...crawler, log: {...crawler.log }}))
-            console.error('loadCrawlerLog', errorPayload)
-        })
-     }
+            .then((resp) => {
+                if (resp.status == 200) { return resp.json() }
+                else { throw resp }
+            })
+            .then((receivedLogs) => {
+                if (preserveDisplayArgs) {
+                    const crawlerId = crawler.settings.id
+                    const crawlerFromState = getState().crawlersPage.crawlers.get(crawlerId)
+                    dispatch(updateCrawler({ ...crawler, log: { records: receivedLogs }, displayArgs: crawlerFromState.displayArgs }))
+                }
+                else {
+                    dispatch(updateCrawler({ ...crawler, log: { records: receivedLogs } }))
+                }
+            })
+            .catch((errorPayload) => {
+                dispatch(updateCrawler({ ...crawler, log: { ...crawler.log } }))
+                console.error('loadCrawlerLog', errorPayload)
+            })
+    }
 }
 
 export const loadPipelineLog = (pipeline) => {
-     return (dispatch, getState) => {
+    return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-        fetch(urls.ambarWebApiGetCrawlerLog('pipeline', PIPELINE_LOG_SIZE) , {
+        fetch(urls.ambarWebApiGetCrawlerLog('pipeline', PIPELINE_LOG_SIZE), {
             method: 'GET',
             ...defaultSettings
         })
-        .then ((resp) => {
-            if (resp.status == 200) { return resp.json() }
-            else { throw resp }            
-        })
-        .then((data) => {            
-            dispatch(updatePipeline({ ...pipeline, log: { records: data }}))
-        })
-        .catch((errorPayload) => {
-            dispatch(updatePipeline({ ...pipeline, log: {...pipeline.log }}))
-            console.error('loadPipelineLog', errorPayload)
-        })
-     }
+            .then((resp) => {
+                if (resp.status == 200) { return resp.json() }
+                else { throw resp }
+            })
+            .then((data) => {
+                dispatch(updatePipeline({ ...pipeline, log: { records: data } }))
+            })
+            .catch((errorPayload) => {
+                dispatch(updatePipeline({ ...pipeline, log: { ...pipeline.log } }))
+                console.error('loadPipelineLog', errorPayload)
+            })
+    }
 }
 
 export const startStopCrawler = (crawler, startStopCommand) => {
@@ -106,35 +107,35 @@ export const startStopCrawler = (crawler, startStopCommand) => {
             const urls = stateValueExtractor.getUrls(getState())
             const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: true }}))
+            dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: true } }))
 
             fetch(urls.ambarWebApiStartStopCrawler(crawler.settings.id, startStopCommand), {
                 method: 'PUT',
                 ...defaultSettings
             })
-            .then((resp) => {
-                if (resp.status === 200 || resp.status === 304) { 
-                    return fetch(urls.ambarWebApiGetCrawler(crawler.settings.id), {
-                        method: 'GET',
-                        ...defaultSettings
-                    })                                       
-                }
-                else { throw resp }            
-            })
-            .then((resp) => {
-                if (resp.status === 200) { return resp.json() }
-                else { throw resp }
-            })
-            .then((data) => {
-                let crawlerFromApi = crawlersModel.fromApiSingle(data) 
-                crawlerFromApi = {...crawlerFromApi, log: {records: crawler.log.records}}                                                                        
-                dispatch(loadCrawlerLog(crawlerFromApi))   
-            })
-            .catch((errorPayload) => {                
-                dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false }}))
-                dispatch(handleError(errorPayload))
-                console.error('startStopCrawler', errorPayload)
-            })           
+                .then((resp) => {
+                    if (resp.status === 200 || resp.status === 304) {
+                        return fetch(urls.ambarWebApiGetCrawler(crawler.settings.id), {
+                            method: 'GET',
+                            ...defaultSettings
+                        })
+                    }
+                    else { throw resp }
+                })
+                .then((resp) => {
+                    if (resp.status === 200) { return resp.json() }
+                    else { throw resp }
+                })
+                .then((data) => {
+                    let crawlerFromApi = crawlersModel.fromApiSingle(data)
+                    crawlerFromApi = { ...crawlerFromApi, log: { records: crawler.log.records } }
+                    dispatch(loadCrawlerLog(crawlerFromApi))
+                })
+                .catch((errorPayload) => {
+                    dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: false } }))
+                    dispatch(handleError(errorPayload))
+                    console.error('startStopCrawler', errorPayload)
+                })
         })
     }
 }
@@ -154,26 +155,26 @@ export const refreshCrawler = (crawlerId) => {
             method: 'GET',
             ...defaultSettings
         })
-        .then((resp) => {                         
-            if (resp.status === 200) { return resp.json() }
-            else { throw resp }
-        }) 
-        .then((data) => {
-            let crawlerFromApi = crawlersModel.fromApiSingle(data)        
-            crawlerFromApi = {...crawlerFromApi, log: {records: crawler.log.records}, displayArgs: crawler.displayArgs}                               
-            dispatch(loadCrawlerLog(crawlerFromApi))     
-        })
-        .catch((errorPayload) => {
-            if (errorPayload.status == 404) {
-                dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, delete: true }})) 
-                console.warn('refreshCrawler', errorPayload)
-                return
-            }
-            
-            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false }}))
-            dispatch(handleError(errorPayload))
-            console.error('refreshCrawler', errorPayload)
-        })         
+            .then((resp) => {
+                if (resp.status === 200) { return resp.json() }
+                else { throw resp }
+            })
+            .then((data) => {
+                let crawlerFromApi = crawlersModel.fromApiSingle(data)
+                crawlerFromApi = { ...crawlerFromApi, log: { records: crawler.log.records }, displayArgs: crawler.displayArgs }
+                dispatch(loadCrawlerLog(crawlerFromApi))
+            })
+            .catch((errorPayload) => {
+                if (errorPayload.status == 404) {
+                    dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, delete: true } }))
+                    console.warn('refreshCrawler', errorPayload)
+                    return
+                }
+
+                dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: false } }))
+                dispatch(handleError(errorPayload))
+                console.error('refreshCrawler', errorPayload)
+            })
     }
 }
 
@@ -182,163 +183,165 @@ export const deleteCrawler = (crawler) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-        dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: true }}))
+        dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: true } }))
 
         fetch(urls.ambarWebApiDeleteCrawler(crawler.settings.id), {
             method: 'DELETE',
             ...defaultSettings
         })
-        .then((resp) => {
-            if (resp.status === 200) { 
-                dispatch(updateCrawler({ 
+            .then((resp) => {
+                if (resp.status === 200) {
+                    dispatch(updateCrawler({
                         ...crawler,
-                         meta: {...crawler.meta, delete: true }, 
-                         displayArgs: {...crawler.displayArgs, isDeleteModalOpen: false}
-                    })) 
-            }
-            else { throw resp }
-        })
-        .catch((errorPayload) => {   
-            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, errorMessage: `Server error` }})) 
-            console.error('deleteCrawler', errorPayload)
-        })   
+                        meta: { ...crawler.meta, delete: true },
+                        displayArgs: { ...crawler.displayArgs, isDeleteModalOpen: false }
+                    }))
+                }
+                else { throw resp }
+            })
+            .catch((errorPayload) => {
+                dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: false, errorMessage: `Server error` } }))
+                console.error('deleteCrawler', errorPayload)
+            })
     }
 }
 
 export const setCrawlerUpdateJSON = (crawler, updateJSON) => {
-    return (dispatch, getState) => { 
-        dispatch(updateCrawler({ ...crawler, meta: {
-                    ...crawler.meta,
-                    updateJSON: updateJSON,
-                    updateJSONTouched: true
-                }
+    return (dispatch, getState) => {
+        dispatch(updateCrawler({
+            ...crawler, meta: {
+                ...crawler.meta,
+                updateJSON: updateJSON,
+                updateJSONTouched: true
+            }
         }))
     }
 }
 
 export const updateCrawlerFromUpdateJSON = (crawler) => {
-    return (dispatch, getState) => { 
+    return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-        dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: true }}))
+        dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: true } }))
 
         let crawlerSettings = null
 
-        try { crawlerSettings = JSON.parse(crawler.meta.updateJSON) } 
-        catch(errorPayload) {            
-            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Specified JSON is invalid!' }}))
-            return
-        }       
-
-        if (crawler.settings.id != crawlerSettings.id) {
-            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Please do not change crawler id!' }}))
+        try { crawlerSettings = JSON.parse(crawler.meta.updateJSON) }
+        catch (errorPayload) {
+            dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Specified JSON is invalid!' } }))
             return
         }
 
-        if ((crawlerSettings.credentials.password === '******' || crawlerSettings.credentials.password == '') && (crawlerSettings.credentials.token === '******' || crawlerSettings.credentials.token == '') && (crawlerSettings.credentials.auth_type != 'basic')) {
-            dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Please provide password or token for ntlm or oauth authentication!' }}))
+        if (crawler.settings.id != crawlerSettings.id) {
+            dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Please do not change crawler id!' } }))
             return
-        }       
-        
+        }
+
+        if ((crawlerSettings.credentials.password === '******') || (crawlerSettings.credentials.token === '******')) {
+            dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: 'Please provide password or token!' } }))
+            return
+        }
+
         fetch(urls.ambarWebApiUpdateCrawler(crawler.settings.id), {
             method: 'POST',
             ...defaultSettings,
             body: JSON.stringify(crawlerSettings)
         })
-        .then((resp) => {
-            if (resp.status === 200) {  
-                return fetch(urls.ambarWebApiGetCrawler(crawler.settings.id), {
-                    method: 'GET',
-                    ...defaultSettings
-                })                                           
-                .then((resp) => {
-                    if (resp.status === 200) { return resp.json() }
-                    else { throw `Unrecognized response code ${resp.status}` }
-                })
-            }
-            if (resp.status === 400 || resp.status === 500 ) {
-                return resp.json()
-                    .then((json) => {
-                        throw json.message
+            .then((resp) => {
+                if (resp.status === 200) {
+                    return fetch(urls.ambarWebApiGetCrawler(crawler.settings.id), {
+                        method: 'GET',
+                        ...defaultSettings
                     })
-            }
-            else { throw `Unrecognized response code ${resp.status}` }
-        })               
-        .then((data) => {
-            let updatedCrawler = crawlersModel.fromApiSingle(data) 
-            updatedCrawler = {...updatedCrawler, displayArgs: {...crawler.displayArgs, isSettingsModalOpen: false}}                                         
-            dispatch(loadCrawlerLog(updatedCrawler, false)) 
-        })
-        .catch((errorPayload) => {
-             dispatch(updateCrawler({ ...crawler, meta: {...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: errorPayload }}))
-             console.error('updateCrawlerFromUpdateJSON', errorPayload)
-        })
+                        .then((resp) => {
+                            if (resp.status === 200) { return resp.json() }
+                            else { throw `Unrecognized response code ${resp.status}` }
+                        })
+                }
+                if (resp.status === 400 || resp.status === 500) {
+                    return resp.json()
+                        .then((json) => {
+                            throw json.message
+                        })
+                }
+                else { throw `Unrecognized response code ${resp.status}` }
+            })
+            .then((data) => {
+                let updatedCrawler = crawlersModel.fromApiSingle(data)
+                updatedCrawler = { ...updatedCrawler, displayArgs: { ...crawler.displayArgs, isSettingsModalOpen: false } }
+                dispatch(loadCrawlerLog(updatedCrawler, false))
+            })
+            .catch((errorPayload) => {
+                dispatch(updateCrawler({ ...crawler, meta: { ...crawler.meta, fetching: false, updateJSONTouched: false, errorMessage: errorPayload } }))
+                console.error('updateCrawlerFromUpdateJSON', errorPayload)
+            })
     }
 }
 
 export const setNewCrawlerJSON = (newCrawler, json) => {
-    return (dispatch, getState) => { 
-        dispatch(updateNewCrawler({...newCrawler, json: json, jsonTouched: true}))
+    return (dispatch, getState) => {
+        dispatch(updateNewCrawler({ ...newCrawler, json: json, jsonTouched: true }))
     }
 }
 
 export const createNewCrawler = (newCrawler) => {
-    return (dispatch, getState) => { 
+    return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-        dispatch(updateNewCrawler({...newCrawler, fetching: true}))
+        dispatch(updateNewCrawler({ ...newCrawler, fetching: true }))
 
         let crawlerToCreate = {}
 
         try { crawlerToCreate = JSON.parse(newCrawler.json) }
-        catch(errorPayload) {
-            dispatch(updateNewCrawler({...newCrawler, fetching: false, errorMessage: 'Specified JSON is invalid!', jsonTouched: false}))
+        catch (errorPayload) {
+            dispatch(updateNewCrawler({ ...newCrawler, fetching: false, errorMessage: 'Specified JSON is invalid!', jsonTouched: false }))
             return
         }
 
         const crawlers = getState().crawlersPage.crawlers
         if (crawlers.has(crawlerToCreate.id)) {
-            dispatch(updateNewCrawler({...newCrawler, fetching: false, errorMessage: 'Crawler with specified id already exists!', jsonTouched: false}))
+            dispatch(updateNewCrawler({ ...newCrawler, fetching: false, errorMessage: 'Crawler with specified id already exists!', jsonTouched: false }))
             return
-        }    
+        }
 
         fetch(urls.ambarWebApiCreateCrawler(crawlerToCreate.id), {
             method: 'POST',
             ...defaultSettings,
             body: newCrawler.json
         })
-        .then((resp) => {
-            if (resp.status === 201) { 
-                dispatch(updateNewCrawler({...newCrawler, fetching: false, jsonTouched: false, isCreateCrawlerModalOpen: false})) 
-                dispatch(loadCrawlers()) 
-                dispatch(loadSources())
-            }
-            else { throw resp }
-        })
-        .catch((errorPayload) => {
-             dispatch(updateNewCrawler({...newCrawler, fetching: false, errorMessage: `Error: ${errorPayload.message}`, jsonTouched: false})) 
-             console.error('createNewCrawler', errorPayload)
-        })
+            .then((resp) => {
+                if (resp.status === 201) {
+                    const crawlerJsonTemplate = getState()['core'].crawlerJsonTemplate
+                    dispatch(updateNewCrawler({ ...newCrawler, json: crawlerJsonTemplate, fetching: false, jsonTouched: false, isCreateCrawlerModalOpen: false }))
+                    dispatch(loadCrawlers())
+                    dispatch(loadSources())
+                }
+                else { throw resp }
+            })
+            .catch((errorPayload) => {
+                dispatch(updateNewCrawler({ ...newCrawler, fetching: false, errorMessage: `Error: ${errorPayload.message}`, jsonTouched: false }))
+                console.error('createNewCrawler', errorPayload)
+            })
     }
 }
 
 export const setDeleteModalOpen = (crawler, isOpen) => {
-    return (dispatch, getState) => { 
-        dispatch(updateCrawler({...crawler, displayArgs: { ...crawler.displayArgs, isDeleteModalOpen: isOpen }}))
+    return (dispatch, getState) => {
+        dispatch(updateCrawler({ ...crawler, displayArgs: { ...crawler.displayArgs, isDeleteModalOpen: isOpen } }))
     }
 }
 
 export const setSettingsModalOpen = (crawler, isOpen) => {
-    return (dispatch, getState) => { 
-        dispatch(updateCrawler({...crawler, displayArgs: { ...crawler.displayArgs, isSettingsModalOpen: isOpen }}))
+    return (dispatch, getState) => {
+        dispatch(updateCrawler({ ...crawler, displayArgs: { ...crawler.displayArgs, isSettingsModalOpen: isOpen } }))
     }
 }
 
 export const setCreateCrawlerModalOpen = (newCrawler, isOpen) => {
-    return (dispatch, getState) => { 
-        dispatch(updateNewCrawler({...newCrawler, isCreateCrawlerModalOpen: isOpen }))
+    return (dispatch, getState) => {
+        dispatch(updateNewCrawler({ ...newCrawler, isCreateCrawlerModalOpen: isOpen }))
     }
 }
 
@@ -370,24 +373,24 @@ const updateNewCrawler = (newCrawler) => {
     }
 }
 
-const ACTION_HANDLERS = {    
+const ACTION_HANDLERS = {
     [FILL_CRAWLERS]: (state, action) => {
-        let newState = {...state }
+        let newState = { ...state }
         newState.crawlers = action.crawlers
         return newState
     },
     [UPDATE_CRAWLER]: (state, action) => {
-        let newState = {...state }
+        let newState = { ...state }
         newState.crawlers = new Map(state.crawlers)
         if (action.crawler.meta.delete) { newState.crawlers.delete(action.crawler.settings.id) }
-        else { newState.crawlers.set(action.crawler.settings.id, action.crawler) }       
+        else { newState.crawlers.set(action.crawler.settings.id, action.crawler) }
         return newState
     },
     [UPDATE_NEW_CRAWLER]: (state, action) => {
-        return {...state, newCrawler: action.newCrawler }
+        return { ...state, newCrawler: action.newCrawler }
     },
     [UPDATE_PIPELINE]: (state, action) => {
-        return {...state, pipeline: action.pipeline }
+        return { ...state, pipeline: action.pipeline }
     }
 }
 
