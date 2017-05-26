@@ -2,16 +2,6 @@
     margin: 10px;
 }
 
-.searchResultRowCardHeaderTitle {
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.searchResultRowCardHeaderSubTitle {
-    color: #9E9E9E;
-    font-size: 12px;
-}
-
 .searchResultRowCardTextContainer {
     display: flex;
     justify-content: space-between;
@@ -68,11 +58,3 @@ em {
      user-select: none; 
 }
 
-.resultAvatar:hover {    
-    cursor: pointer !important;
-    filter: brightness(1.1);
-}
-
-.resultAvatar:active {
-    filter: brightness(1.2);
-}

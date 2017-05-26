@@ -220,8 +220,8 @@ class TagsInput extends Component {
             <div 
                 style={{padding: '5px', cursor: 'text'}}
                 onClick={() => this.focusOnInput()}>   
-                {this.state.tags.map((tag) => 
-                    <Tag onRemove={(tag) => this.removeTag(tag)}>{tag}</Tag>)
+                {this.state.tags.map((tag, idx) => 
+                    <Tag key={idx} onRemove={(tag) => this.removeTag(tag)}>{tag}</Tag>)
                 }       
                 <Autosuggest 
                     ref='suggestInput'

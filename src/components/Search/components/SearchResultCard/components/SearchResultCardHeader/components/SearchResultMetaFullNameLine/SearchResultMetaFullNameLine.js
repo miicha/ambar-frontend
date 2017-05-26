@@ -31,8 +31,7 @@ const SearchResultMetaFullNameLine = (props) => {
                     onTouchTap={() => performSearchByPathToFile(part.pathToPart)}>
                     {part.part}
                 </span>)}            
-            </div>
-            <span>by Ilya Pirozhenko from DebianPublicFtp</span>
+            </div>            
         </div>
     )
 }

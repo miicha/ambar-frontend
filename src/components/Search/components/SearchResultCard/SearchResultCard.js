@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { LoadingIndicator } from 'components/BasicComponents'
-import SearchResultMetaDescriptionLine from '../SearchResultMetaDescriptionLine'
-import SearchResultMetaFullNameLine from '../SearchResultMetaFullNameLine'
 
-import { Card, CardActions, CardHeader, CardText, CardTitle } from 'material-ui/Card'
-import Avatar from 'material-ui/Avatar'
+import { Card, CardActions, CardText, CardTitle } from 'material-ui/Card'
 import MediaQuery from 'react-responsive'
 import Paper from 'material-ui/Paper'
 import { Divider, FlatButton } from 'material-ui'
@@ -13,49 +10,15 @@ import PreviewIcon from 'material-ui/svg-icons/action/open-in-new'
 import TextDownloadIcon from 'material-ui/svg-icons/action/subject'
 import LinearProgress from 'material-ui/LinearProgress'
 
-import TagsInput from '../TagsInput'
+import { SearchResultCardHeader, TagsInput } from './components'
 
-import classes from './SearchResultRow.scss'
-
-const getHashCode = (str) => {
-    let hash = 0;
-
-    if (str.length == 0) {
-        return hash
-    }
-
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i)
-        hash = ((hash << 5) - hash) + char
-        hash = hash & hash // Convert to 32bit integer
-    }
-
-    return hash
-}
+import classes from './SearchResultCard.scss'
 
 const getExtension = (meta) => {
     let extension = (typeof meta.extension !== 'string') && meta.extension.length && meta.extension.length > 0
         ? meta.extension[0]
         : meta.extension
     return extension ? extension.replace('.', '').toLowerCase() : ''
-}
-
-const getFileAvatarByMeta = (meta, searchFunction) => {
-    const colors = [
-        '#EF5350', '#E53935', '#D81B60', '#EC407A', '#AB47BC', '#7E57C2', '#5C6BC0', '#2196F3', '#43A047', '#EF6C00', '#A1887F', '#78909C', '#FF4081', '#3949AB']
-
-    let extension = getExtension(meta)
-
-    return <Avatar
-        className={classes.resultAvatar}
-        onTouchTap={() => searchFunction(`*.${extension}`)}
-        size={38}
-        style={{
-            fontSize: '12px',
-            textTransform: 'uppercase',
-            cursor: 'default'
-        }}
-        backgroundColor={colors[getHashCode(extension) % colors.length]}>{extension}</Avatar>
 }
 
 const shouldShowPreviewButton = (showFilePreview, size, extension) => {
@@ -101,28 +64,14 @@ class SearchResultRow extends Component {
         return (
             <Paper zDepth={1} className={classes.searchResultRowCard}>
                 <Card>
-                    <CardHeader
-                        style={{ overflowX: 'hidden' }}
-                        textStyle={{paddingRight: '0', display: 'block'}}
-                        title={
-                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div>                                
-                                    <span
-                                        className={classes.searchResultRowCardHeaderTitle}
-                                        dangerouslySetInnerHTML={{ __html: meta.short_name }}
-                                    />&nbsp;&ndash;&nbsp;44Kb                                    
-                                </div>
-                                <div>Modified: Yesterday</div>
-                            </div>
-                        }
-                        avatar={getFileAvatarByMeta(meta, performSearchByPathToFile)}
-                        subtitle={<SearchResultMetaFullNameLine
-                            meta={meta}
-                            performSearchByPathToFile={performSearchByPathToFile}
-                        />}
-                        actAsExpander={false}
-                        showExpandableButton={false}
-                    />       
+                    <SearchResultCardHeader
+                        searchQuery={searchQuery}
+                        meta={meta}
+                        content={content}
+                        performSearchByPathToFile={performSearchByPathToFile}
+                        performSearchByAuthor={performSearchByAuthor}
+                        performSearchBySource={performSearchBySource}
+                    />
                     <TagsInput />
                     <div className={classes.searchResultRowCardTextContainer}>
                         <div className={classes.searchResultRowCardTextDiv}>
@@ -173,14 +122,7 @@ class SearchResultRow extends Component {
                                 primary={true}
                                 onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px') }} />
                             }
-                        </div>
-                        <SearchResultMetaDescriptionLine
-                            searchQuery={searchQuery}
-                            content={content}
-                            meta={meta}
-                            performSearchByAuthor={performSearchByAuthor}
-                            performSearchBySource={performSearchBySource}
-                        />
+                        </div>                        
                     </CardActions>
                 </Card>
             </Paper>

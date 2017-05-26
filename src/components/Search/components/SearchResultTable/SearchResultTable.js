@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import SearchResultRow from '../SearchResultRow'
+import SearchResultCard from '../SearchResultCard'
 import HintCard from '../HintCard'
 
 import classes from './SearchResultTable.scss'
@@ -23,7 +23,7 @@ class SearchResultTable extends Component {
         return (
             <div className='pageContainer'>
                 {hits && hits.size > 0 && Array.from(hits.values()).map((hit, idx) =>
-                    <SearchResultRow
+                    <SearchResultCard
                         key={hit.sha256}
                         hit={hit}
                         searchQuery={searchQuery}
