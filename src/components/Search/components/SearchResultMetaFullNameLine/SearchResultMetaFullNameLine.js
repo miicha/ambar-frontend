@@ -22,14 +22,17 @@ const SearchResultMetaFullNameLine = (props) => {
     const isHighlighted = meta.highlight && meta.highlight.full_name
 
     return (
-        <div className={isHighlighted ? classes.metaFullNameLineContainerHighlighted : classes.metaFullNameLineContainer}>
-            <span>//</span>
-            {fullPathPartsExtended.map((part, idx) => <span
-                className={classes.metaFullNamePart}
-                key={idx}
-                onTouchTap={() => performSearchByPathToFile(part.pathToPart)}>
-                {part.part}
-            </span>)}
+        <div>
+            <div className={isHighlighted ? classes.metaFullNameLineContainerHighlighted : classes.metaFullNameLineContainer}>
+                <span>//</span>
+                {fullPathPartsExtended.map((part, idx) => <span
+                    className={classes.metaFullNamePart}
+                    key={idx}
+                    onTouchTap={() => performSearchByPathToFile(part.pathToPart)}>
+                    {part.part}
+                </span>)}            
+            </div>
+            <span>by Ilya Pirozhenko from DebianPublicFtp</span>
         </div>
     )
 }

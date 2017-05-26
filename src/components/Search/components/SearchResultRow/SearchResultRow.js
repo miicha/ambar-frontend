@@ -13,6 +13,8 @@ import PreviewIcon from 'material-ui/svg-icons/action/open-in-new'
 import TextDownloadIcon from 'material-ui/svg-icons/action/subject'
 import LinearProgress from 'material-ui/LinearProgress'
 
+import TagsInput from '../TagsInput'
+
 import classes from './SearchResultRow.scss'
 
 const getHashCode = (str) => {
@@ -101,12 +103,27 @@ class SearchResultRow extends Component {
                 <Card>
                     <CardHeader
                         style={{ overflowX: 'hidden' }}
-                        title={<span className={classes.searchResultRowCardHeaderTitle} dangerouslySetInnerHTML={{ __html: meta.short_name }} />}
+                        textStyle={{paddingRight: '0', display: 'block'}}
+                        title={
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <div>                                
+                                    <span
+                                        className={classes.searchResultRowCardHeaderTitle}
+                                        dangerouslySetInnerHTML={{ __html: meta.short_name }}
+                                    />&nbsp;&ndash;&nbsp;44Kb                                    
+                                </div>
+                                <div>Modified: Yesterday</div>
+                            </div>
+                        }
                         avatar={getFileAvatarByMeta(meta, performSearchByPathToFile)}
-                        subtitle={<SearchResultMetaFullNameLine meta={meta} performSearchByPathToFile={performSearchByPathToFile} />}
+                        subtitle={<SearchResultMetaFullNameLine
+                            meta={meta}
+                            performSearchByPathToFile={performSearchByPathToFile}
+                        />}
                         actAsExpander={false}
                         showExpandableButton={false}
-                    />
+                    />       
+                    <TagsInput />
                     <div className={classes.searchResultRowCardTextContainer}>
                         <div className={classes.searchResultRowCardTextDiv}>
                             {fetching && <CardText>
@@ -154,7 +171,7 @@ class SearchResultRow extends Component {
                                 icon={<PreviewIcon />}
                                 label='Preview'
                                 primary={true}
-                                onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600px,height=600px') }} />
+                                onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px') }} />
                             }
                         </div>
                         <SearchResultMetaDescriptionLine
