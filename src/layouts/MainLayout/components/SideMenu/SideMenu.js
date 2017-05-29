@@ -71,19 +71,7 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleSideMe
           style={menuItemStyle}>
           Account
         </MenuItem>
-      }
-      <Divider />
-      <MenuItem
-        onTouchTap={() => {
-          toggleSideMenu()
-          window.open('https://ambar.cloud', '_blank')
-        }}
-        value={'/help'}
-        leftIcon={<HelpIcon />}
-        innerDivStyle={innerMenuItemStyle}
-        style={menuItemStyle}>
-        Help
-      </MenuItem>
+      }      
     </Menu>
   </Drawer>
 )

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import FlatButton from 'material-ui/FlatButton'
 import EmptyCard from '../EmptyCard'
 import classes from './HintCard.scss'
 
@@ -64,7 +65,7 @@ const HintCard = (props) => {
     </div>)
 
     const emailText = (<p>
-        Have any questions? <a className={classes.link} href="mailto:hello@ambar.cloud?subject=Ambar Question">Drop us an email</a>
+        Have any questions? <span className={classes.link} onTouchTap={() => document.getElementById('linkedchat-button').click() }>Drop us a message on chat</span>
     </p>)
 
     const textElement = (<div>
