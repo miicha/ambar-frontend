@@ -46,9 +46,11 @@ class SearchResultRow extends Component {
         const {
             hit: {
                 fetching: fetching,
-            meta: meta,
-            content: content,
-            sha256: sha256
+                meta: meta,
+                content: content,
+                sha256: sha256,
+                tags: tags,
+                file_id
             },
             searchQuery,
             loadHighlight,
@@ -57,7 +59,10 @@ class SearchResultRow extends Component {
             performSearchByAuthor,
             performSearchByPathToFile,
             toggleImagePreview,
-            showFilePreview } = this.props
+            showFilePreview,
+            addTagToFile,
+            removeTagFromFile,
+            performSearchByTag } = this.props
 
         const contentHighlight = content && content.highlight && content.highlight.text ? content.highlight.text : undefined
 
@@ -72,7 +77,12 @@ class SearchResultRow extends Component {
                         performSearchByAuthor={performSearchByAuthor}
                         performSearchBySource={performSearchBySource}
                     />
-                    <TagsInput />
+                    <TagsInput
+                        tags={tags.map(t => t.name)}
+                        onAddTag={(tag) => addTagToFile(file_id, tag)}
+                        onRemoveTag={(tag) => removeTagFromFile(file_id, tag)}
+                        performSearchByTag={performSearchByTag}
+                    />
                     <div className={classes.searchResultRowCardTextContainer}>
                         <div className={classes.searchResultRowCardTextDiv}>
                             {fetching && <CardText>
@@ -122,7 +132,7 @@ class SearchResultRow extends Component {
                                 primary={true}
                                 onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px') }} />
                             }
-                        </div>                        
+                        </div>
                     </CardActions>
                 </Card>
             </Paper>
@@ -140,7 +150,10 @@ SearchResultRow.propTypes = {
     performSearchBySource: React.PropTypes.func.isRequired,
     performSearchByAuthor: React.PropTypes.func.isRequired,
     performSearchByPathToFile: React.PropTypes.func.isRequired,
-    toggleImagePreview: React.PropTypes.func.isRequired
+    toggleImagePreview: React.PropTypes.func.isRequired,
+    addTagToFile: React.PropTypes.func.isRequired,
+    removeTagFromFile: React.PropTypes.func.isRequired,
+    performSearchByTag: React.PropTypes.func.isRequired
 }
 
 export default SearchResultRow

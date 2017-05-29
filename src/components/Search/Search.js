@@ -91,6 +91,9 @@ class Search extends Component {
             toggleRefineSearchModal,
             toggleSourceSelected,
             setAppHeader,
+            addTagToFile,
+            removeTagFromFile,
+            performSearchByTag
          } = this.props
 
         return (
@@ -116,6 +119,9 @@ class Search extends Component {
                         performSearchByQuery={performSearchByQuery}
                         toggleImagePreview={toggleImagePreview}
                         showFilePreview={showFilePreview}
+                        addTagToFile={addTagToFile}
+                        removeTagFromFile={removeTagFromFile}
+                        performSearchByTag={performSearchByTag}
                     />
                     {this.containerNode && <InfiniteScroll
                         anchorEl={this.containerNode}
@@ -208,11 +214,14 @@ Search.propTypes = {
 
     isRefineSearchModalOpen: React.PropTypes.bool.isRequired,
     toggleRefineSearchModal: React.PropTypes.func.isRequired,
-
-    sources: React.PropTypes.object.isRequired,
+    
     toggleSourceSelected: React.PropTypes.func.isRequired,
 
-    setQuery: React.PropTypes.func.isRequired
+    setQuery: React.PropTypes.func.isRequired,
+    
+    addTagToFile: React.PropTypes.func.isRequired,
+    removeTagFromFile: React.PropTypes.func.isRequired,
+    performSearchByTag: React.PropTypes.func.isRequired
 }
 
 export default Search

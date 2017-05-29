@@ -27,6 +27,7 @@ const init = (apiHost) => {
         ambarWebApiGetFilesBySourceId: (sourceId) => `${apiHost}/api/files?sourceId=${sourceId}`,
         ambarWebApiPostFile: (sourceId, fileName) => `${apiHost}/api/files/${sourceId}/${fileName}`,
         ambarWebApiGetThumbnail: (sha) => `${apiHost}/api/thumbs/${sha}`,
+
         ambarWebApiLogin: () => `${apiHost}/api/users/login`,
         ambarWebApiLogout: () => `${apiHost}/api/users/logout`,
         ambarWebApiSignup: () => `${apiHost}/api/users`,
@@ -38,6 +39,9 @@ const init = (apiHost) => {
         ambarWebApiResetPassword: () => `${apiHost}/api/users/password/reset`,
         ambarWebApiChangePassword: () => `${apiHost}/api/users/password/change`,
         googlePreviewFile: (downloadUri, urls) => `https://docs.google.com/viewer?url=${encodeURI(urls.ambarWebApiGetFile(downloadUri))}`,
+
+        ambarWebApiAddTagToFile: (fileId) => `${apiHost}/api/tags/${fileId}`,
+        ambarWebApiDeleteTagFromFile: (fileId) => `${apiHost}/api/tags/${fileId}`,
 
         getParamsFromQuery: (query) => {
             if (!query) {

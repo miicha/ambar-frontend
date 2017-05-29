@@ -18,7 +18,10 @@ import {
   performSearchByPathToFile,
   performSearchByAuthor,
   performSearchByQuery,
-  setQueryFromGetParam
+  setQueryFromGetParam,
+  addTagToFile,
+  removeTagFromFile,
+  performSearchByTag
 } from '../modules/SearchPage'
 import Search from 'components/Search'
 
@@ -41,7 +44,10 @@ const mapDispatchToProps = {
   toggleRefineSearchModal,
   toggleSourceSelected,
   setQueryFromGetParam,
-  setQuery
+  setQuery,
+  addTagToFile,
+  removeTagFromFile,
+  performSearchByTag
 }
 
 const mapStateToProps = (state) => {

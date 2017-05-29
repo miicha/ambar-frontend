@@ -377,6 +377,45 @@ export const setQuery = (query) => {
     }
 }
 
+export const addTagToFile = (fileId, tagName) => {
+    return (dispatch, getState) => {
+        const urls = stateValueExtractor.getUrls(getState())
+        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+
+        fetch(urls.ambarWebApiAddTagToFile(fileId), {
+            method: 'POST',
+            body: JSON.stringify({name: tagName}),
+            ...defaultSettings
+        })
+            .then(resp => {
+                if (resp.status == 200 || resp.status == 201) {
+                    analytics().event('TAGS.ADD', { name: tagName })
+                    return
+                }
+                else { throw resp }
+            })           
+            .catch((errorPayload) => {
+                dispatch(stopLoadingIndicator())
+                dispatch(handleError(errorPayload))
+                console.error('addTagToFile', errorPayload)
+            })
+    }
+}
+
+export const removeTagFromFile = (fileId, tagName) => {
+    console.log('Not implemented yet', fileId, tagName)
+}
+
+export const performSearchByTag = (tag) => {
+    return (dispatch, getState) => {
+        //let query = getState()['searchPage'].searchQuery.replace(Regexes.AUTHOR_QUERY_REGEX, '') //TODO: chnage to tags regex        
+        let query = getState()['searchPage'].searchQuery //TODO: chnage to tags regex        
+        query = `${query} tags:${tag}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
 const setSources = (sources) => {
     return {
         type: SET_SOURCES,
@@ -410,7 +449,7 @@ export const setQueryFromGetParam = () => {
     }
 }
 
-function updateQuery(query) {
+const updateQuery = (query) => {
     return {
         type: UPDATE_QUERY,
         query
@@ -442,7 +481,7 @@ const ACTION_HANDLERS = {
         else {
             newState.hits = new Map([...state.hits, ...action.hits])
         }
-        newState.fetching = false        
+        newState.fetching = false
         newState.hasMore = action.hasMore
         newState.currentPage = action.currentPage
         return newState

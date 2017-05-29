@@ -18,7 +18,10 @@ class SearchResultTable extends Component {
             performSearchByAuthor,
             performSearchByPathToFile,
             performSearchByQuery,
-            toggleImagePreview } = this.props
+            toggleImagePreview,
+            addTagToFile,
+            removeTagFromFile,
+            performSearchByTag } = this.props
 
         return (
             <div className='pageContainer'>
@@ -33,7 +36,11 @@ class SearchResultTable extends Component {
                         performSearchByAuthor={performSearchByAuthor}
                         performSearchByPathToFile={performSearchByPathToFile}
                         toggleImagePreview={toggleImagePreview}
-                        showFilePreview={showFilePreview} />
+                        showFilePreview={showFilePreview}
+                        addTagToFile={addTagToFile}
+                        removeTagFromFile={removeTagFromFile}
+                        performSearchByTag={performSearchByTag}
+                     />
                 )}
                 {(!hits || hits.size == 0)
                     && searchQuery != ''
@@ -65,7 +72,10 @@ SearchResultTable.propTypes = {
     performSearchBySource: React.PropTypes.func.isRequired,
     performSearchByAuthor: React.PropTypes.func.isRequired,
     performSearchByQuery: React.PropTypes.func.isRequired,
-    toggleImagePreview: React.PropTypes.func.isRequired
+    toggleImagePreview: React.PropTypes.func.isRequired,
+    addTagToFile: React.PropTypes.func.isRequired,
+    removeTagFromFile: React.PropTypes.func.isRequired,
+    performSearchByTag: React.PropTypes.func.isRequired
 }
 
 export default SearchResultTable
