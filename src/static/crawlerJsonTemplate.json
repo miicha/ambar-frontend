@@ -18,8 +18,8 @@
   },
   "schedule": {
     "is_active": false,
-    "cron_schedule": "*/15 * * * *"
+    "cron_schedule": "*/15 * * * *" // Every 15 minutes
   },
-  "max_file_size_bytes": 30000000,
+  "max_file_size_bytes": 30000000, // 30MB
   "verbose": true
 }
