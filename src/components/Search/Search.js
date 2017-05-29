@@ -135,7 +135,7 @@ class Search extends Component {
                     />}
                 </div>
                 <div>
-                    <div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', bottom: '10%', right: '30px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', bottom: '10%', right: '30px', zIndex: '990' }}>
                         <FloatingActionButton
                             zDepth={4}
                             onTouchTap={() => { this.containerNode.scrollTop = 0 }}

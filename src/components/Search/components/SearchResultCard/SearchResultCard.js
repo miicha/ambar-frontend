@@ -8,6 +8,8 @@ import { Divider, FlatButton } from 'material-ui'
 import FileDownloadIcon from 'material-ui/svg-icons/file/file-download'
 import PreviewIcon from 'material-ui/svg-icons/action/open-in-new'
 import TextDownloadIcon from 'material-ui/svg-icons/action/subject'
+import DeleteIcon from 'material-ui/svg-icons/action/delete'
+import UndoIcon from 'material-ui/svg-icons/content/undo'
 import LinearProgress from 'material-ui/LinearProgress'
 
 import { SearchResultCardHeader, TagsInput } from './components'
@@ -21,11 +23,11 @@ const getExtension = (meta) => {
     return extension ? extension.replace('.', '').toLowerCase() : ''
 }
 
-const shouldShowPreviewButton = (showFilePreview, size, extension) => {
+const shouldShowPreviewButton = (size, extension) => {
     const MAX_FILE_SIZE_FOR_PREVIEW = 3 * 1024 * 1024 // 3MB
     const GOOGLE_ALLOWED_FILE_EXTENSIONS = ['doc', 'docx', 'ppt', 'pptx', 'rtf', 'txt', 'xls', 'xlsx', 'csv', 'pdf']
 
-    return showFilePreview && size < MAX_FILE_SIZE_FOR_PREVIEW && GOOGLE_ALLOWED_FILE_EXTENSIONS.indexOf(extension) !== -1
+    return size < MAX_FILE_SIZE_FOR_PREVIEW && GOOGLE_ALLOWED_FILE_EXTENSIONS.indexOf(extension) !== -1
 }
 
 const shouldShowTextButton = (extension) => {
@@ -34,6 +36,15 @@ const shouldShowTextButton = (extension) => {
 }
 
 class SearchResultRow extends Component {
+
+    constructor() {
+        super()
+
+        this.state = {
+            isVisible: true
+        }
+    }
+
     startLoadingHighlight() {
         const { searchQuery, hit: { sha256: sha256 }, loadHighlight } = this.props
         loadHighlight(sha256, searchQuery)
@@ -46,11 +57,11 @@ class SearchResultRow extends Component {
         const {
             hit: {
                 fetching: fetching,
-                meta: meta,
-                content: content,
-                sha256: sha256,
-                tags: tags,
-                file_id
+            meta: meta,
+            content: content,
+            sha256: sha256,
+            tags: tags,
+            file_id
             },
             searchQuery,
             loadHighlight,
@@ -77,62 +88,90 @@ class SearchResultRow extends Component {
                         performSearchByAuthor={performSearchByAuthor}
                         performSearchBySource={performSearchBySource}
                     />
-                    <TagsInput
-                        tags={tags.map(t => t.name)}
-                        onAddTag={(tag) => addTagToFile(file_id, tag)}
-                        onRemoveTag={(tag) => removeTagFromFile(file_id, tag)}
-                        performSearchByTag={performSearchByTag}
-                    />
-                    <div className={classes.searchResultRowCardTextContainer}>
-                        <div className={classes.searchResultRowCardTextDiv}>
-                            {fetching && <CardText>
-                                <LoadingIndicator />
-                            </CardText>
-                            }
-                            {!fetching && content.state != 'processed' &&
-                                <CardText>
-                                    <LinearProgress mode='indeterminate' />
+                    {this.state.isVisible && <div>
+                        <TagsInput
+                            tags={tags.map(t => t.name)}
+                            onAddTag={(tag) => addTagToFile(file_id, tag)}
+                            onRemoveTag={(tag) => removeTagFromFile(file_id, tag)}
+                            performSearchByTag={performSearchByTag}
+                        />
+                        <div className={classes.searchResultRowCardTextContainer}>
+                            <div className={classes.searchResultRowCardTextDiv}>
+                                {fetching && <CardText>
+                                    <LoadingIndicator />
                                 </CardText>
-                            }
-                            {!fetching && content.state === 'processed' && !contentHighlight &&
-                                <CardText onMouseEnter={() => this.startLoadingHighlight()}>
-                                    <span className={classes.blurred}>Если у общества нет цветовой дифференциации штанов - то у общества</span><br />
-                                    <span className={classes.blurred}>нет цели, а если нет цели - то...</span>
-                                </CardText>
-                            }
-                            {!fetching && contentHighlight && contentHighlight.map((hl, idx) =>
-                                <CardText key={idx}
-                                    className={idx != contentHighlight.length - 1 ? classes.searchResultRowCardTextWithBorder : undefined}
-                                    dangerouslySetInnerHTML={{ __html: hl }}
-                                />)
+                                }
+                                {!fetching && content.state != 'processed' &&
+                                    <CardText>
+                                        <LinearProgress mode='indeterminate' />
+                                    </CardText>
+                                }
+                                {!fetching && content.state === 'processed' && !contentHighlight &&
+                                    <CardText onMouseEnter={() => this.startLoadingHighlight()}>
+                                        <span className={classes.blurred}>Если у общества нет цветовой дифференциации штанов - то у общества</span><br />
+                                        <span className={classes.blurred}>нет цели, а если нет цели - то...</span>
+                                    </CardText>
+                                }
+                                {!fetching && contentHighlight && contentHighlight.map((hl, idx) =>
+                                    <CardText key={idx}
+                                        className={idx != contentHighlight.length - 1 ? classes.searchResultRowCardTextWithBorder : undefined}
+                                        dangerouslySetInnerHTML={{ __html: hl }}
+                                    />)
+                                }
+                            </div>
+                            {!fetching && contentHighlight && content.thumb_available &&
+                                <MediaQuery query='(min-width: 1024px)'>
+                                    <div className={classes.searchResultRowCardTextThumbnailContainer} >
+                                        <img onTouchTap={() => { toggleImagePreview(urls.ambarWebApiGetThumbnail(sha256)) }}
+                                            className={classes.searchResultRowCardTextThumbnailImage}
+                                            src={urls.ambarWebApiGetThumbnail(sha256)} />
+                                    </div>
+                                </MediaQuery>
                             }
                         </div>
-                        {!fetching && contentHighlight && content.thumb_available &&
-                            <MediaQuery query='(min-width: 1024px)'>
-                                <div className={classes.searchResultRowCardTextThumbnailContainer} >
-                                    <img onTouchTap={() => { toggleImagePreview(urls.ambarWebApiGetThumbnail(sha256)) }}
-                                        className={classes.searchResultRowCardTextThumbnailImage}
-                                        src={urls.ambarWebApiGetThumbnail(sha256)} />
-                                </div>
-                            </MediaQuery>
-                        }
-                    </div>
+                    </div>}
                     <CardActions className={classes.searchResultRowCardFooter}>
-                        <div style={{ display: 'flex' }}>
-                            <FlatButton icon={<FileDownloadIcon />} label='Original' primary={true} onTouchTap={() => { window.open(urls.ambarWebApiGetFile(meta.download_uri)) }} />
-                            {shouldShowTextButton(getExtension(meta)) && <FlatButton
-                                icon={<TextDownloadIcon />}
-                                label='Text'
-                                primary={true}
-                                onTouchTap={() => { window.open(urls.ambarWebApiGetFileText(meta.download_uri)) }} />
-                            }
-                            {shouldShowPreviewButton(showFilePreview, content.size, getExtension(meta)) && <FlatButton
-                                icon={<PreviewIcon />}
-                                label='Preview'
-                                primary={true}
-                                onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px') }} />
-                            }
+                        {this.state.isVisible && <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                            <div>
+                                <FlatButton
+                                    icon={<FileDownloadIcon />}
+                                    label='Original'
+                                    primary={true}
+                                    onTouchTap={() => { window.open(urls.ambarWebApiGetFile(meta.download_uri)) }}
+                                />
+                                <FlatButton
+                                    icon={<TextDownloadIcon />}
+                                    label='Text'
+                                    disabled={!shouldShowTextButton(getExtension(meta))}
+                                    primary={true}
+                                    onTouchTap={() => { window.open(urls.ambarWebApiGetFileText(meta.download_uri)) }}
+                                />
+                                {showFilePreview && <FlatButton
+                                    icon={<PreviewIcon />}
+                                    label='Preview'
+                                    primary={true}
+                                    disabled={!shouldShowPreviewButton(content.size, getExtension(meta))}
+                                    onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px') }}
+                                />}
+                            </div>
+                            <div>
+                                <FlatButton
+                                    icon={<DeleteIcon />}                                    
+                                    secondary={true}
+                                    style={{minWidth: '14px'}}
+                                    onTouchTap={() => {this.setState({...this.state, isVisible: false})}}
+                                />
+                            </div>
+                        </div>}
+                        {!this.state.isVisible && <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                            <FlatButton
+                                    icon={<UndoIcon />}
+                                    label='Restore'
+                                    primary={true}
+                                    onTouchTap={() => {this.setState({...this.state, isVisible: true})}}
+                                />
                         </div>
+                        }
                     </CardActions>
                 </Card>
             </Paper>
