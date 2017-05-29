@@ -39,7 +39,7 @@ Tag.propTypes = {
     onRemove: React.PropTypes.func
 }
 
-const languages = ['csharp', 'basic', 'pascal', 'delphi', 'ada']
+const languages = ['csharp', 'basic', 'pascal', 'delphi', 'ada', 'ada1', 'ada2', 'ada3', 'ada4', 'ada5', 'adadadadadadadadadadadad']
 
 class TagsInput extends Component {
     constructor() {
@@ -169,7 +169,6 @@ class TagsInput extends Component {
         const props = this.props
 
         const theme = {
-
             container: {
                 display: 'inline-block',
                 position: 'relative',
@@ -203,28 +202,26 @@ class TagsInput extends Component {
             suggestionsContainerOpen: {
                 display: 'block',
                 position: 'absolute',
-                top: 30,
-                width: 280,
+                top: 25,
+                width: 120,
                 border: '1px solid #aaa',
-                backgroundColor: '#fff',
-                fontFamily: 'Helvetica, sans-serif',
-                fontWeight: 300,
-                fontSize: 16,
-                borderBottomLeftRadius: 4,
-                borderBottomRightRadius: 4,
+                backgroundColor: '#fff',                  
+                fontSize: 12,                                
                 zIndex: 2
             },
             suggestionsList: {
                 margin: 0,
                 padding: 0,
                 listStyleType: 'none',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
             },
             suggestion: {
                 cursor: 'pointer',
-                padding: '10px 20px'
+                padding: '2px 4px'                
             },
             suggestionHighlighted: {
-                backgroundColor: '#ddd'
+                backgroundColor: 'rgba(0, 188, 212, 0.15)'
             }
         }
 
