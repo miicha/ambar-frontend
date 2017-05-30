@@ -158,7 +158,7 @@ class SearchResultRow extends Component {
                                 <FlatButton
                                     icon={<DeleteIcon />}                                    
                                     secondary={true}
-                                    style={{minWidth: '14px'}}
+                                    label='Hide'
                                     onTouchTap={() => {this.setState({...this.state, isVisible: false})}}
                                 />
                             </div>
