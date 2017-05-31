@@ -11,8 +11,6 @@ import SignupPage from './SignupPage'
 import SetPassword from './SetPasswordPage'
 import ResetPassword from './ResetPasswordPage'
 import DropboxPage from './DropboxPage'
-
-
 import CheckEmail from 'components/CheckEmail'
 
 export const createRoutes = (store) => ({

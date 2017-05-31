@@ -6,8 +6,6 @@ import { startLoadingIndicator, stopLoadingIndicator } from 'routes/MainLayout/m
 import * as Regexes from 'utils/regexes'
 import 'whatwg-fetch'
 
-export const START_STOP_HIGHLIGHT_LOADING = 'SEARCH.START_STOP_HIGHLIGHT_LOADING'
-export const SET_CONTENT_HIGHLIGHT = 'SEARCH.SET_CONTENT_HIGHLIGHT'
 export const FILL_HITS = 'SEARCH.FILL_HITS'
 export const UPDATE_SCROLLED_DOWN = 'SEARCH.UPDATE_SCROLLED_DOWN'
 export const TOGGLE_UPLOAD_MODAL = 'SEARCH.TOGGLE_UPLOAD_MODAL'
@@ -88,35 +86,6 @@ export const performSearch = (page, query) => {
 export const cleanUpSearchResult = () => {
     return (dispatch, getState) => {
         dispatch(fillHits(true, new Map(), 0, '', false, 0))
-    }
-}
-
-export const loadHighlight = (sha256, query) => {
-    return (dispatch, getState) => {
-        const urls = stateValueExtractor.getUrls(getState())
-        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
-
-        return new Promise((resolve) => {
-            dispatch(startStopHighlightLoadingIndicator(sha256, true))
-            fetch(urls.ambarWebApiLoadContentHightlight(sha256, query), {
-                method: 'GET',
-                ...defaultSettings
-            })
-                .then((resp) => {
-                    if (resp.status == 200) { return resp.json() }
-                    else { throw resp }
-                })
-                .then((resp) => {
-                    dispatch(setContentHighlight(sha256, hitsModel.contentHighlightFromApi(resp)))
-                    dispatch(startStopHighlightLoadingIndicator(sha256, false))
-                    analytics().event('SEARCH.LOAD_HIGHLIGHT')
-                })
-                .catch((errorPayload) => {
-                    dispatch(startStopHighlightLoadingIndicator(sha256, false))
-                    dispatch(handleError(errorPayload))
-                    console.error('loadHighlight', errorPayload)
-                })
-        })
     }
 }
 
@@ -207,22 +176,6 @@ export const fillHits = (clean, hits, found, searchQuery, hasMore, currentPage) 
     }
 }
 
-export const setContentHighlight = (sha256, highlight) => {
-    return {
-        type: SET_CONTENT_HIGHLIGHT,
-        sha256,
-        highlight
-    }
-}
-
-export const startStopHighlightLoadingIndicator = (sha256, fetching) => {
-    return {
-        type: START_STOP_HIGHLIGHT_LOADING,
-        sha256,
-        fetching
-    }
-}
-
 export const updateScrolledDown = (scrolledDown) => {
     return {
         type: UPDATE_SCROLLED_DOWN,
@@ -268,26 +221,6 @@ export const filesUploading = (isUploading) => {
     return {
         type: FILES_UPLOADING,
         isUploading: isUploading
-    }
-}
-
-export const performSearchByPathToFile = (path) => {
-    return (dispatch, getState) => {
-        let query = getState()['searchPage'].searchQuery.replace(Regexes.FILE_NAME_QUERY_REGEX, '')
-        path = path.replace(/\s/gim, '?')
-        query = `${query} filename:${path}`
-        dispatch(setQuery(query))
-        dispatch(performSearch(0, query))
-    }
-}
-
-export const performSearchByAuthor = (author) => {
-    return (dispatch, getState) => {
-        let query = getState()['searchPage'].searchQuery.replace(Regexes.AUTHOR_QUERY_REGEX, '')
-        author = author.replace(/\s/gim, '?')
-        query = `${query} author:${author}`
-        dispatch(setQuery(query))
-        dispatch(performSearch(0, query))
     }
 }
 
@@ -360,16 +293,6 @@ export const toggleSourceSelected = (sourceId) => {
     }
 }
 
-export const performSearchBySource = (sourceId) => {
-    return (dispatch, getState) => {
-        dispatch(setSources(sourcesModel.fromSourcesDisabled(getState()['searchPage'].sources)))
-        dispatch(updateSourceSelected(sourceId))
-        const query = getState()['searchPage'].searchQuery
-        dispatch(setQuery(query))
-        dispatch(performSearch(0, query))
-    }
-}
-
 export const setQuery = (query) => {
     return (dispatch, getState) => {
         dispatch(updateQuery(query))
@@ -377,46 +300,7 @@ export const setQuery = (query) => {
     }
 }
 
-export const addTagToFile = (fileId, tagName) => {
-    return (dispatch, getState) => {
-        const urls = stateValueExtractor.getUrls(getState())
-        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
-
-        fetch(urls.ambarWebApiAddTagToFile(fileId), {
-            method: 'POST',
-            body: JSON.stringify({name: tagName}),
-            ...defaultSettings
-        })
-            .then(resp => {
-                if (resp.status == 200 || resp.status == 201) {
-                    analytics().event('TAGS.ADD', { name: tagName })
-                    return
-                }
-                else { throw resp }
-            })           
-            .catch((errorPayload) => {
-                dispatch(stopLoadingIndicator())
-                dispatch(handleError(errorPayload))
-                console.error('addTagToFile', errorPayload)
-            })
-    }
-}
-
-export const removeTagFromFile = (fileId, tagName) => {
-    console.log('Not implemented yet', fileId, tagName)
-}
-
-export const performSearchByTag = (tag) => {
-    return (dispatch, getState) => {
-        //let query = getState()['searchPage'].searchQuery.replace(Regexes.AUTHOR_QUERY_REGEX, '') //TODO: chnage to tags regex        
-        let query = getState()['searchPage'].searchQuery //TODO: chnage to tags regex        
-        query = `${query} tags:${tag}`
-        dispatch(setQuery(query))
-        dispatch(performSearch(0, query))
-    }
-}
-
-const setSources = (sources) => {
+export const setSources = (sources) => {
     return {
         type: SET_SOURCES,
         sources
@@ -430,7 +314,7 @@ const setIsRefineSearchModalOpen = (isRefineSearchModalOpen) => {
     }
 }
 
-const updateSourceSelected = (sourceId) => {
+export const updateSourceSelected = (sourceId) => {
     return {
         type: TOGGLE_SOURCE_SELECTED,
         sourceId
@@ -456,23 +340,7 @@ const updateQuery = (query) => {
     }
 }
 
-const ACTION_HANDLERS = {
-    [START_STOP_HIGHLIGHT_LOADING]: (state, action) => {
-        let newState = { ...state }
-        newState.hits = new Map(state.hits)
-        let hit = { ...newState.hits.get(action.sha256) }
-        hit.fetching = action.fetching
-        newState.hits.set(action.sha256, hit)
-        return newState
-    },
-    [SET_CONTENT_HIGHLIGHT]: (state, action) => {
-        let newState = { ...state }
-        newState.hits = new Map(state.hits)
-        let hit = { ...newState.hits.get(action.sha256) }
-        hit.content.highlight = action.highlight
-        newState.hits.set(action.sha256, hit)
-        return newState
-    },
+export const ACTION_HANDLERS = {    
     [FILL_HITS]: (state, action) => {
         let newState = { ...state }
         if (action.clean) {
@@ -549,26 +417,4 @@ const ACTION_HANDLERS = {
     [UPDATE_QUERY]: (state, action) => {
         return ({ ...state, searchQuery: action.query })
     }
-}
-
-const initialState = {
-    searchQuery: '',
-    currentPage: 0,
-    hits: new Map(),
-    hasMore: false,
-    scrolledDown: false,
-    isUploadModalOpen: false,
-    filesToUpload: [],
-    bucketName: 'Default',
-    bucketNameValidationMessage: '',
-    isFilesUploading: false,
-    isImagePreviewOpen: false,
-    imagePreviewUrl: '',
-    sources: new Map(),
-    isRefineSearchModalOpen: false
-}
-
-export default function searchPageReducer(state = initialState, action) {
-    const handler = ACTION_HANDLERS[action.type]
-    return handler ? handler(state, action) : state
 }

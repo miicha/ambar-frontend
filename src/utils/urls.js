@@ -41,7 +41,7 @@ const init = (apiHost) => {
         googlePreviewFile: (downloadUri, urls) => `https://docs.google.com/viewer?url=${encodeURI(urls.ambarWebApiGetFile(downloadUri))}`,
 
         ambarWebApiAddTagToFile: (fileId) => `${apiHost}/api/tags/${fileId}`,
-        ambarWebApiDeleteTagFromFile: (fileId) => `${apiHost}/api/tags/${fileId}`,
+        ambarWebApiDeleteTagFromFile: (fileId, tagName) => `${apiHost}/api/tags/${fileId}/${tagName}`,
 
         getParamsFromQuery: (query) => {
             if (!query) {

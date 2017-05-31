@@ -42,15 +42,12 @@ class SearchResultRow extends Component {
 
         this.state = {
             isVisible: true
-        }
+        }        
     }
 
     startLoadingHighlight() {
         const { searchQuery, hit: { sha256: sha256 }, loadHighlight } = this.props
         loadHighlight(sha256, searchQuery)
-    }
-
-    componentDidMount() {
     }
 
     render() {
@@ -90,9 +87,9 @@ class SearchResultRow extends Component {
                     />
                     {this.state.isVisible && <div>
                         <TagsInput
-                            tags={tags.map(t => t.name)}
-                            onAddTag={(tag) => addTagToFile(file_id, tag)}
-                            onRemoveTag={(tag) => removeTagFromFile(file_id, tag)}
+                            tags={tags}
+                            onAddTag={(tag) => addTagToFile(sha256, file_id, tag)}
+                            onRemoveTag={(tag) => removeTagFromFile(sha256, file_id, tag)}
                             performSearchByTag={performSearchByTag}
                         />
                         <div className={classes.searchResultRowCardTextContainer}>

@@ -8,30 +8,30 @@ import FontIcon from 'material-ui/FontIcon'
 
 import classes from './TagsInput.scss'
 
-const Tag = ({ tagName, onRemove, onClick }) => {
+const Tag = ({ tagName, onRemove, onClick, isHighlighted, isFetching}) => {
     const onRemoveCallback = onRemove
         ? onRemove
         : () => { }
 
     const onClickCallback = onClick
         ? onClick
-        : () => { }
+        : () => { }    
 
     return (
         <div
-            style={{display: 'flex', alignItems: 'center'}}            
-            className={classes.tag}
+            style={{ display: 'flex', alignItems: 'center' }}
+            className={`${classes.tag} ${isHighlighted ? classes.highlight : ''}`}
             onTouchTap={(e) => onClickCallback(tagName)}>
             <span>{tagName}</span>
-            <ClearIcon 
-                className={classes.removeTagButton} 
+            {!isFetching && <ClearIcon
+                className={classes.removeTagButton}
                 onTouchTap={(e) => {
                     e.stopPropagation()
                     onRemoveCallback(tagName)
-                }}                                   
+                }}
                 hoverColor='#FF5722'
-                style={{color: 'inherit', width: '1em', height: '1em'}}        
-            />            
+                style={{ color: 'inherit', width: '1em', height: '1em' }}
+            />}
         </div>
     )
 }
@@ -39,7 +39,8 @@ const Tag = ({ tagName, onRemove, onClick }) => {
 Tag.propTypes = {
     tagName: React.PropTypes.string.isRequired,
     onRemove: React.PropTypes.func,
-    onClick: React.PropTypes.func
+    onClick: React.PropTypes.func,
+    isHighlighted: React.PropTypes.bool
 }
 
 const languages = ['csharp', 'basic', 'pascal', 'delphi', 'ada', 'ada1', 'ada2', 'ada3', 'ada4', 'ada5', 'adadadadadadadadadadadad']
@@ -49,15 +50,9 @@ class TagsInput extends Component {
         super()
 
         this.state = {
-            tags: [],
             inputValue: '',
             suggestions: []
         }
-    }
-
-    componentDidMount() {
-        const {tags} = this.props
-        this.setState({...this.state, tags: tags})
     }
 
     addTag(tag) {
@@ -65,39 +60,38 @@ class TagsInput extends Component {
             return
         }
 
-        if (this.state.tags.indexOf(tag) == -1) {
-            const tags = [...this.state.tags, tag]
-            this.setState({ ...this.state, tags: tags, inputValue: '' })
-        } else {
-            this.setState({ ...this.state, inputValue: '' })
+        if (!this.props.tags.find(t => t.name === tag)) {
+            this.props.onAddTag(tag)
         }
 
-        this.props.onAddTag(tag)
+        this.setState({ ...this.state, inputValue: '' })
     }
 
     removeTag(tag) {
-        const currentTags = this.state.tags
-
+        const currentTags = this.props.tags.map(t => t.name)
         if (!currentTags || currentTags.length === 0) {
             return
         }
-
-        this.setState({ ...this.state, tags: currentTags.filter(t => t !== tag) })
         this.props.onRemoveTag(tag)
     }
 
     removeLastTag() {
-        const currentTags = this.state.tags
+        const currentTags = this.props.tags
         if (!currentTags || currentTags.length === 0) {
             return
         }
 
-        this.setState({ ...this.state, tags: currentTags.slice(0, currentTags.length - 1) })
-        this.props.onRemoveTag(currentTags[currentTags.length-1])
+        const lastTag = currentTags[currentTags.length - 1]
+        if (lastTag.isFetching) {
+            return
+        }
+
+        this.props.onRemoveTag(lastTag.name)
     }
 
-    onChange(value) {
-        this.setState({ ...this.state, inputValue: value })
+    onChange(value) {                        
+        this.setState({ ...this.state, inputValue: value.trim() })
+        value = value.replace(/[\s\,\;]/gim, ',')
 
         const newTags = value.split(',').map(t => t.trim().toLowerCase())
 
@@ -126,7 +120,7 @@ class TagsInput extends Component {
         this.addTag(this.state.inputValue)
     }
 
-    focusOnInput() {        
+    focusOnInput() {
         if (!this.refs.suggestInput) {
             return
         }
@@ -186,24 +180,6 @@ class TagsInput extends Component {
                 position: 'relative',
                 margin: '4px'
             },
-            /*
-            input: {
-              width: 240,
-              height: 30,
-              padding: '10px 20px',
-              fontFamily: 'Helvetica, sans-serif',
-              fontWeight: 300,
-              fontSize: 16,
-              border: '1px solid #aaa',
-              borderTopLeftRadius: 4,
-              borderTopRightRadius: 4,
-              borderBottomLeftRadius: 4,
-              borderBottomRightRadius: 4,
-            },
-            inputFocused: {
-              outline: 'none'
-            },
-            */
             inputOpen: {
                 borderBottomLeftRadius: 0,
                 borderBottomRightRadius: 0
@@ -217,8 +193,8 @@ class TagsInput extends Component {
                 top: 25,
                 width: 120,
                 border: '1px solid #aaa',
-                backgroundColor: '#fff',                  
-                fontSize: 12,                                
+                backgroundColor: '#fff',
+                fontSize: 12,
                 zIndex: 2
             },
             suggestionsList: {
@@ -230,25 +206,27 @@ class TagsInput extends Component {
             },
             suggestion: {
                 cursor: 'pointer',
-                padding: '2px 4px'                
+                padding: '2px 4px'
             },
             suggestionHighlighted: {
                 backgroundColor: 'rgba(0, 188, 212, 0.15)'
             }
         }
 
-        const {performSearchByTag} = this.props
+        const { performSearchByTag } = this.props
 
         return (
             <div
                 style={{ padding: '5px', cursor: 'text', display: 'flex', flexWrap: 'wrap' }}
                 onClick={() => this.focusOnInput()}>
-                {this.state.tags.map((tagName, idx) =>
-                    <Tag 
-                        key={idx} 
-                        onRemove={(tagName) => this.removeTag(tagName)}                         
+                {this.props.tags.map((tag, idx) =>
+                    <Tag
+                        key={idx}
+                        onRemove={(tagName) => this.removeTag(tagName)}
                         onClick={(tagName) => performSearchByTag(tagName)}
-                        tagName={tagName}
+                        tagName={tag.name}
+                        isHighlighted={!!tag.highlight && !!tag.highlight.name}
+                        isFetching={tag.isFetching}
                     />)
                 }
                 <Autosuggest
@@ -266,7 +244,7 @@ class TagsInput extends Component {
                         onChange: (e) => this.onChange(e.target.value),
                         onBlur: () => this.onBlur(),
                         onKeyPress: (event) => this.onKeyPress(event),
-                        onKeyDown: (event) => this.onKeyDown(event)                        
+                        onKeyDown: (event) => this.onKeyDown(event)
                     }}
                     theme={theme}
                     renderInputComponent={(inputProps) => this.autosizeInput(inputProps)}

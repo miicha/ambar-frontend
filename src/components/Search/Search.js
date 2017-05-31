@@ -55,14 +55,11 @@ class Search extends Component {
 
     render() {
         const {
-            query,
             fetching,
             hits,
             searchQuery,
             performSearch,
-            loadHighlight,
             hasMore,
-            urls,
             scrolledDown,
             setScrolledDown,
             setPageTitle,
@@ -79,21 +76,14 @@ class Search extends Component {
             bucketNameValidationMessage,
             isFilesUploading,
             uploadFiles,
-            performSearchBySource,
-            performSearchByAuthor,
-            performSearchByPathToFile,
-            performSearchByQuery,
             toggleImagePreview,
             isImagePreviewOpen,
             imagePreviewUrl,
-            showFilePreview,
             isRefineSearchModalOpen,
             toggleRefineSearchModal,
             toggleSourceSelected,
             setAppHeader,
-            addTagToFile,
-            removeTagFromFile,
-            performSearchByTag
+            performSearchByQuery
          } = this.props
 
         return (
@@ -108,20 +98,10 @@ class Search extends Component {
                     ref={(container) => { this.containerNode = container }}>
                     <SearchResultTable
                         fetching={fetching}
-                        performSearch={performSearch}
-                        loadHighlight={loadHighlight}
                         hits={hits}
                         searchQuery={searchQuery}
-                        urls={urls}                        
-                        performSearchBySource={performSearchBySource}
-                        performSearchByAuthor={performSearchByAuthor}
-                        performSearchByPathToFile={performSearchByPathToFile}
-                        performSearchByQuery={performSearchByQuery}
                         toggleImagePreview={toggleImagePreview}
-                        showFilePreview={showFilePreview}
-                        addTagToFile={addTagToFile}
-                        removeTagFromFile={removeTagFromFile}
-                        performSearchByTag={performSearchByTag}
+                        performSearchByQuery={performSearchByQuery}
                     />
                     {this.containerNode && <InfiniteScroll
                         anchorEl={this.containerNode}
@@ -183,18 +163,8 @@ Search.propTypes = {
 
     searchQuery: React.PropTypes.string.isRequired,
     hits: React.PropTypes.object.isRequired,
-    performSearch: React.PropTypes.func.isRequired,
-    loadHighlight: React.PropTypes.func.isRequired,
-    performSearchByPathToFile: React.PropTypes.func.isRequired,
-    performSearchByAuthor: React.PropTypes.func.isRequired,
-    performSearchByQuery: React.PropTypes.func.isRequired,
-    cleanUpSearchResult: React.PropTypes.func.isRequired,
 
     loadSources: React.PropTypes.func.isRequired,
-    performSearchBySource: React.PropTypes.func.isRequired,
-
-    urls: React.PropTypes.object.isRequired,
-    showFilePreview: React.PropTypes.bool.isRequired,
 
     toggleUploadModal: React.PropTypes.func.isRequired,
     isUploadModalOpen: React.PropTypes.bool.isRequired,
@@ -218,10 +188,8 @@ Search.propTypes = {
     toggleSourceSelected: React.PropTypes.func.isRequired,
 
     setQuery: React.PropTypes.func.isRequired,
-    
-    addTagToFile: React.PropTypes.func.isRequired,
-    removeTagFromFile: React.PropTypes.func.isRequired,
-    performSearchByTag: React.PropTypes.func.isRequired
+    performSearchByQuery: React.PropTypes.func.isRequired,
+
 }
 
 export default Search

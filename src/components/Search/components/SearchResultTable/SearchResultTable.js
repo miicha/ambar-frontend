@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import SearchResultCard from '../SearchResultCard'
+import SearchResult from 'routes/SearchPage/containers/SearchCardContainer'
 import HintCard from '../HintCard'
 
 import classes from './SearchResultTable.scss'
@@ -10,36 +10,18 @@ class SearchResultTable extends Component {
             hits,
             searchQuery,
             fetching,
-            performSearch,
-            urls,
-            showFilePreview,
-            loadHighlight,
-            performSearchBySource,
-            performSearchByAuthor,
-            performSearchByPathToFile,
             performSearchByQuery,
-            toggleImagePreview,
-            addTagToFile,
-            removeTagFromFile,
-            performSearchByTag } = this.props
+            toggleImagePreview
+        } = this.props
 
         return (
             <div className='pageContainer'>
                 {hits && hits.size > 0 && Array.from(hits.values()).map((hit, idx) =>
-                    <SearchResultCard
-                        key={hit.sha256}
-                        hit={hit}
+                    <SearchResult
+                        key={hit.sha256}                        
+                        sha256={hit.sha256}
                         searchQuery={searchQuery}
-                        loadHighlight={loadHighlight}
-                        urls={urls}
-                        performSearchBySource={performSearchBySource}
-                        performSearchByAuthor={performSearchByAuthor}
-                        performSearchByPathToFile={performSearchByPathToFile}
                         toggleImagePreview={toggleImagePreview}
-                        showFilePreview={showFilePreview}
-                        addTagToFile={addTagToFile}
-                        removeTagFromFile={removeTagFromFile}
-                        performSearchByTag={performSearchByTag}
                      />
                 )}
                 {(!hits || hits.size == 0)
@@ -64,18 +46,7 @@ class SearchResultTable extends Component {
 SearchResultTable.propTypes = {
     fetching: React.PropTypes.bool.isRequired,
     searchQuery: React.PropTypes.string.isRequired,
-    loadHighlight: React.PropTypes.func.isRequired,
-    performSearch: React.PropTypes.func.isRequired,
-    performSearchByPathToFile: React.PropTypes.func.isRequired,
-    urls: React.PropTypes.object.isRequired,
-    showFilePreview: React.PropTypes.bool.isRequired,
-    performSearchBySource: React.PropTypes.func.isRequired,
-    performSearchByAuthor: React.PropTypes.func.isRequired,
-    performSearchByQuery: React.PropTypes.func.isRequired,
     toggleImagePreview: React.PropTypes.func.isRequired,
-    addTagToFile: React.PropTypes.func.isRequired,
-    removeTagFromFile: React.PropTypes.func.isRequired,
-    performSearchByTag: React.PropTypes.func.isRequired
 }
 
 export default SearchResultTable
