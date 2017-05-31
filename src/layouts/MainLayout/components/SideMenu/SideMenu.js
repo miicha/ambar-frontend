@@ -32,6 +32,9 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleSideMe
       targetOrigin={{ horizontal: 'left', vertical: 'top' }}
       open={isOpen}
       onTouchTap={() => toggleSideMenu()}
+      onRequestChange={(open, reason) => {if (reason === 'clickAway') {
+        toggleSideMenu()
+      }}}
     >
       <Menu value={currentLocation} selectedMenuItemStyle={selectedMenuItemStyle} disableAutoFocus={true} >
         {allowedRoutes.includes(SEARCH_PAGE_LOCATION) &&

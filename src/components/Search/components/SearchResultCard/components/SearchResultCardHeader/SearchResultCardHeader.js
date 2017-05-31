@@ -50,8 +50,34 @@ const getFileAvatarByMeta = (meta, searchFunction) => {
         backgroundColor={colors[getHashCode(extension) % colors.length]}>{extension}</Avatar>
 }
 
-const getDaysFromNowToDate = (date) => {
-    return Math.floor(moment.duration(moment().diff(moment(date))).asDays())
+const getHumanizedTime = (date) => {
+    let diff = moment.duration(moment().utc().diff(moment.utc(date)))
+
+    if (Math.floor(diff.asDays()) > 6) {
+        return moment.utc(date).format('DD.MM.YYYY') 
+    }
+
+    if (Math.floor(diff.asDays()) <= 6 && Math.floor(diff.asDays()) > 1) {
+        return `${Math.floor(diff.asDays())} days ago`
+    }
+
+    if (Math.floor(diff.asDays()) == 1) {
+        return 'yesterday'
+    }
+
+    if (Math.floor(diff.asHours()) < 24 && Math.floor(diff.asHours()) > 1) {
+        return `${Math.floor(diff.asHours())} hours ago`
+    }
+
+    if (Math.floor(diff.asHours()) == 1) {
+        return 'an hour ago'
+    }
+
+    if (Math.floor(diff.asMinutes()) < 60) {
+        return `${Math.floor(diff.asMinutes())} minute(s) ago`
+    }
+
+    return moment.utc(date).format('DD.MM.YYYY') 
 }
 
 const SIZE_QUERY = /((^|\s)size(>|<)[=]{0,1})([0-9]*)([k|m]{0,1})/im
@@ -83,7 +109,7 @@ const SearchResultCardHeader = (props) => {
 
     const updatedDatetimeHighlighted = searchQuery ? WHEN_QUERY.test(searchQuery) : false
     const updatedDatetime = meta.updated_datetime
-    const displayedUpdatedDateTime = updatedDatetime && getDaysFromNowToDate(updatedDatetime) > 6 ? moment(updatedDatetime).format('DD.MM.YYYY') : moment().to(updatedDatetime)
+    const displayedUpdatedDateTime = updatedDatetime && getHumanizedTime(updatedDatetime) 
 
     const authorHighlighted = content.highlight && content.highlight.author
     const author = content.author
