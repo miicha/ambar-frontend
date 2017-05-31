@@ -4,7 +4,7 @@ import classes from './AppBarTitle.scss'
 export const AppBarTitle = ({data, fetching, currentApplicationState  }) => {
     return (
     <div style={{ display: 'flex', height: '100%' }}>
-        <div style={{ display: 'flex', flexGrow: '1' }}>
+        <div style={{ display: 'flex', flexGrow: '1', cursor: 'default', select: 'none' }}>
             {data.left ? data.left(currentApplicationState) : <div />}                        
         </div>
         {data.center ? data.center(currentApplicationState) : <div />}        

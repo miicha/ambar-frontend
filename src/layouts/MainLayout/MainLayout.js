@@ -30,26 +30,27 @@ class MainLayout extends Component {
         } = this.props
 
         return (
-            <div style={{height: '100%'}}>
-                <div style={{height: '100%'}}>
+            <div style={{ height: '100%' }}>
+                <div style={{ height: '100%' }}>
                     {fetching && <LinearProgress style={{ position: 'fixed', top: '64px', zIndex: '2000' }} color="#FFAB00" />}
-                    <SideMenu
-                        isOpen={isSideMenuOpen}
-                        currentLocation={location}
-                        toggleSideMenu={toggleSideMenu}
-                        changeLocation={changeLocation}
-                        mode={mode}
-                        allowedRoutes={allowedRoutes} />
                     <AppBar
                         title={<AppBarTitle
                             data={header}
                             fetching={fetching}
                             currentApplicationState={state}
-                            />}
+                        />}
                         style={{ position: 'fixed', top: 0, left: 0 }}
                         zDepth={2}
-                        onLeftIconButtonTouchTap={toggleSideMenu}
-                        iconElementRight={<div style={{ display: 'flex', flexDirection: 'row' }}>
+                        onRightIconButtonTouchTap={toggleSideMenu}
+                        iconElementRight={<SideMenu
+                            isOpen={isSideMenuOpen}
+                            currentLocation={location}
+                            toggleSideMenu={toggleSideMenu}
+                            changeLocation={changeLocation}
+                            mode={mode}
+                            allowedRoutes={allowedRoutes} 
+                        />}
+                        iconElementLeft={<div style={{ display: 'flex', flexDirection: 'row' }}>
                             {mode !== 'ee' && <MediaQuery query='(min-width: 1024px)'>
                                 <RateUs isOpen={showRateUsModal} toggle={toggleRateUsModal} />
                             </MediaQuery>}
@@ -57,7 +58,7 @@ class MainLayout extends Component {
                         </div>}
                     />
                     <div style={{ width: '100%', height: '100%', overflowY: 'hidden', paddingTop: '64px' }}>
-                        <div style={{height: '100%', overflowY: 'auto'}}>
+                        <div style={{ height: '100%', overflowY: 'auto' }}>
                             {React.cloneElement(children, { setPageTitle: setPageTitle, setAppHeader: setAppHeader })}
                         </div>
                     </div>

@@ -159,6 +159,7 @@ class SearchResultRow extends Component {
                                     icon={<DeleteIcon />}                                    
                                     secondary={true}
                                     label='Hide'
+                                    style={{color: 'grey'}}
                                     onTouchTap={() => {this.setState({...this.state, isVisible: false})}}
                                 />
                             </div>
