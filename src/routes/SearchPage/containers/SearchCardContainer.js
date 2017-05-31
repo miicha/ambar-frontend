@@ -9,7 +9,9 @@ import {
   loadHighlight,
   toggleImagePreview,
   addTagToFile,
-  removeTagFromFile
+  removeTagFromFile,
+  hideFile,
+  showFile
 } from '../modules/SearchCard'
 
 import SearchCard from 'components/Search/components/SearchResultCard'
@@ -23,7 +25,9 @@ const mapDispatchToProps = {
   loadHighlight,
   toggleImagePreview,
   addTagToFile,
-  removeTagFromFile
+  removeTagFromFile,
+  hideFile,
+  showFile
 }
 
 const mapStateToProps = (state, ownProps) => {

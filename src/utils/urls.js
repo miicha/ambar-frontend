@@ -40,8 +40,11 @@ const init = (apiHost) => {
         ambarWebApiChangePassword: () => `${apiHost}/api/users/password/change`,
         googlePreviewFile: (downloadUri, urls) => `https://docs.google.com/viewer?url=${encodeURI(urls.ambarWebApiGetFile(downloadUri))}`,
 
-        ambarWebApiAddTagToFile: (fileId) => `${apiHost}/api/tags/${fileId}`,
+        ambarWebApiAddTagToFile: (fileId, tagName) => `${apiHost}/api/tags/${fileId}/${tagName}`,
         ambarWebApiDeleteTagFromFile: (fileId, tagName) => `${apiHost}/api/tags/${fileId}/${tagName}`,
+
+        ambarWebApiHideFile: (fileId) => `${apiHost}/api/files/hide/${fileId}`,
+        ambarWebApiUnhideFile: (fileId) => `${apiHost}/api/files/unhide/${fileId}`,
 
         getParamsFromQuery: (query) => {
             if (!query) {

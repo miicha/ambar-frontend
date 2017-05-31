@@ -13,6 +13,7 @@ export const SET_CONTENT_HIGHLIGHT = 'SEARCH_CARD.SET_CONTENT_HIGHLIGHT'
 export const ADD_TAG = 'SEARCH_CARD.ADD_TAG'
 export const REMOVE_TAG = 'SEARCH_CARD.REMOVE_TAG'
 export const MARK_TAG_AS_CREATED = 'SEARCH_CARD.MARK_TAG_AS_CREATED'
+export const TOGGLE_IS_HIDDEN_FILE = 'SEARCH_CARD.TOGGLE_IS_HIDDEN_FILE'
 
 export const loadHighlight = (sha256, query) => {
     return (dispatch, getState) => {
@@ -105,9 +106,8 @@ export const addTagToFile = (sha256, fileId, tagName) => {
 
         dispatch(addTag(sha256, tagName))
 
-        fetch(urls.ambarWebApiAddTagToFile(fileId), {
-            method: 'POST',
-            body: JSON.stringify({ name: tagName }),
+        fetch(urls.ambarWebApiAddTagToFile(fileId, tagName), {
+            method: 'POST',            
             ...defaultSettings
         })
             .then(resp => {
@@ -150,6 +150,56 @@ export const removeTagFromFile = (sha256, fileId, tagName) => {
     }
 }
 
+export const hideFile = (sha256, fileId) => {
+    return (dispatch, getState) => {
+        const urls = stateValueExtractor.getUrls(getState())
+        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+
+        dispatch(toggleIsHiddenFile(sha256, true))
+
+        fetch(urls.ambarWebApiHideFile(fileId), {
+            method: 'PUT',            
+            ...defaultSettings
+        })
+            .then(resp => {
+                if (resp.status == 200) {
+                    analytics().event('FILE.HIDE')
+                    return
+                }
+                else { throw resp }
+            })
+            .catch((errorPayload) => {
+                dispatch(handleError(errorPayload))
+                console.error('hideFile', errorPayload)
+            })
+    }
+}
+
+export const showFile = (sha256, fileId) => {
+    return (dispatch, getState) => {
+        const urls = stateValueExtractor.getUrls(getState())
+        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+
+        dispatch(toggleIsHiddenFile(sha256, false))
+
+        fetch(urls.ambarWebApiUnhideFile(fileId), {
+            method: 'PUT',            
+            ...defaultSettings
+        })
+            .then(resp => {
+                if (resp.status == 200) {
+                    analytics().event('FILE.SHOW')
+                    return
+                }
+                else { throw resp }
+            })
+            .catch((errorPayload) => {
+                dispatch(handleError(errorPayload))
+                console.error('showFile', errorPayload)
+            })
+    }
+}
+
 const addTag = (sha256, tagName) => {
     return {
         type: ADD_TAG,
@@ -171,6 +221,14 @@ const markTagAsCreated = (sha256, tagName) => {
         type: MARK_TAG_AS_CREATED,
         tagName: tagName,
         sha256: sha256
+    }
+}
+
+const toggleIsHiddenFile = (sha256, value) => {
+    return {
+        type: TOGGLE_IS_HIDDEN_FILE,      
+        sha256: sha256,
+        value: value
     }
 }
 
@@ -217,6 +275,11 @@ export const ACTION_HANDLERS = {
             return tag
         })
 
+        return updateHits(state, action.sha256, hit)
+    },
+    [TOGGLE_IS_HIDDEN_FILE]: (state, action) => {
+        const oldHit = getHit(state, action.sha256)
+        const hit = { ...oldHit, isHidden: action.value, hidden_mark: action.value ? {} : null }
         return updateHits(state, action.sha256, hit)
     }
 }

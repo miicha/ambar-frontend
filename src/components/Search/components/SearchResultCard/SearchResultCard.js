@@ -36,15 +36,6 @@ const shouldShowTextButton = (extension) => {
 }
 
 class SearchResultRow extends Component {
-
-    constructor() {
-        super()
-
-        this.state = {
-            isVisible: true
-        }        
-    }
-
     startLoadingHighlight() {
         const { searchQuery, hit: { sha256: sha256 }, loadHighlight } = this.props
         loadHighlight(sha256, searchQuery)
@@ -58,7 +49,9 @@ class SearchResultRow extends Component {
             content: content,
             sha256: sha256,
             tags: tags,
-            file_id
+            file_id: file_id,
+            isHidden: isHidden,
+            hidden_mark: hidden_mark
             },
             searchQuery,
             loadHighlight,
@@ -70,7 +63,9 @@ class SearchResultRow extends Component {
             showFilePreview,
             addTagToFile,
             removeTagFromFile,
-            performSearchByTag } = this.props
+            performSearchByTag,
+            hideFile,
+            showFile } = this.props
 
         const contentHighlight = content && content.highlight && content.highlight.text ? content.highlight.text : undefined
 
@@ -85,7 +80,7 @@ class SearchResultRow extends Component {
                         performSearchByAuthor={performSearchByAuthor}
                         performSearchBySource={performSearchBySource}
                     />
-                    {this.state.isVisible && <div>
+                    {!isHidden && <div>
                         <TagsInput
                             tags={tags}
                             onAddTag={(tag) => addTagToFile(sha256, file_id, tag)}
@@ -128,8 +123,8 @@ class SearchResultRow extends Component {
                         </div>
                     </div>}
                     <CardActions className={classes.searchResultRowCardFooter}>
-                        {this.state.isVisible && <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                            <div>
+                        <div style={{ display: 'flex', justifyContent: !isHidden ? 'space-between' : 'flex-end' , width: '100%' }}>
+                            {!isHidden && <div>
                                 <FlatButton
                                     icon={<FileDownloadIcon />}
                                     label='Original'
@@ -150,26 +145,23 @@ class SearchResultRow extends Component {
                                     disabled={!shouldShowPreviewButton(content.size, getExtension(meta))}
                                     onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px') }}
                                 />}
-                            </div>
+                            </div>}
                             <div>
-                                <FlatButton
-                                    icon={<DeleteIcon />}                                    
+                                {!hidden_mark && <FlatButton
+                                    icon={<DeleteIcon />}
                                     secondary={true}
                                     label='Hide'
-                                    style={{color: 'grey'}}
-                                    onTouchTap={() => {this.setState({...this.state, isVisible: false})}}
-                                />
-                            </div>
-                        </div>}
-                        {!this.state.isVisible && <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                            <FlatButton
+                                    style={{ color: 'grey' }}
+                                    onTouchTap={() => hideFile(sha256, file_id)}
+                                />}
+                                 {(isHidden || hidden_mark) && <FlatButton
                                     icon={<UndoIcon />}
                                     label='Restore'
                                     primary={true}
-                                    onTouchTap={() => {this.setState({...this.state, isVisible: true})}}
-                                />
-                        </div>
-                        }
+                                    onTouchTap={() => showFile(sha256, file_id)}
+                                />}
+                            </div>
+                        </div>}                        
                     </CardActions>
                 </Card>
             </Paper>
@@ -190,7 +182,9 @@ SearchResultRow.propTypes = {
     toggleImagePreview: React.PropTypes.func.isRequired,
     addTagToFile: React.PropTypes.func.isRequired,
     removeTagFromFile: React.PropTypes.func.isRequired,
-    performSearchByTag: React.PropTypes.func.isRequired
+    performSearchByTag: React.PropTypes.func.isRequired,
+    hideFile: React.PropTypes.func.isRequired,
+    showFile: React.PropTypes.func.isRequired
 }
 
 export default SearchResultRow
