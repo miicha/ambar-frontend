@@ -86,6 +86,7 @@ class SearchResultRow extends Component {
                             onAddTag={(tag) => addTagToFile(sha256, file_id, tag)}
                             onRemoveTag={(tag) => removeTagFromFile(sha256, file_id, tag)}
                             performSearchByTag={performSearchByTag}
+                            suggestions={['csharp', 'basic', 'pascal', 'delphi', 'ada', 'ada1', 'ada2', 'ada3', 'ada4', 'ada5', 'adadadadadadadadadadadad']}
                         />
                         <div className={classes.searchResultRowCardTextContainer}>
                             <div className={classes.searchResultRowCardTextDiv}>

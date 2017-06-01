@@ -57,10 +57,24 @@ const HintCard = (props) => {
                     <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thisyear') }}>thisyear</span>
                 )
                 </li>
-            <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('author:*') }}>
-                author:*
-                    </span> - search only in file author field, can be combined with other queries
-                </li>
+            <li>
+                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('author:*') }}>
+                    author:*
+                </span> - search only in file author field, can be combined with other queries
+            </li>
+            <li>
+                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('tags:ocr') }}>
+                    tags:ocr
+                </span> - search for file tagged with ocr tag
+            </li>
+            <li>
+                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:hidden') }}>
+                    show:hidden
+                </span> - search in hidden files (available options are:&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:hidden') }}>hidden</span>,&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:all') }}>all</span>
+                )
+            </li>
         </ul>
     </div>)
 

@@ -7,7 +7,7 @@ const LoadingIndicator = (props) => {
     const indicatorSize = (small ? 23 : (medium ? 40 : (large ? 50 : 40))) 
     const mode = freezed ? 'determinate' : 'indeterminate'
     const className = blurred ? classes.circularProgressBlurred : classes.circularProgress
-    return <div className={className}><CircularProgress size={indicatorSize} mode={mode} value={100} color={color ? color : '#00bcd4'}/></div>
+    return <div className={className}><CircularProgress size={indicatorSize} mode={mode} value={100} color={color ? color : '#00bcd4'} /></div>
 }
 
 LoadingIndicator.propTypes = {

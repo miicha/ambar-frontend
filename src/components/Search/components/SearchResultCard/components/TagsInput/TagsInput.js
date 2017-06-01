@@ -2,53 +2,14 @@ import React, { Component } from 'react'
 
 import AutosizeInput from 'react-input-autosize'
 import Autosuggest from 'react-autosuggest'
-
-import ClearIcon from 'material-ui/svg-icons/content/clear'
 import FontIcon from 'material-ui/FontIcon'
 
+import { Tag } from './components'
 import classes from './TagsInput.scss'
-
-const Tag = ({ tagName, onRemove, onClick, isHighlighted, isFetching}) => {
-    const onRemoveCallback = onRemove
-        ? onRemove
-        : () => { }
-
-    const onClickCallback = onClick
-        ? onClick
-        : () => { }    
-
-    return (
-        <div
-            style={{ display: 'flex', alignItems: 'center' }}
-            className={`${classes.tag} ${isHighlighted ? classes.highlight : ''}`}
-            onTouchTap={(e) => onClickCallback(tagName)}>
-            <span>{tagName}</span>
-            {!isFetching && <ClearIcon
-                className={classes.removeTagButton}
-                onTouchTap={(e) => {
-                    e.stopPropagation()
-                    onRemoveCallback(tagName)
-                }}
-                hoverColor='#FF5722'
-                style={{ color: 'inherit', width: '1em', height: '1em' }}
-            />}
-        </div>
-    )
-}
-
-Tag.propTypes = {
-    tagName: React.PropTypes.string.isRequired,
-    onRemove: React.PropTypes.func,
-    onClick: React.PropTypes.func,
-    isHighlighted: React.PropTypes.bool
-}
-
-const languages = ['csharp', 'basic', 'pascal', 'delphi', 'ada', 'ada1', 'ada2', 'ada3', 'ada4', 'ada5', 'adadadadadadadadadadadad']
 
 class TagsInput extends Component {
     constructor() {
         super()
-
         this.state = {
             inputValue: '',
             suggestions: []
@@ -89,7 +50,7 @@ class TagsInput extends Component {
         this.props.onRemoveTag(lastTag.name)
     }
 
-    onChange(value) {                        
+    onChange(value) {
         this.setState({ ...this.state, inputValue: value.trim() })
         value = value.replace(/[\s\,\;]/gim, ',')
 
@@ -154,7 +115,7 @@ class TagsInput extends Component {
         const inputValue = value.trim().toLowerCase()
         const inputLength = inputValue.length
 
-        return inputLength === 0 ? [] : languages.filter(lang =>
+        return inputLength === 0 ? [] : this.props.suggestions.filter(lang =>
             lang.toLowerCase().slice(0, inputLength) === inputValue
         )
     }
