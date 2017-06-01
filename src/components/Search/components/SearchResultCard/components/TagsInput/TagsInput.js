@@ -115,8 +115,12 @@ class TagsInput extends Component {
         const inputValue = value.trim().toLowerCase()
         const inputLength = inputValue.length
 
-        return inputLength === 0 ? [] : this.props.suggestions.filter(lang =>
-            lang.toLowerCase().slice(0, inputLength) === inputValue
+        const suggestions = this.props.suggestions.filter(suggestion => {
+            return !this.props.tags.some(tag => tag.name === suggestion)
+        })
+
+        return inputLength === 0 ? suggestions.slice(0, 10) : suggestions.filter(suggestion =>
+            suggestion.toLowerCase().slice(0, inputLength) === inputValue
         )
     }
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import Drawer from 'material-ui/Drawer'
 
 import SearchIcon from 'material-ui/svg-icons/action/search'
 import SettingsIcon from 'material-ui/svg-icons/action/settings'
@@ -14,7 +13,7 @@ import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider'
 import IconMenu from 'material-ui/IconMenu'
 
-import classes from './SideMenu.scss'
+import classes from './MainMenu.scss'
 
 const innerMenuItemStyle = { paddingLeft: '50px' }
 const menuItemStyle = { WebkitAppearance: 'none' }
@@ -25,15 +24,16 @@ const SETTINGS_PAGE_LOCATION = '/crawlers'
 const STAT_PAGE_LOCATION = '/statistics'
 const ACCOUNT_PAGE_LOCATION = '/account'
 
-export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleSideMenu, allowedRoutes }) => (
+export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMenu, allowedRoutes }) => (
     <IconMenu
       iconButtonElement={<IconButton><MenuIcon color='white'/></IconButton>}
       anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
       targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+      menuStyle={{marginTop: '-16px'}}
       open={isOpen}
-      onTouchTap={() => toggleSideMenu()}
+      onTouchTap={() => toggleMainMenu()}
       onRequestChange={(open, reason) => {if (reason === 'clickAway') {
-        toggleSideMenu()
+        toggleMainMenu()
       }}}
     >
       <Menu value={currentLocation} selectedMenuItemStyle={selectedMenuItemStyle} disableAutoFocus={true} >
@@ -82,11 +82,11 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleSideMe
 )
 
 SideMenu.propTypes = {
-      allowedRoutes: React.PropTypes.array.isRequired,
+  allowedRoutes: React.PropTypes.array.isRequired,
   isOpen: React.PropTypes.bool.isRequired,
   currentLocation: React.PropTypes.string.isRequired,
   changeLocation: React.PropTypes.func.isRequired,
-  toggleSideMenu: React.PropTypes.func.isRequired
+  toggleMainMenu: React.PropTypes.func.isRequired
 }
 
 export default SideMenu

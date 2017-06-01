@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import SideMenu from './components/SideMenu'
+import MainMenu from './components/MainMenu'
 import RateUs from './components/RateUs'
 import { AmbarResponsiveLogo } from 'components/BasicComponents'
 import AppBarTitle from './components/AppBarTitle'
@@ -42,10 +42,10 @@ class MainLayout extends Component {
                         style={{ position: 'fixed', top: 0, left: 0 }}
                         zDepth={2}
                         onRightIconButtonTouchTap={toggleSideMenu}
-                        iconElementRight={<SideMenu
+                        iconElementRight={<MainMenu
                             isOpen={isSideMenuOpen}
                             currentLocation={location}
-                            toggleSideMenu={toggleSideMenu}
+                            toggleMainMenu={toggleSideMenu}
                             changeLocation={changeLocation}
                             mode={mode}
                             allowedRoutes={allowedRoutes} 

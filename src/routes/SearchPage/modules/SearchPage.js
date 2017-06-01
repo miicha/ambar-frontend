@@ -20,6 +20,7 @@ export const SET_SOURCES = 'SEARCH.SET_SOURCES'
 export const SET_IS_REFINE_SEARCH_MODAL_OPEN = 'SEARCH.SET_IS_REFINE_SEARCH_MODAL_OPEN'
 export const TOGGLE_SOURCE_SELECTED = 'SEARCH.TOGGLE_SOURCE_SELECTED'
 export const UPDATE_QUERY = 'SEARCH.UPDATE_QUERY'
+export const SET_TAGS = 'SEARCH.SET_TAGS'
 
 const REQUEST_SIZE = 10
 
@@ -231,6 +232,13 @@ export const performSearchByQuery = (query) => {
     }
 }
 
+export const loadSourcesAndTags = () => {
+    return (dispatch, getState) => {
+        dispatch(loadSources())
+        dispatch(loadTags())
+    }
+}
+
 export const loadSources = () => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
@@ -270,6 +278,38 @@ export const loadSources = () => {
     }
 }
 
+export const loadTags = () => {
+    return (dispatch, getState) => {
+        const urls = stateValueExtractor.getUrls(getState())
+        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+
+        dispatch(startLoadingIndicator())
+
+        fetch(urls.ambarWebApiGetAllTags(), {
+            method: 'GET',
+            ...defaultSettings
+        })
+            .then(resp => {
+                if (resp.status == 200) {
+                    return resp.json()
+                }
+                else { throw resp }
+            })
+            .then(tags => {
+                dispatch(setTags(tags))
+                dispatch(stopLoadingIndicator())
+            })
+            .catch((errorPayload) => {
+                dispatch(stopLoadingIndicator())
+                dispatch(handleError(errorPayload))
+                console.error('loadTags', errorPayload)
+            })
+
+        dispatch(stopLoadingIndicator())
+    }
+}
+
+
 export const cleanFilesToUpload = () => {
     return {
         type: CLEAN_FILES_TO_UPLOAD
@@ -297,6 +337,13 @@ export const setQuery = (query) => {
     return (dispatch, getState) => {
         dispatch(updateQuery(query))
         dispatch(setSources(sourcesModel.fromSources(getState()['searchPage'].sources, query)))
+    }
+}
+
+export const setTags = (tags) => {
+    return {
+        type: SET_TAGS,
+        tags
     }
 }
 
@@ -340,7 +387,7 @@ const updateQuery = (query) => {
     }
 }
 
-export const ACTION_HANDLERS = {    
+export const ACTION_HANDLERS = {
     [FILL_HITS]: (state, action) => {
         let newState = { ...state }
         if (action.clean) {
@@ -416,5 +463,8 @@ export const ACTION_HANDLERS = {
     },
     [UPDATE_QUERY]: (state, action) => {
         return ({ ...state, searchQuery: action.query })
+    },
+    [SET_TAGS]: (state, action) => {
+        return ({ ...state, tags: action.tags })
     }
 }

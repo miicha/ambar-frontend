@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import {
   performSearch,
-  loadHighlight,
   setQuery,
   setScrolledDown,
   toggleUploadModal,
@@ -13,41 +12,28 @@ import {
   cleanUpSearchResult,
   toggleRefineSearchModal,
   toggleSourceSelected,
-  loadSources,
-  performSearchBySource,
-  performSearchByPathToFile,
-  performSearchByAuthor,
+  loadSourcesAndTags,
   performSearchByQuery,
   setQueryFromGetParam,
-  addTagToFile,
-  removeTagFromFile,
-  performSearchByTag
 } from '../modules/SearchPage'
 import Search from 'components/Search'
 
 const mapDispatchToProps = {
   performSearch,
-  loadSources,
-  loadHighlight,
+  performSearchByQuery,
+  loadSourcesAndTags,
   setScrolledDown,
   toggleUploadModal,
   addFilesToUpload,
   removeFileToUpload,
   setBucketName,
   uploadFiles,
-  performSearchBySource,
-  performSearchByPathToFile,
   toggleImagePreview,
   cleanUpSearchResult,
-  performSearchByAuthor,
-  performSearchByQuery,
   toggleRefineSearchModal,
   toggleSourceSelected,
   setQueryFromGetParam,
-  setQuery,
-  addTagToFile,
-  removeTagFromFile,
-  performSearchByTag
+  setQuery
 }
 
 const mapStateToProps = (state) => {

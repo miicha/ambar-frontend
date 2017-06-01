@@ -15,7 +15,8 @@ const initialState = {
     isImagePreviewOpen: false,
     imagePreviewUrl: '',
     sources: new Map(),
-    isRefineSearchModalOpen: false
+    isRefineSearchModalOpen: false,
+    tags: []
 }
 
 export default function reducer(state = initialState, action) {    

@@ -42,6 +42,7 @@ const init = (apiHost) => {
 
         ambarWebApiAddTagToFile: (fileId, tagName) => `${apiHost}/api/tags/${fileId}/${tagName}`,
         ambarWebApiDeleteTagFromFile: (fileId, tagName) => `${apiHost}/api/tags/${fileId}/${tagName}`,
+        ambarWebApiGetAllTags: () => `${apiHost}/api/tags`,
 
         ambarWebApiHideFile: (fileId) => `${apiHost}/api/files/hide/${fileId}`,
         ambarWebApiUnhideFile: (fileId) => `${apiHost}/api/files/unhide/${fileId}`,

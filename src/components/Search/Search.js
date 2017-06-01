@@ -23,7 +23,7 @@ class Search extends Component {
     timeoutId = null
 
     componentDidMount() {
-        const { setPageTitle, setAppHeader, loadSources, performSearch, toggleRefineSearchModal, searchQuery, setQueryFromGetParam, setQuery } = this.props
+        const { setPageTitle, setAppHeader, loadSourcesAndTags, performSearch, toggleRefineSearchModal, searchQuery, setQueryFromGetParam, setQuery } = this.props
 
         setPageTitle('Search')
         setAppHeader({
@@ -44,7 +44,7 @@ class Search extends Component {
                 icon={<MoreHoriz color={cyan100} />}
             />
         })
-        loadSources()
+        loadSourcesAndTags()
         setQueryFromGetParam()
     }
 
@@ -164,7 +164,7 @@ Search.propTypes = {
     searchQuery: React.PropTypes.string.isRequired,
     hits: React.PropTypes.object.isRequired,
 
-    loadSources: React.PropTypes.func.isRequired,
+    loadSourcesAndTags: React.PropTypes.func.isRequired,
 
     toggleUploadModal: React.PropTypes.func.isRequired,
     isUploadModalOpen: React.PropTypes.bool.isRequired,

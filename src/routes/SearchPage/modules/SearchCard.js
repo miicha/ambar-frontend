@@ -3,7 +3,7 @@ import { hitsModel, sourcesModel } from 'models/'
 import { titles, analytics, FormDataPolyfill } from 'utils'
 import { handleError, showInfo } from 'routes/CoreLayout/modules/CoreLayout'
 import { startLoadingIndicator, stopLoadingIndicator } from 'routes/MainLayout/modules/MainLayout'
-import { setQuery, performSearch, setSources, updateSourceSelected } from 'routes/SearchPage/modules/SearchPage'
+import { setQuery, performSearch, setSources, setTags, updateSourceSelected } from 'routes/SearchPage/modules/SearchPage'
 
 import * as Regexes from 'utils/regexes'
 import 'whatwg-fetch'
@@ -114,9 +114,12 @@ export const addTagToFile = (sha256, fileId, tagName) => {
                 if (resp.status == 200 || resp.status == 201) {                    
                     dispatch(markTagAsCreated(sha256, tagName))
                     analytics().event('TAGS.ADD', { name: tagName })
-                    return
+                    return resp.json()
                 }
                 else { throw resp }
+            })
+            .then((data) => {
+                dispatch(setTags(data.tags))
             })
             .catch((errorPayload) => {
                 dispatch(handleError(errorPayload))
@@ -139,9 +142,12 @@ export const removeTagFromFile = (sha256, fileId, tagName) => {
             .then(resp => {
                 if (resp.status == 200) {
                     analytics().event('TAGS.REMOVED', { name: tagName })
-                    return
+                    return resp.json()
                 }
                 else { throw resp }
+            })
+            .then((data) => {
+                dispatch(setTags(data.tags))
             })
             .catch((errorPayload) => {
                 dispatch(handleError(errorPayload))

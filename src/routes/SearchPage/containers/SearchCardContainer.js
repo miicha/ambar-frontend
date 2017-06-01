@@ -36,7 +36,8 @@ const mapStateToProps = (state, ownProps) => {
   return ({ 
     hit: hit,
     showFilePreview: state['core'].showFilePreview,
-    urls: state['core'].urls
+    urls: state['core'].urls,
+    allTags: state['searchPage'].tags
   })
 }
 

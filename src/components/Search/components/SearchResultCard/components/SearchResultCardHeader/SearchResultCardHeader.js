@@ -51,33 +51,15 @@ const getFileAvatarByMeta = (meta, searchFunction) => {
 }
 
 const getHumanizedTime = (date) => {
-    let diff = moment.duration(moment().utc().diff(moment.utc(date)))
+    const start = moment.utc()
+    const end = moment.utc(date)
 
-    if (Math.floor(diff.asDays()) > 6) {
-        return moment.utc(date).format('DD.MM.YYYY') 
+    let diff = moment.duration(end.diff(start))
+    if (Math.floor(Math.abs(diff.asDays())) > 6) {
+        return end.format('DD.MM.YYYY') 
     }
 
-    if (Math.floor(diff.asDays()) <= 6 && Math.floor(diff.asDays()) > 1) {
-        return `${Math.floor(diff.asDays())} days ago`
-    }
-
-    if (Math.floor(diff.asDays()) == 1) {
-        return 'yesterday'
-    }
-
-    if (Math.floor(diff.asHours()) < 24 && Math.floor(diff.asHours()) > 1) {
-        return `${Math.floor(diff.asHours())} hours ago`
-    }
-
-    if (Math.floor(diff.asHours()) == 1) {
-        return 'an hour ago'
-    }
-
-    if (Math.floor(diff.asMinutes()) < 60) {
-        return `${Math.floor(diff.asMinutes())} minute(s) ago`
-    }
-
-    return moment.utc(date).format('DD.MM.YYYY') 
+    return diff.humanize(true)
 }
 
 const SIZE_QUERY = /((^|\s)size(>|<)[=]{0,1})([0-9]*)([k|m]{0,1})/im
