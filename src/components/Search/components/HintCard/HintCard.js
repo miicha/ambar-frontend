@@ -79,7 +79,9 @@ const HintCard = (props) => {
     </div>)
 
     const emailText = (<p>
-        Have any questions? <span className={classes.link} onTouchTap={() => document.getElementById('linkedchat-button').click() }>Drop us a message on chat</span>
+        Have any questions? <span className={classes.link} onTouchTap={(e) => { 
+            document.getElementById('linkedchat-button').click(false) 
+        }}>Drop us a message on chat</span>
     </p>)
 
     const textElement = (<div>

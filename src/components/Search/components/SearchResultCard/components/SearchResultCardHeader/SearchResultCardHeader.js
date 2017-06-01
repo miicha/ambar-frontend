@@ -121,7 +121,7 @@ const SearchResultCardHeader = (props) => {
                                 {author && <span style={{paddingRight: '3px'}}>by&nbsp;
                                     <HighlightedSpan
                                         className={classes.clickableMeta}
-                                        onTouchTap={() => performSearchByAuthor(author)}
+                                        onTouchTap={() => performSearchByAuthor(`${author}*`)}
                                         isHighlighted={authorHighlighted}>
                                         {author}
                                     </HighlightedSpan>
