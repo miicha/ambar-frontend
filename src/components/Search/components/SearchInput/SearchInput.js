@@ -7,7 +7,7 @@ import MediaQuery from 'react-responsive'
 import classes from './SearchInput.scss'
 
 class SearchInput extends Component {
-    timeoutId = null
+    static timeoutId = null
 
     componentDidMount() {
         this.refs.search_input.focus()
@@ -59,7 +59,7 @@ class SearchInput extends Component {
 
                             this.timeoutId = setTimeout(() => {
                                 performSearch(0, newValue)
-                            }, 200)
+                            }, 500)
                         }}                        
                         underlineShow={false}                                                      
                     />
