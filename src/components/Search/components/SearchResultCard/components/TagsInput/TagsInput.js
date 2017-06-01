@@ -112,12 +112,10 @@ class TagsInput extends Component {
     }
 
     getSuggestions(value) {
+        
         const inputValue = value.trim().toLowerCase()
         const inputLength = inputValue.length
-
-        const suggestions = this.props.suggestions.filter(suggestion => {
-            return !this.props.tags.some(tag => tag.name === suggestion)
-        })
+        const suggestions = this.props.suggestions
 
         return inputLength === 0 ? suggestions.slice(0, 10) : suggestions.filter(suggestion =>
             suggestion.toLowerCase().slice(0, inputLength) === inputValue
@@ -157,8 +155,9 @@ class TagsInput extends Component {
                 position: 'absolute',
                 top: 25,
                 width: 120,
-                border: '1px solid #aaa',
                 backgroundColor: '#fff',
+                boxShadow: '0 0 7px rgba(0, 0, 0, 0.4)',
+                borderRadius: '2px',
                 fontSize: 12,
                 zIndex: 2
             },
@@ -199,14 +198,15 @@ class TagsInput extends Component {
                     suggestions={this.state.suggestions}
                     getSuggestionValue={s => s}
                     renderSuggestion={(suggestion) => <span>{suggestion}</span>}
-                    onSuggestionSelected={(e, { suggestion }) => {
+                    onSuggestionSelected={(e, { suggestion, suggegstionValue, suggestionIndex, sectionIndex, method }) => {
                         this.addTag(suggestion)
                     }}
+                    shouldRenderSuggestions={(value) => true}
                     onSuggestionsFetchRequested={e => this.onSuggestionsFetchRequested(e)}
                     onSuggestionsClearRequested={e => this.onSuggestionsClearRequested(e)}
                     inputProps={{
                         value: this.state.inputValue,
-                        onChange: (e) => this.onChange(e.target.value),
+                        onChange: (e, { newValue, method }) => this.onChange(newValue),
                         onBlur: () => this.onBlur(),
                         onKeyPress: (event) => this.onKeyPress(event),
                         onKeyDown: (event) => this.onKeyDown(event)

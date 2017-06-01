@@ -35,7 +35,7 @@ const shouldShowTextButton = (extension) => {
     return ARCHIVE_EXTENSIONS.indexOf(extension) == -1
 }
 
-class SearchResultRow extends Component {
+class SearchResultCard extends Component {
     startLoadingHighlight() {
         const { searchQuery, hit: { sha256: sha256 }, loadHighlight } = this.props
         loadHighlight(sha256, searchQuery)
@@ -145,7 +145,11 @@ class SearchResultRow extends Component {
                                     label='Preview'
                                     primary={true}
                                     disabled={!shouldShowPreviewButton(content.size, getExtension(meta))}
-                                    onTouchTap={() => { window.open(urls.googlePreviewFile(meta.download_uri, urls), 'preview', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px') }}
+                                    onTouchTap={() => { window.open(
+                                        urls.googlePreviewFile(meta.download_uri, urls),
+                                        'preview',
+                                        'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px'
+                                    ) }}
                                 />}
                             </div>}
                             <div>
@@ -172,7 +176,7 @@ class SearchResultRow extends Component {
 }
 
 
-SearchResultRow.propTypes = {
+SearchResultCard.propTypes = {
     hit: React.PropTypes.object.isRequired,
     allTags: React.PropTypes.array.isRequired,
     searchQuery: React.PropTypes.string.isRequired,
@@ -190,7 +194,7 @@ SearchResultRow.propTypes = {
     showFile: React.PropTypes.func.isRequired
 }
 
-export default SearchResultRow
+export default SearchResultCard
 
 
 
