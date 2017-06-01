@@ -53,11 +53,11 @@ const UserInfoCard = ({
 				</div>
 			</CardText>
 			<CardActions>
-				{auth != 'none' && <RaisedButton
+				<RaisedButton
 					label="Log Out"
-					disabled={fetching}
+					disabled={fetching || auth == 'none'}
 					secondary={true}
-					onTouchTap={performLogout} />}
+					onTouchTap={performLogout} />
 				{!isDefaultUser && <FlatButton
 					label="Delete Account"
 					disabled={fetching}

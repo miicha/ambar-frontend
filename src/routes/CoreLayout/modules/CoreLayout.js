@@ -25,6 +25,7 @@ export const loadConfig = () => {
                 dispatch(changeField('version', apiInfo.version))
                 dispatch(changeField('integrations', apiInfo.integrations))
                 dispatch(changeField('showFilePreview', apiInfo.showFilePreview === 'true'))                
+                dispatch(changeField('auth', apiInfo.auth))                
                 
                 analytics(apiInfo.analytics.token)
                 analytics().register({ apiUrl: urls.apiHost })
@@ -143,7 +144,8 @@ const initialState = {
     fetching: true,
     isNotificationOpen: false,
     notificationMessage: '',
-    notificationReason: 'error'
+    notificationReason: 'error',
+    auth: 'basic'
 }
 
 export default function coreLayoutReducer(state = initialState, action) {
