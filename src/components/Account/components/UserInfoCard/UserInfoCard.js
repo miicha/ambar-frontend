@@ -23,7 +23,8 @@ const UserInfoCard = ({
 	storageUsed,
 	showRemoveUserAccountDialog,
 	toggleRemoveUserAccountDialog,
-	removeUserAccount
+	removeUserAccount,
+	auth
  }) => {
 	const actions = [
 		<FlatButton
@@ -52,11 +53,11 @@ const UserInfoCard = ({
 				</div>
 			</CardText>
 			<CardActions>
-				<RaisedButton
+				{auth != 'none' && <RaisedButton
 					label="Log Out"
 					disabled={fetching}
 					secondary={true}
-					onTouchTap={performLogout} />
+					onTouchTap={performLogout} />}
 				{!isDefaultUser && <FlatButton
 					label="Delete Account"
 					disabled={fetching}
@@ -96,7 +97,8 @@ UserInfoCard.propTypes = {
 	storageMax: React.PropTypes.number.isRequired,
 	showRemoveUserAccountDialog: React.PropTypes.bool.isRequired,
 	toggleRemoveUserAccountDialog: React.PropTypes.func.isRequired,
-	removeUserAccount: React.PropTypes.func.isRequired
+	removeUserAccount: React.PropTypes.func.isRequired,
+	auth: React.PropTypes.string.isRequired
 }
 
 export default UserInfoCard

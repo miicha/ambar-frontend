@@ -45,6 +45,8 @@ class Account extends Component {
             initDropboxCrawler,
             deleteDropboxCrawler,
             
+            auth
+            
         } = this.props
 
         return (
@@ -62,6 +64,7 @@ class Account extends Component {
                     showRemoveUserAccountDialog={showRemoveUserAccountDialog}
                     toggleRemoveUserAccountDialog={toggleRemoveUserAccountDialog}
                     removeUserAccount={removeUserAccount}
+                    auth={auth}
                 />
                 <ChangePasswordCard
                     fetching={fetching}
@@ -117,7 +120,8 @@ Account.propTypes = {
     deleteDropboxCrawler: React.PropTypes.func.isRequired,
 
     toggleRemoveUserAccountDialog: React.PropTypes.func.isRequired,
-    removeUserAccount: React.PropTypes.func.isRequired
+    removeUserAccount: React.PropTypes.func.isRequired,
+    auth: React.PropTypes.string.isRequired
 }
 
 export default Account

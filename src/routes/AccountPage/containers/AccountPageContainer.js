@@ -47,7 +47,8 @@ const mapStateToProps = (state) => {
     newPasswordConfirmationError: state['accountPage'].newPasswordConfirmationError,
     showRemoveUserAccountDialog: state['accountPage'].showRemoveUserAccountDialog,
     dropboxCrawler: state['accountPage'].dropboxCrawler,
-    isDefaultUser: state['accountPage'].isDefaultUser
+    isDefaultUser: state['accountPage'].isDefaultUser,
+    auth: state['core'].auth
   })
 }
 

@@ -102,7 +102,7 @@ export const performLogout = () => {
             })
             .then(() => {
                 dispatch(changeField('fetching', false))
-                dispatch(setAuth(null, null, null))
+                dispatch(setAuth('', '', ''))
                 dispatch(push('/login'))
                 analytics().event('ACCOUNT.LOGOUT')
                 analytics().reset()
@@ -140,7 +140,7 @@ export const removeUserAccount = () => {
             })
             .then(() => {
                 dispatch(changeField('fetching', false))
-                dispatch(setAuth(null, null, null))
+                dispatch(setAuth('', '', ''))
                 dispatch(push('/signup'))
                 analytics().event('ACCOUNT.DELETE')
                 analytics().reset()

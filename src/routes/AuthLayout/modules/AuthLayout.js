@@ -61,9 +61,9 @@ const checkAuth = (url, authHeaders) => new Promise((resolve, reject) => {
 
 export const setAuth = (email, token, ttl) => {
     return (dispatch, getState) => {
-
-        analytics().identify(email)
-        analytics().userIncrement('login_times', 1)
+        if (email != '') {
+            analytics().identify(email)       
+        }
 
         localStorage.email = email
         localStorage.token = token
