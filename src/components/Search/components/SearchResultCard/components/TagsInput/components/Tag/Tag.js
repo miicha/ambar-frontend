@@ -17,7 +17,10 @@ const Tag = ({ tagName, onRemove, onClick, isHighlighted, isFetching }) => {
         <div
             style={{ display: 'flex', alignItems: 'center' }}
             className={`${classes.tag} ${isHighlighted ? classes.highlight : ''} ${isFetching ? classes.loading : ''}`}
-            onTouchTap={(e) => onClickCallback(tagName)}>
+            onTouchTap={(e) => {
+                e.stopPropagation()                
+                onClickCallback(tagName)
+            }}>
             <span>{tagName}</span>
             {!isFetching && <ClearIcon
                 className={classes.removeTagButton}
