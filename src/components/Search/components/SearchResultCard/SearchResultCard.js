@@ -37,8 +37,8 @@ const shouldShowTextButton = (extension) => {
 
 class SearchResultCard extends Component {
     startLoadingHighlight() {
-        const { searchQuery, hit: { sha256: sha256 }, loadHighlight } = this.props
-        loadHighlight(sha256, searchQuery)
+        const { searchQuery, hit: { sha256: sha256, file_id: fileId }, loadHighlight } = this.props
+        loadHighlight(sha256, fileId, searchQuery)
     }
 
     render() {
@@ -53,7 +53,7 @@ class SearchResultCard extends Component {
             isHidden: isHidden,
             hidden_mark: hidden_mark
         },
-        allTags,
+            allTags,
             searchQuery,
             loadHighlight,
             urls,
@@ -95,12 +95,7 @@ class SearchResultCard extends Component {
                                     <LoadingIndicator />
                                 </CardText>
                                 }
-                                {!fetching && content.state != 'processed' &&
-                                    <CardText>
-                                        <LinearProgress mode='indeterminate' />
-                                    </CardText>
-                                }
-                                {!fetching && content.state === 'processed' && !contentHighlight &&
+                                {!fetching && !contentHighlight &&
                                     <CardText onMouseEnter={() => this.startLoadingHighlight()}>
                                         <span className={classes.blurred}>Если у общества нет цветовой дифференциации штанов - то у общества</span><br />
                                         <span className={classes.blurred}>нет цели, а если нет цели - то...</span>
@@ -125,7 +120,7 @@ class SearchResultCard extends Component {
                         </div>
                     </div>}
                     <CardActions className={classes.searchResultRowCardFooter}>
-                        <div style={{ display: 'flex', justifyContent: !isHidden ? 'space-between' : 'flex-end' , width: '100%' }}>
+                        <div style={{ display: 'flex', justifyContent: !isHidden ? 'space-between' : 'flex-end', width: '100%' }}>
                             {!isHidden && <div>
                                 <FlatButton
                                     icon={<FileDownloadIcon />}
@@ -145,11 +140,13 @@ class SearchResultCard extends Component {
                                     label='Preview'
                                     primary={true}
                                     disabled={!shouldShowPreviewButton(content.size, getExtension(meta))}
-                                    onTouchTap={() => { window.open(
-                                        urls.googlePreviewFile(meta.download_uri, urls),
-                                        'preview',
-                                        'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px'
-                                    ) }}
+                                    onTouchTap={() => {
+                                        window.open(
+                                            urls.googlePreviewFile(meta.download_uri, urls),
+                                            'preview',
+                                            'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800px,height=600px'
+                                        )
+                                    }}
                                 />}
                             </div>}
                             <div>
@@ -160,14 +157,14 @@ class SearchResultCard extends Component {
                                     style={{ color: 'grey' }}
                                     onTouchTap={() => hideFile(sha256, file_id)}
                                 />}
-                                 {(isHidden || hidden_mark) && <FlatButton
+                                {(isHidden || hidden_mark) && <FlatButton
                                     icon={<UndoIcon />}
                                     label='Restore'
                                     primary={true}
                                     onTouchTap={() => showFile(sha256, file_id)}
                                 />}
                             </div>
-                        </div>}                        
+                        </div>}
                     </CardActions>
                 </Card>
             </Paper>

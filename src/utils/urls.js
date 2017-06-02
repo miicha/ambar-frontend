@@ -3,7 +3,7 @@ const init = (apiHost) => {
     return {
         apiHost: apiHost,
         ambarWebApiSearchByStringQuery: (query, page, size) => `${apiHost}/api/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`,
-        ambarWebApiLoadContentHightlight: (sha256, query) => `${apiHost}/api/search/${sha256}/?query=${encodeURIComponent(query)}`,
+        ambarWebApiLoadContentHightlight: (fileId, query) => `${apiHost}/api/search/${fileId}/?query=${encodeURIComponent(query)}`,
         ambarWebApiGetFile: (metaId) => `${apiHost}/api/files/${metaId}`,
         ambarWebApiGetFileText: (metaId) => `${apiHost}/api/files/${metaId}/text`,
 
