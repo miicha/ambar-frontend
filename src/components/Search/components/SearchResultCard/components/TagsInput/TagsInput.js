@@ -77,15 +77,10 @@ class TagsInput extends Component {
         }
     }
 
-    onBlur() {
-        this.addTag(this.state.inputValue)
-    }
-
     focusOnInput() {
         if (!this.refs.suggestInput) {
             return
-        }
-
+        }        
         this.refs.suggestInput.input.focus()
     }
 
@@ -182,7 +177,12 @@ class TagsInput extends Component {
         return (
             <div
                 style={{ padding: '5px', cursor: 'text', display: 'flex', flexWrap: 'wrap' }}
-                onClick={() => this.focusOnInput()}>
+                className='TAGS_CONTAINER'
+                onClick={(e) => {                    
+                    if (e.target.className == 'TAGS_CONTAINER') {                        
+                        this.focusOnInput()
+                    }
+                }}>
                 {this.props.tags.map((tag, idx) =>
                     <Tag
                         key={idx}
@@ -206,8 +206,7 @@ class TagsInput extends Component {
                     onSuggestionsClearRequested={e => this.onSuggestionsClearRequested(e)}
                     inputProps={{
                         value: this.state.inputValue,
-                        onChange: (e, { newValue, method }) => this.onChange(newValue),
-                        onBlur: () => this.onBlur(),
+                        onChange: (e, { newValue, method }) => this.onChange(newValue),                        
                         onKeyPress: (event) => this.onKeyPress(event),
                         onKeyDown: (event) => this.onKeyDown(event)
                     }}
