@@ -15,14 +15,15 @@ export const REMOVE_TAG = 'SEARCH_CARD.REMOVE_TAG'
 export const MARK_TAG_AS_CREATED = 'SEARCH_CARD.MARK_TAG_AS_CREATED'
 export const TOGGLE_IS_HIDDEN_FILE = 'SEARCH_CARD.TOGGLE_IS_HIDDEN_FILE'
 
-export const loadHighlight = (sha256, query) => {
+export const loadHighlight = (sha256, fileId, query) => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
         return new Promise((resolve) => {
             dispatch(startStopHighlightLoadingIndicator(sha256, true))
-            fetch(urls.ambarWebApiLoadContentHightlight(sha256, query), {
+            console.log(sha256, fileId)
+            fetch(urls.ambarWebApiLoadContentHightlight(fileId, query), {
                 method: 'GET',
                 ...defaultSettings
             })
@@ -92,7 +93,7 @@ export const performSearchBySource = (sourceId) => {
 
 export const performSearchByTag = (tag) => {
     return (dispatch, getState) => {
-        let query = getState()['searchPage'].searchQuery.replace(Regexes.TAGS_QUERY_REGEX, '')        
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.TAGS_QUERY_REGEX, '')
         query = `${query} tags:${tag}`
         dispatch(setQuery(query))
         dispatch(performSearch(0, query))
@@ -107,11 +108,11 @@ export const addTagToFile = (sha256, fileId, tagName) => {
         dispatch(addTag(sha256, tagName))
 
         fetch(urls.ambarWebApiAddTagToFile(fileId, tagName), {
-            method: 'POST',            
+            method: 'POST',
             ...defaultSettings
         })
             .then(resp => {
-                if (resp.status == 200 || resp.status == 201) {                    
+                if (resp.status == 200 || resp.status == 201) {
                     dispatch(markTagAsCreated(sha256, tagName))
                     analytics().event('TAGS.ADD', { name: tagName })
                     return resp.json()
@@ -136,7 +137,7 @@ export const removeTagFromFile = (sha256, fileId, tagName) => {
         dispatch(removeTag(sha256, tagName))
 
         fetch(urls.ambarWebApiDeleteTagFromFile(fileId, tagName), {
-            method: 'DELETE',            
+            method: 'DELETE',
             ...defaultSettings
         })
             .then(resp => {
@@ -164,7 +165,7 @@ export const hideFile = (sha256, fileId) => {
         dispatch(toggleIsHiddenFile(sha256, true))
 
         fetch(urls.ambarWebApiHideFile(fileId), {
-            method: 'PUT',            
+            method: 'PUT',
             ...defaultSettings
         })
             .then(resp => {
@@ -189,7 +190,7 @@ export const showFile = (sha256, fileId) => {
         dispatch(toggleIsHiddenFile(sha256, false))
 
         fetch(urls.ambarWebApiUnhideFile(fileId), {
-            method: 'PUT',            
+            method: 'PUT',
             ...defaultSettings
         })
             .then(resp => {
@@ -232,7 +233,7 @@ const markTagAsCreated = (sha256, tagName) => {
 
 const toggleIsHiddenFile = (sha256, value) => {
     return {
-        type: TOGGLE_IS_HIDDEN_FILE,      
+        type: TOGGLE_IS_HIDDEN_FILE,
         sha256: sha256,
         value: value
     }
@@ -272,7 +273,7 @@ export const ACTION_HANDLERS = {
     },
     [MARK_TAG_AS_CREATED]: (state, action) => {
         const oldHit = getHit(state, action.sha256)
-        const hit = { ...oldHit}
+        const hit = { ...oldHit }
         hit.tags = hit.tags.map(tag => {
             if (tag.name === action.tagName) {
                 tag.isFetching = false
