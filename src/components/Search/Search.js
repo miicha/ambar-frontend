@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { titles } from 'utils/'
-import SearchResultTable from './components/SearchResultTable'
-import UploadFileModal from './components/UploadFileModal'
-import ImagePreview from './components/ImagePreview'
-import SearchInput from './components/SearchInput'
-import RefineSearchModal from './components/RefineSearchModal'
+
+import { UploadFileModal, SearchResultTable, ImagePreview, SearchInput, SideMenu, RefineSearchModal } from './components'
 import { InfiniteScroll } from 'components/BasicComponents'
 
 import { cyan100, cyan300, cyan400 } from 'material-ui/styles/colors'
@@ -14,6 +11,7 @@ import UploadIcon from 'material-ui/svg-icons/editor/attach-file'
 import ArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import FlatButton from 'material-ui/FlatButton'
+
 import Dialog from 'material-ui/Dialog'
 
 import classes from './Search.scss'
@@ -94,7 +92,20 @@ class Search extends Component {
                     sources={sources}
                     toggleSourceSelected={toggleSourceSelected}
                 />
-                <div style={{ height: '100%', overflowY: 'auto' }} 
+                <div style={{
+                    position: 'fixed',
+                    width: '200px',
+                    height: '100%',
+                    left: 0,
+                    right: 0,
+                    //borderRight: '1px solid rgba(0,0,0,0.1)',
+                    boxShadow: '0 0 15px rgba(0, 0, 0, 0.4)',
+                    padding: '0',
+                   // backgroundColor: 'rgba(0,0,0,0.05)'
+                }}>
+                    <SideMenu />
+                </div>
+                <div style={{ marginLeft: '200px', height: '100%', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.05)' }}
                     ref={(container) => { this.containerNode = container }}>
                     <SearchResultTable
                         fetching={fetching}
@@ -184,7 +195,7 @@ Search.propTypes = {
 
     isRefineSearchModalOpen: React.PropTypes.bool.isRequired,
     toggleRefineSearchModal: React.PropTypes.func.isRequired,
-    
+
     toggleSourceSelected: React.PropTypes.func.isRequired,
 
     setQuery: React.PropTypes.func.isRequired,
