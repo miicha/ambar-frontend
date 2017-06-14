@@ -1,11 +1,14 @@
 import { connect } from 'react-redux'
-import { 
+import {
   postConfigRequest,
   checkIfAllowed,
   toggleSideMenu,
   changeLocation,
   setAppHeader,
-  toggleRateUsModal } from '../modules/MainLayout'
+  toggleRateUsModal
+} from '../modules/MainLayout'
+
+import { performLogout } from 'routes/AccountPage/modules/AccountPage'
 
 import MainLayout from 'layouts/MainLayout/MainLayout'
 
@@ -14,7 +17,8 @@ const mapDispatchToProps = {
   toggleSideMenu,
   changeLocation,
   setAppHeader,
-  toggleRateUsModal
+  toggleRateUsModal,
+  performLogout
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -27,6 +31,7 @@ const mapStateToProps = (state, ownProps) => {
     mode: state['core'].mode,
     version: state['core'].version,
     showRateUsModal: state['global'].showRateUsModal,
+    auth: state['core'].auth,
     state: state
   })
 }
