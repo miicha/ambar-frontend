@@ -61,7 +61,7 @@ const UploadFileModal = (props) => {
 
     return (
         <Dialog
-            title="Upload File"
+            title="Upload Files"
             actions={uploadFileModalActions}
             modal={true}
             open={open}

@@ -8,7 +8,6 @@ import UploadModal from 'routes/SearchPage/containers/UploadModalContainer'
 import { cyan100, cyan300, cyan400 } from 'material-ui/styles/colors'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
 import MediaQuery from 'react-responsive'
-import UploadIcon from 'material-ui/svg-icons/editor/attach-file'
 import ArrowUpward from 'material-ui/svg-icons/navigation/arrow-upward'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -96,7 +95,11 @@ class Search extends Component {
                         boxShadow: '0 0 15px rgba(0, 0, 0, 0.4)',
                         padding: '0'
                     }}>
-                        <SideMenu performSearchByQuery={performSearchByQuery} />
+                        <SideMenu 
+                            performSearchByQuery={performSearchByQuery} 
+                            toggleUploadModal={toggleUploadModal}
+                            sources={sources}
+                        />
                     </div>
                 </Desktop>
                 <MediaQuery query='(min-width: 1024px)'>
@@ -132,14 +135,7 @@ class Search extends Component {
                             onTouchTap={() => { this.containerNode.scrollTop = 0 }}
                             className={scrolledDown ? '' : 'hiddenWithAnimation'}>
                             <ArrowUpward />
-                        </FloatingActionButton>
-                        <FloatingActionButton
-                            zDepth={4}
-                            className={classes.uploadFileBtn}
-                            secondary={true}
-                            onTouchTap={toggleUploadModal}>
-                            <UploadIcon />
-                        </FloatingActionButton>
+                        </FloatingActionButton>                        
                     </div>
                     <UploadModal />                        
                 </div>
