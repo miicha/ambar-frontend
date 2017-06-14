@@ -14,49 +14,40 @@ import Divider from 'material-ui/Divider'
 
 import classes from './SideMenu.scss'
 
-const SideMenu = (props) => {
+const menuItemStyle = {fontSize: '15px', padding: '10px 10px 10px 32px'}
+const MenuItem = (props) => <ListItem {...props} innerDivStyle={menuItemStyle} />
 
-    const menuItemStyle = {fontSize: '15px', padding: '10px 10px 10px 32px'}
+const subHeaderStyle = {fontSize: '15px', color: '#777777', lineHeight: '20px', cursor: 'default', fontFamily: 'Roboto, sans-serif'}
+const MenuLabel = ({children, ...props}) => <Subheader {...props} style={subHeaderStyle}>{children}</Subheader>
 
+const SideMenu = ({performSearchByQuery}) => {
     return (
         <div className={classes.sideMenuContainer}>
-            <Subheader style={{fontSize: '15px', color: '#777777', lineHeight: '20px', cursor: 'default', fontFamily: 'Roboto, sans-serif'}}><DateIcon color='rgb(117, 117, 117)'/>Time Range</Subheader>
+            <MenuLabel>Time Range</MenuLabel>
             <List>
-                <ListItem
-                    key={1}
-                    innerDivStyle={menuItemStyle}
-                    primaryText='Today'
+                <MenuItem primaryText='Today' onTouchTap={() => performSearchByQuery('when:today')} />
+                <MenuItem primaryText='Yesterday' onTouchTap={() => performSearchByQuery('when:yesterday')} />
+                <MenuItem primaryText='This Week' onTouchTap={() => performSearchByQuery('when:thisweek')} />
+                <MenuItem primaryText='This Month' onTouchTap={() => performSearchByQuery('when:thismonth')} />
+                <MenuItem primaryText='This Year' onTouchTap={() => performSearchByQuery('when:thisyear')} />
+            </List>
+            <MenuLabel>Size</MenuLabel>
+             <List>
+                <MenuItem 
+                    primaryText='Large'
+                    secondaryText='Larger than 3MB'
+                    onTouchTap={() => performSearchByQuery('size>3M')}
                 />
-                <ListItem
-                    key={2}
-                    innerDivStyle={menuItemStyle}
-                    primaryText='Yesterday'
-                />
-                <ListItem
-                    key={3}
-                    innerDivStyle={menuItemStyle}
-                    primaryText='This Week'
-                />
-                <ListItem
-                    key={3}
-                    innerDivStyle={menuItemStyle}
-                    primaryText='This Month'
-                />
-                <ListItem
-                    key={4}
-                    innerDivStyle={menuItemStyle}
-                    primaryText='This Year'
+                <MenuItem
+                    primaryText='Small'
+                    secondaryText='Smaller than 300KB'
+                    onTouchTap={() => performSearchByQuery('size<300K')}
                 />
             </List>
             <Divider />
             <List>
-                <ListItem
-                    primaryText="Hidden"
-                    innerDivStyle={menuItemStyle}
-                    leftIcon={<TrashIcon />} 
-                />
+                <MenuItem primaryText="Hidden" onTouchTap={() => performSearchByQuery('show:hidden')}/>
             </List>
-
         </div>
     )
 }

@@ -16,6 +16,8 @@ import Dialog from 'material-ui/Dialog'
 
 import classes from './Search.scss'
 
+const Desktop = ({ children }) => <MediaQuery query='(min-width: 1024px)' children={children} />
+
 class Search extends Component {
 
     timeoutId = null
@@ -25,7 +27,7 @@ class Search extends Component {
 
         setPageTitle('Search')
         setAppHeader({
-            left: () => <MediaQuery query='(min-width: 1024px)'>Search</MediaQuery>,
+            left: () => <Desktop>Search</Desktop>,
             center: (state) => {
                 return (
                     <SearchInput
@@ -92,39 +94,45 @@ class Search extends Component {
                     sources={sources}
                     toggleSourceSelected={toggleSourceSelected}
                 />
-                <div style={{
-                    position: 'fixed',
-                    width: '200px',
-                    height: '100%',
-                    left: 0,
-                    right: 0,
-                    //borderRight: '1px solid rgba(0,0,0,0.1)',
-                    boxShadow: '0 0 15px rgba(0, 0, 0, 0.4)',
-                    padding: '0',
-                   // backgroundColor: 'rgba(0,0,0,0.05)'
-                }}>
-                    <SideMenu />
-                </div>
-                <div style={{ marginLeft: '200px', height: '100%', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.05)' }}
-                    ref={(container) => { this.containerNode = container }}>
-                    <SearchResultTable
-                        fetching={fetching}
-                        hits={hits}
-                        searchQuery={searchQuery}
-                        toggleImagePreview={toggleImagePreview}
-                        performSearchByQuery={performSearchByQuery}
-                    />
-                    {this.containerNode && <InfiniteScroll
-                        anchorEl={this.containerNode}
-                        currentPage={currentPage}
-                        threshold={100}
-                        loadMore={(newPage) => {
-                            performSearch(newPage, searchQuery)
-                        }}
-                        hasMore={hasMore}
-                        onScrollDown={(isFirstPage) => setScrolledDown(!isFirstPage)}
-                    />}
-                </div>
+                <Desktop>
+                    <div style={{
+                        position: 'fixed',
+                        width: '200px',
+                        height: '100%',
+                        left: 0,
+                        right: 0,
+                        boxShadow: '0 0 15px rgba(0, 0, 0, 0.4)',
+                        padding: '0'
+                    }}>
+                        <SideMenu performSearchByQuery={performSearchByQuery} />
+                    </div>
+                </Desktop>
+                <MediaQuery query='(min-width: 1024px)'>
+                    {
+                        (matches) => {
+                            return (<div style={{ marginLeft: matches ? '200px' : '0', height: '100%', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.05)' }}
+                                ref={(container) => { this.containerNode = container }}>
+                                <SearchResultTable
+                                    fetching={fetching}
+                                    hits={hits}
+                                    searchQuery={searchQuery}
+                                    toggleImagePreview={toggleImagePreview}
+                                    performSearchByQuery={performSearchByQuery}
+                                />
+                                {this.containerNode && <InfiniteScroll
+                                    anchorEl={this.containerNode}
+                                    currentPage={currentPage}
+                                    threshold={100}
+                                    loadMore={(newPage) => {
+                                        performSearch(newPage, searchQuery)
+                                    }}
+                                    hasMore={hasMore}
+                                    onScrollDown={(isFirstPage) => setScrolledDown(!isFirstPage)}
+                                />}
+                            </div>)
+                        }
+                    }
+                </MediaQuery>
                 <div>
                     <div style={{ display: 'flex', flexDirection: 'column', position: 'fixed', bottom: '10%', right: '30px', zIndex: '990' }}>
                         <FloatingActionButton
