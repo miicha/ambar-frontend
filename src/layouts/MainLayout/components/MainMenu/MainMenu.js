@@ -24,61 +24,77 @@ const SETTINGS_PAGE_LOCATION = '/crawlers'
 const STAT_PAGE_LOCATION = '/statistics'
 const ACCOUNT_PAGE_LOCATION = '/account'
 
-export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMenu, allowedRoutes }) => (
-    <IconMenu
-      iconButtonElement={<IconButton><MenuIcon color='white'/></IconButton>}
-      anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-      targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-      menuStyle={{marginTop: '-16px'}}
-      open={isOpen}
-      onTouchTap={() => toggleMainMenu()}
-      onRequestChange={(open, reason) => {if (reason === 'clickAway') {
+export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMenu, allowedRoutes, auth, performLogout }) => (
+  <IconMenu
+    iconButtonElement={<IconButton><MenuIcon color='white' /></IconButton>}
+    anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+    targetOrigin={{ horizontal: 'left', vertical: 'top' }}  
+    open={isOpen}
+    onTouchTap={() => toggleMainMenu()}
+    onRequestChange={(open, reason) => {
+      if (reason === 'clickAway') {
         toggleMainMenu()
-      }}}
-    >
-      <Menu value={currentLocation} selectedMenuItemStyle={selectedMenuItemStyle} disableAutoFocus={true} >
-        {allowedRoutes.includes(SEARCH_PAGE_LOCATION) &&
+      }
+    }}
+  >
+    <Menu 
+      value={currentLocation}
+      selectedMenuItemStyle={selectedMenuItemStyle}
+      disableAutoFocus={true}>
+      {allowedRoutes.includes(SEARCH_PAGE_LOCATION) &&
+        <MenuItem
+          onTouchTap={() => changeLocation(SEARCH_PAGE_LOCATION)}
+          value={SEARCH_PAGE_LOCATION}
+          leftIcon={<SearchIcon />}
+          innerDivStyle={innerMenuItemStyle}
+          style={menuItemStyle}>
+          Search
+        </MenuItem>
+      }
+      {allowedRoutes.includes(SETTINGS_PAGE_LOCATION) &&
+        <MenuItem
+          onTouchTap={() => changeLocation(SETTINGS_PAGE_LOCATION)}
+          value={SETTINGS_PAGE_LOCATION}
+          leftIcon={<SettingsIcon />}
+          innerDivStyle={innerMenuItemStyle}
+          style={menuItemStyle}>
+          Settings
+        </MenuItem>
+      }
+      {allowedRoutes.includes(STAT_PAGE_LOCATION) &&
+        <MenuItem
+          onTouchTap={() => changeLocation(STAT_PAGE_LOCATION)}
+          value={STAT_PAGE_LOCATION}
+          leftIcon={<StatisticsIcon />}
+          innerDivStyle={innerMenuItemStyle}
+          style={menuItemStyle}>
+          Statistics
+        </MenuItem>
+      }
+      {allowedRoutes.includes(ACCOUNT_PAGE_LOCATION) &&
+        <MenuItem
+          onTouchTap={() => changeLocation(ACCOUNT_PAGE_LOCATION)}
+          value={ACCOUNT_PAGE_LOCATION}
+          leftIcon={<AccountIcon />}
+          innerDivStyle={innerMenuItemStyle}
+          style={menuItemStyle}>
+          Account
+        </MenuItem>
+      }
+      { 
+        auth !== 'none' && 
+        <div>
+          <Divider />
           <MenuItem
-            onTouchTap={() => changeLocation(SEARCH_PAGE_LOCATION)}
-            value={SEARCH_PAGE_LOCATION}
-            leftIcon={<SearchIcon />}
+            onTouchTap={() => performLogout()}            
             innerDivStyle={innerMenuItemStyle}
             style={menuItemStyle}>
-            Search
-        </MenuItem>
-        }
-        {allowedRoutes.includes(SETTINGS_PAGE_LOCATION) &&
-          <MenuItem
-            onTouchTap={() => changeLocation(SETTINGS_PAGE_LOCATION)}
-            value={SETTINGS_PAGE_LOCATION}
-            leftIcon={<SettingsIcon />}
-            innerDivStyle={innerMenuItemStyle}
-            style={menuItemStyle}>
-            Settings
-        </MenuItem>
-        }
-        {allowedRoutes.includes(STAT_PAGE_LOCATION) &&
-          <MenuItem
-            onTouchTap={() => changeLocation(STAT_PAGE_LOCATION)}
-            value={STAT_PAGE_LOCATION}
-            leftIcon={<StatisticsIcon />}
-            innerDivStyle={innerMenuItemStyle}
-            style={menuItemStyle}>
-            Statistics
-        </MenuItem>
-        }
-        {allowedRoutes.includes(ACCOUNT_PAGE_LOCATION) &&
-          <MenuItem
-            onTouchTap={() => changeLocation(ACCOUNT_PAGE_LOCATION)}
-            value={ACCOUNT_PAGE_LOCATION}
-            leftIcon={<AccountIcon />}
-            innerDivStyle={innerMenuItemStyle}
-            style={menuItemStyle}>
-            Account
-        </MenuItem>
-        }
-      </Menu>
-    </IconMenu>
+            Log Out
+          </MenuItem>
+        </div>
+      }
+    </Menu>
+  </IconMenu>
 )
 
 SideMenu.propTypes = {
@@ -86,7 +102,9 @@ SideMenu.propTypes = {
   isOpen: React.PropTypes.bool.isRequired,
   currentLocation: React.PropTypes.string.isRequired,
   changeLocation: React.PropTypes.func.isRequired,
-  toggleMainMenu: React.PropTypes.func.isRequired
+  toggleMainMenu: React.PropTypes.func.isRequired,
+  auth: React.PropTypes.string.isRequired,
+  performLogout: React.PropTypes.func.isRequired
 }
 
 export default SideMenu

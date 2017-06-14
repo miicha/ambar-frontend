@@ -26,6 +26,8 @@ class MainLayout extends Component {
             setAppHeader,
             showRateUsModal,
             toggleRateUsModal,
+            auth,
+            performLogout,
             state
         } = this.props
 
@@ -49,6 +51,8 @@ class MainLayout extends Component {
                             changeLocation={changeLocation}
                             mode={mode}
                             allowedRoutes={allowedRoutes} 
+                            auth={auth}
+                            performLogout={performLogout}
                         />}
                         iconElementLeft={<div style={{ display: 'flex', flexDirection: 'row' }}>
                             {mode !== 'ee' && <MediaQuery query='(min-width: 1024px)'>
@@ -89,7 +93,11 @@ class MainLayout extends Component {
         setAppHeader: React.PropTypes.func.isRequired,
         setPageTitle: React.PropTypes.func.isRequired,
 
-        state: React.PropTypes.object.isRequired
+        auth: React.PropTypes.string.isRequired,
+
+        state: React.PropTypes.object.isRequired,
+
+        performLogout: React.PropTypes.func.isRequired
     }
 }
 
