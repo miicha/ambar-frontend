@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { titles } from 'utils/'
 
-import { SearchResultTable, ImagePreview, SearchInput, SideMenu, RefineSearchModal } from './components'
+import { SearchResultTable, ImagePreview, SearchInput, SideMenu } from './components'
 import { InfiniteScroll } from 'components/BasicComponents'
 import UploadModal from 'routes/SearchPage/containers/UploadModalContainer'
 
@@ -35,14 +35,7 @@ class Search extends Component {
                         query={state['searchPage'].searchQuery}
                         performSearch={performSearch}
                     />)
-            },
-            right: () => <FlatButton
-                style={{ height: '34px', 'lineHeight': '10px', width: '34px', 'minWidth': '34px' }}
-                backgroundColor={cyan300}
-                hoverColor={cyan400}
-                onTouchTap={() => toggleRefineSearchModal()}
-                icon={<MoreHoriz color={cyan100} />}
-            />
+            }            
         })
         loadSourcesAndTags()
         setQueryFromGetParam()
@@ -78,13 +71,7 @@ class Search extends Component {
          } = this.props
 
         return (
-            <div style={{ height: '100%' }}>
-                <RefineSearchModal
-                    isRefineSearchModalOpen={isRefineSearchModalOpen}
-                    toggleRefineSearchModal={toggleRefineSearchModal}
-                    sources={sources}
-                    toggleSourceSelected={toggleSourceSelected}
-                />
+            <div style={{ height: '100%' }}>                
                 <Desktop>
                     <div style={{
                         position: 'fixed',
