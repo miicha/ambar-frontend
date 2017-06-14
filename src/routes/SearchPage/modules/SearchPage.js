@@ -8,13 +8,6 @@ import 'whatwg-fetch'
 
 export const FILL_HITS = 'SEARCH.FILL_HITS'
 export const UPDATE_SCROLLED_DOWN = 'SEARCH.UPDATE_SCROLLED_DOWN'
-export const TOGGLE_UPLOAD_MODAL = 'SEARCH.TOGGLE_UPLOAD_MODAL'
-export const ADD_FILES_TO_UPLOAD = 'SEARCH.ADD_FILES_TO_UPLOAD'
-export const REMOVE_FILE_TO_UPLOAD = 'SEARCH.REMOVE_FILE_TO_UPLOAD'
-export const SET_BUCKET_NAME = 'SEARCH.SET_BUCKET_NAME'
-export const FILES_UPLOADING = 'SEARCH.FILES_UPLOADING'
-export const CLEAN_FILES_TO_UPLOAD = 'SEARCH.CLEAN_FILES_TO_UPLOAD'
-export const SET_BUCKET_NAME_VALIDATION_MESSAGE = 'SEARCH.SET_BUCKET_NAME_VALIDATION_MESSAGE'
 export const TOGGLE_IMAGE_PREVIEW_MODAL = 'SEARCH.TOGGLE_IMAGE_PREVIEW_MODAL'
 export const SET_SOURCES = 'SEARCH.SET_SOURCES'
 export const SET_IS_REFINE_SEARCH_MODAL_OPEN = 'SEARCH.SET_IS_REFINE_SEARCH_MODAL_OPEN'
@@ -90,67 +83,6 @@ export const cleanUpSearchResult = () => {
     }
 }
 
-export const uploadFiles = () => {
-    return (dispatch, getState) => {
-        dispatch(filesUploading(true))
-
-        const urls = stateValueExtractor.getUrls(getState())
-        const authHeaders = stateValueExtractor.getAuthHeaders(getState())
-
-        const { filesToUpload, bucketName } = getState()['searchPage']
-
-        const BUCKET_NAME_REGEX = /^[0-9a-zA-Z\-]+$/
-        if (!BUCKET_NAME_REGEX.test(bucketName)) {
-            dispatch(filesUploading(false))
-            dispatch(setBucketNameValidationMessage('Bucket name has illegal characters, only numbers, letters and dashes allowed'))
-            return
-        }
-
-        const uploadPromises = filesToUpload.map(file => new Promise((resolve, reject) => {
-            const form = new FormDataPolyfill()
-            form.set(file.name, file, file.name)
-
-            fetch(urls.ambarWebApiPostFile(bucketName, file.name), {
-                method: 'POST',
-                body: form._asNative(),
-                mode: 'cors',
-                credentials: 'include',
-                headers: {
-                    ...authHeaders
-                }
-            }).then((resp) => {
-                if (resp.status >= 400) {
-                    throw resp
-                }
-                else { resolve() }
-            })
-                .catch((errorPayload) => reject(errorPayload))
-        }))
-
-        Promise.all(uploadPromises)
-            .then((values) => {
-                dispatch(filesUploading(false))
-                dispatch(loadSources())
-                dispatch(toggleUploadModal())
-                dispatch(cleanFilesToUpload())
-                dispatch(showInfo('Files succesfully uploaded'))
-                analytics().event('SEARCH.UPLOAD_FILES', { count: uploadPromises.length })
-            })
-            .catch((errorPayload) => {
-                dispatch(filesUploading(false))
-
-                if (errorPayload.status === 507) {
-                    dispatch(handleError('No free space left in your account', true))
-                } else {
-                    dispatch(handleError(errorPayload))
-                    analytics().event('SEARCH.UPLOAD_FILES_ERROR', { error: errorPayload })
-                }
-
-                console.error('uploadFile', errorPayload)
-            })
-    }
-}
-
 export const toggleImagePreview = (imageUrl = undefined) => {
     return (dispatch, getState) => {
         analytics().event('SEARCH.TOGGLE_IMAGE_PREIVEW')
@@ -181,47 +113,6 @@ export const updateScrolledDown = (scrolledDown) => {
     return {
         type: UPDATE_SCROLLED_DOWN,
         scrolledDown
-    }
-}
-
-export const toggleUploadModal = () => {
-    return {
-        type: TOGGLE_UPLOAD_MODAL
-    }
-}
-
-export const addFilesToUpload = (files) => {
-    return {
-        type: ADD_FILES_TO_UPLOAD,
-        files: files
-    }
-}
-
-export const removeFileToUpload = (file) => {
-    return {
-        type: REMOVE_FILE_TO_UPLOAD,
-        file: file
-    }
-}
-
-export const setBucketName = (bucketName) => {
-    return {
-        type: SET_BUCKET_NAME,
-        name: bucketName
-    }
-}
-
-export const setBucketNameValidationMessage = (bucketNameValidationMessage) => {
-    return {
-        type: SET_BUCKET_NAME_VALIDATION_MESSAGE,
-        message: bucketNameValidationMessage
-    }
-}
-
-export const filesUploading = (isUploading) => {
-    return {
-        type: FILES_UPLOADING,
-        isUploading: isUploading
     }
 }
 
@@ -306,13 +197,6 @@ export const loadTags = () => {
             })
 
         dispatch(stopLoadingIndicator())
-    }
-}
-
-
-export const cleanFilesToUpload = () => {
-    return {
-        type: CLEAN_FILES_TO_UPLOAD
     }
 }
 
@@ -403,32 +287,6 @@ export const ACTION_HANDLERS = {
     },
     [UPDATE_SCROLLED_DOWN]: (state, action) => {
         const newState = { ...state, scrolledDown: action.scrolledDown }
-        return newState
-    },
-    [TOGGLE_UPLOAD_MODAL]: (state, action) => {
-        const newState = { ...state, isUploadModalOpen: !state.isUploadModalOpen }
-        return newState
-    },
-    [ADD_FILES_TO_UPLOAD]: (state, action) => {
-        const newState = { ...state, filesToUpload: [...state.filesToUpload, ...action.files] }
-        return newState
-    },
-    [REMOVE_FILE_TO_UPLOAD]: (state, action) => {
-        const newState = { ...state, filesToUpload: state.filesToUpload.filter(f => f !== action.file) }
-        return newState
-    },
-    [SET_BUCKET_NAME]: (state, action) => {
-        return { ...state, bucketName: action.name, bucketNameValidationMessage: '' }
-    },
-    [SET_BUCKET_NAME_VALIDATION_MESSAGE]: (state, action) => {
-        return { ...state, bucketNameValidationMessage: action.message }
-    },
-    [FILES_UPLOADING]: (state, action) => {
-        const newState = { ...state, isFilesUploading: action.isUploading }
-        return newState
-    },
-    [CLEAN_FILES_TO_UPLOAD]: (state, action) => {
-        const newState = { ...state, filesToUpload: [] }
         return newState
     },
     [TOGGLE_IMAGE_PREVIEW_MODAL]: (state, action) => {

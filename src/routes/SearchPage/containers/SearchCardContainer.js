@@ -31,7 +31,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const hit = state['searchPage'].hits.get(ownProps.sha256)
+  const hit = state['searchPage'].hits.get(ownProps.fileId)
 
   return ({ 
     hit: hit,

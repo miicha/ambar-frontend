@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { titles } from 'utils/'
 
-import { UploadFileModal, SearchResultTable, ImagePreview, SearchInput, SideMenu, RefineSearchModal } from './components'
+import { SearchResultTable, ImagePreview, SearchInput, SideMenu, RefineSearchModal } from './components'
 import { InfiniteScroll } from 'components/BasicComponents'
+import UploadModal from 'routes/SearchPage/containers/UploadModalContainer'
 
 import { cyan100, cyan300, cyan400 } from 'material-ui/styles/colors'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
@@ -66,16 +67,7 @@ class Search extends Component {
             currentPage,
             mode,
             toggleUploadModal,
-            isUploadModalOpen,
             sources,
-            filesToUpload,
-            addFilesToUpload,
-            removeFileToUpload,
-            setBucketName,
-            bucketName,
-            bucketNameValidationMessage,
-            isFilesUploading,
-            uploadFiles,
             toggleImagePreview,
             isImagePreviewOpen,
             imagePreviewUrl,
@@ -149,19 +141,7 @@ class Search extends Component {
                             <UploadIcon />
                         </FloatingActionButton>
                     </div>
-                    <UploadFileModal
-                        fetching={isFilesUploading}
-                        sources={sources}
-                        open={isUploadModalOpen}
-                        toggleModal={toggleUploadModal}
-                        addFilesToUpload={addFilesToUpload}
-                        removeFileToUpload={removeFileToUpload}
-                        filesToUpload={filesToUpload}
-                        setBucketName={setBucketName}
-                        bucketName={bucketName}
-                        bucketNameValidationMessage={bucketNameValidationMessage}
-                        uploadFiles={uploadFiles}
-                    />
+                    <UploadModal />                        
                 </div>
                 <ImagePreview visible={isImagePreviewOpen} imageUrl={imagePreviewUrl} toggle={toggleImagePreview} />
             </div>
@@ -186,16 +166,7 @@ Search.propTypes = {
     loadSourcesAndTags: React.PropTypes.func.isRequired,
 
     toggleUploadModal: React.PropTypes.func.isRequired,
-    isUploadModalOpen: React.PropTypes.bool.isRequired,
     sources: React.PropTypes.object.isRequired,
-    addFilesToUpload: React.PropTypes.func.isRequired,
-    removeFileToUpload: React.PropTypes.func.isRequired,
-    filesToUpload: React.PropTypes.array.isRequired,
-    setBucketName: React.PropTypes.func.isRequired,
-    bucketName: React.PropTypes.string.isRequired,
-    bucketNameValidationMessage: React.PropTypes.string.isRequired,
-    isFilesUploading: React.PropTypes.bool.isRequired,
-    uploadFiles: React.PropTypes.func.isRequired,
 
     toggleImagePreview: React.PropTypes.func.isRequired,
     isImagePreviewOpen: React.PropTypes.bool.isRequired,
@@ -207,8 +178,7 @@ Search.propTypes = {
     toggleSourceSelected: React.PropTypes.func.isRequired,
 
     setQuery: React.PropTypes.func.isRequired,
-    performSearchByQuery: React.PropTypes.func.isRequired,
-
+    performSearchByQuery: React.PropTypes.func.isRequired
 }
 
 export default Search

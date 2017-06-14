@@ -18,8 +18,8 @@ class SearchResultTable extends Component {
             <div className='pageContainer'>
                 {hits && hits.size > 0 && Array.from(hits.values()).map((hit, idx) =>
                     <SearchResult
-                        key={hit.sha256}                        
-                        sha256={hit.sha256}
+                        key={hit.file_id}                        
+                        fileId={hit.file_id}
                         searchQuery={searchQuery}
                         toggleImagePreview={toggleImagePreview}
                      />

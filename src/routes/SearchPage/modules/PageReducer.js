@@ -1,5 +1,6 @@
 import { ACTION_HANDLERS as SearchCardActions } from './SearchCard'
 import { ACTION_HANDLERS as SearchPageActions } from './SearchPage'
+import { ACTION_HANDLERS as UploadModalActions } from './UploadModal'
 
 const initialState = {
     searchQuery: '',
@@ -22,7 +23,8 @@ const initialState = {
 export default function reducer(state = initialState, action) {    
     const ACTION_HANDLERS = {
         ...SearchCardActions,
-        ...SearchPageActions
+        ...SearchPageActions,
+        ...UploadModalActions
     }
 
     let handler = ACTION_HANDLERS[action.type]

@@ -37,8 +37,8 @@ const shouldShowTextButton = (extension) => {
 
 class SearchResultCard extends Component {
     startLoadingHighlight() {
-        const { searchQuery, hit: { sha256: sha256, file_id: fileId }, loadHighlight } = this.props
-        loadHighlight(sha256, fileId, searchQuery)
+        const { searchQuery, hit: { file_id: fileId }, loadHighlight } = this.props
+        loadHighlight(fileId, searchQuery)
     }
 
     render() {
@@ -49,7 +49,7 @@ class SearchResultCard extends Component {
             content: content,
             sha256: sha256,
             tags: tags,
-            file_id: file_id,
+            file_id: fileId,
             isHidden: isHidden,
             hidden_mark: hidden_mark
         },
@@ -84,8 +84,8 @@ class SearchResultCard extends Component {
                     {!isHidden && <div>
                         <TagsInput
                             tags={tags}
-                            onAddTag={(tag) => addTagToFile(sha256, file_id, tag)}
-                            onRemoveTag={(tag) => removeTagFromFile(sha256, file_id, tag)}
+                            onAddTag={(tag) => addTagToFile(fileId, tag)}
+                            onRemoveTag={(tag) => removeTagFromFile(fileId, tag)}
                             performSearchByTag={performSearchByTag}
                             suggestions={allTags.map(t => t.name)}
                         />
@@ -155,13 +155,13 @@ class SearchResultCard extends Component {
                                     secondary={true}
                                     label='Hide'
                                     style={{ color: 'grey' }}
-                                    onTouchTap={() => hideFile(sha256, file_id)}
+                                    onTouchTap={() => hideFile(fileId)}
                                 />}
                                 {(isHidden || hidden_mark) && <FlatButton
                                     icon={<UndoIcon />}
                                     label='Restore'
                                     primary={true}
-                                    onTouchTap={() => showFile(sha256, file_id)}
+                                    onTouchTap={() => showFile(fileId)}
                                 />}
                             </div>
                         </div>}
