@@ -1,11 +1,6 @@
 import { connect } from 'react-redux'
 
 import {
-  performSearchBySource,
-  performSearchByPathToFile,
-  performSearchByAuthor,
-  performSearchByQuery,
-  performSearchByTag,
   loadHighlight,
   toggleImagePreview,
   addTagToFile,
@@ -13,6 +8,14 @@ import {
   hideFile,
   showFile
 } from '../modules/SearchCard'
+
+import {
+  performSearchBySource,
+  performSearchByPathToFile,
+  performSearchByAuthor,
+  performSearchByQuery,
+  performSearchByTag
+} from '../modules/SearchPage'
 
 import SearchCard from 'components/Search/components/SearchResultCard'
 

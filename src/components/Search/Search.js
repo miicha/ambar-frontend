@@ -35,7 +35,7 @@ class Search extends Component {
                         query={state['searchPage'].searchQuery}
                         performSearch={performSearch}
                     />)
-            }            
+            }
         })
         loadSourcesAndTags()
         setQueryFromGetParam()
@@ -67,11 +67,15 @@ class Search extends Component {
             toggleRefineSearchModal,
             toggleSourceSelected,
             setAppHeader,
-            performSearchByQuery
+            performSearchByQuery,
+            performSearchBySource,
+            performSearchBySize,
+            performSearchByWhen,
+            performSearchByShow
          } = this.props
 
         return (
-            <div style={{ height: '100%' }}>                
+            <div style={{ height: '100%' }}>
                 <Desktop>
                     <div style={{
                         position: 'fixed',
@@ -82,8 +86,12 @@ class Search extends Component {
                         boxShadow: '0 0 15px rgba(0, 0, 0, 0.4)',
                         padding: '0'
                     }}>
-                        <SideMenu 
-                            performSearchByQuery={performSearchByQuery} 
+                        <SideMenu
+                            performSearchByQuery={performSearchByQuery}
+                            performSearchBySource={performSearchBySource}
+                            performSearchBySize={performSearchBySize}
+                            performSearchByWhen={performSearchByWhen}
+                            performSearchByShow={performSearchByShow}
                             toggleUploadModal={toggleUploadModal}
                             sources={sources}
                         />
@@ -122,9 +130,9 @@ class Search extends Component {
                             onTouchTap={() => { this.containerNode.scrollTop = 0 }}
                             className={scrolledDown ? '' : 'hiddenWithAnimation'}>
                             <ArrowUpward />
-                        </FloatingActionButton>                        
+                        </FloatingActionButton>
                     </div>
-                    <UploadModal />                        
+                    <UploadModal />
                 </div>
                 <ImagePreview visible={isImagePreviewOpen} imageUrl={imagePreviewUrl} toggle={toggleImagePreview} />
             </div>
@@ -161,7 +169,11 @@ Search.propTypes = {
     toggleSourceSelected: React.PropTypes.func.isRequired,
 
     setQuery: React.PropTypes.func.isRequired,
-    performSearchByQuery: React.PropTypes.func.isRequired
+    performSearchByQuery: React.PropTypes.func.isRequired,
+    performSearchBySource: React.PropTypes.func.isRequired,
+    performSearchBySize: React.PropTypes.func.isRequired,
+    performSearchByWhen: React.PropTypes.func.isRequired,
+    performSearchByShow: React.PropTypes.func.isRequired
 }
 
 export default Search

@@ -123,6 +123,72 @@ export const performSearchByQuery = (query) => {
     }
 }
 
+export const performSearchByPathToFile = (path) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.FILE_NAME_QUERY_REGEX, '')
+        path = path.replace(/\s/gim, '?')
+        query = `${query} filename:${path}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchByAuthor = (author) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.AUTHOR_QUERY_REGEX, '')
+        author = author.replace(/\s/gim, '?')
+        query = `${query} author:${author}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchBySource = (sourceId) => {
+    return (dispatch, getState) => {
+        dispatch(setSources(sourcesModel.fromSourcesDisabled(getState()['searchPage'].sources)))
+        dispatch(updateSourceSelected(sourceId))
+        const query = getState()['searchPage'].searchQuery
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchByTag = (tag) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.TAGS_QUERY_REGEX, '')
+        query = `${query} tags:${tag}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchBySize = (symbol, size) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.SIZE_QUERY_REGEX, '')
+        query = `${query} size${symbol}${size}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchByWhen = (when) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.WHEN_QUERY_REGEX, '')
+        query = `${query} when:${when}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
+export const performSearchByShow = (show) => {
+    return (dispatch, getState) => {
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.SHOW_QUERY_REGEX, '')
+        query = `${query} show:${show}`
+        dispatch(setQuery(query))
+        dispatch(performSearch(0, query))
+    }
+}
+
 export const loadSourcesAndTags = () => {
     return (dispatch, getState) => {
         dispatch(loadSources())

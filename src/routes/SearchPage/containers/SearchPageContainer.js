@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+
 import {
   performSearch,
   setQuery,
@@ -9,7 +10,11 @@ import {
   toggleSourceSelected,
   loadSourcesAndTags,
   performSearchByQuery,
-  setQueryFromGetParam,
+  performSearchBySource,
+  performSearchBySize,
+  performSearchByWhen,
+  performSearchByShow,
+  setQueryFromGetParam
 } from '../modules/SearchPage'
 
 import { toggleUploadModal } from '../modules/UploadModal'
@@ -19,6 +24,10 @@ import Search from 'components/Search'
 const mapDispatchToProps = {
   performSearch,
   performSearchByQuery,
+  performSearchBySource,
+  performSearchBySize,
+  performSearchByWhen,
+  performSearchByShow,
   loadSourcesAndTags,
   setScrolledDown,
   toggleUploadModal,
