@@ -218,7 +218,7 @@ export const ACTION_HANDLERS = {
     },
     [SET_CONTENT_HIGHLIGHT]: (state, action) => {
         const oldHit = getHit(state, action.fileId)
-        const hit = { ...oldHit, content: { highlight: action.highlight } }
+        const hit = { ...oldHit, content: { ...oldHit.content, highlight: action.highlight } }
         return updateHits(state, action.fileId, hit)
     },
     [ADD_TAG]: (state, action) => {
