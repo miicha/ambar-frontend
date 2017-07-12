@@ -4,8 +4,7 @@ import MediaQuery from 'react-responsive'
 
 export const AmbarResponsiveLogo = ({mode, version}) => (
     <div className={classes.ambarResponsiveLogo} title={`Ambar ${mode.toUpperCase()} ${version}`} >
-        <img alt='Logo'
-            src={'owl.svg'} />        
+        <img alt='Logo' src={'fetch-a-file-logo.png'} />        
     </div>)
 
 
