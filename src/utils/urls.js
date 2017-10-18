@@ -4,6 +4,7 @@ const init = (apiHost) => {
         apiHost: apiHost,
         ambarWebApiSearchByStringQuery: (query, page, size) => `${apiHost}/api/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`,
         ambarWebApiLoadContentHightlight: (fileId, query) => `${apiHost}/api/search/${fileId}/?query=${encodeURIComponent(query)}`,
+        ambarWebApiLoadFullContentHightlight: (fileId, query) => `${apiHost}/api/search/${fileId}/full?query=${encodeURIComponent(query)}`,
         ambarWebApiGetFile: (metaId) => `${apiHost}/api/files/${metaId}`,
         ambarWebApiGetFileText: (metaId) => `${apiHost}/api/files/${metaId}/text`,
 
@@ -24,8 +25,7 @@ const init = (apiHost) => {
         ambarWebApiGetStats: () => `${apiHost}/api/stats`,
         ambarWebApiGetInfo: () => `${apiHost}/api/`,
         ambarWebApiGetSources: () => `${apiHost}/api/sources`,
-        ambarWebApiGetFilesBySourceId: (sourceId) => `${apiHost}/api/files?sourceId=${sourceId}`,
-        ambarWebApiPostFile: (sourceId, fileName) => `${apiHost}/api/files/${sourceId}/${fileName}`,
+        ambarWebApiPostFile: (fileName) => `${apiHost}/api/files/uiupload/${fileName}`,
         ambarWebApiGetThumbnail: (sha) => `${apiHost}/api/thumbs/${sha}`,
 
         ambarWebApiLogin: () => `${apiHost}/api/users/login`,
@@ -37,11 +37,10 @@ const init = (apiHost) => {
         ambarWebApiCheckSetPasswordLink: () => `${apiHost}/api/users/password/set/allowed`,
         ambarWebApiSetPassword: () => `${apiHost}/api/users/password/set`,
         ambarWebApiResetPassword: () => `${apiHost}/api/users/password/reset`,
-        ambarWebApiChangePassword: () => `${apiHost}/api/users/password/change`,
-        googlePreviewFile: (downloadUri, urls) => `https://docs.google.com/viewer?url=${encodeURI(urls.ambarWebApiGetFile(downloadUri))}`,
+        ambarWebApiChangePassword: () => `${apiHost}/api/users/password/change`,        
 
-        ambarWebApiAddTagToFile: (fileId, tagName) => `${apiHost}/api/tags/${fileId}/${tagName}`,
-        ambarWebApiDeleteTagFromFile: (fileId, tagName) => `${apiHost}/api/tags/${fileId}/${tagName}`,
+        ambarWebApiAddTagToFile: (fileId, tagType, tagName) => `${apiHost}/api/tags/${fileId}/${tagType}/${tagName}`,
+        ambarWebApiDeleteTagFromFile: (fileId, tagType, tagName) => `${apiHost}/api/tags/${fileId}/${tagType}/${tagName}`,
         ambarWebApiGetAllTags: () => `${apiHost}/api/tags`,
 
         ambarWebApiHideFile: (fileId) => `${apiHost}/api/files/hide/${fileId}`,

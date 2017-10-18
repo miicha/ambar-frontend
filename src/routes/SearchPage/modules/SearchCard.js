@@ -1,9 +1,9 @@
 import { stateValueExtractor } from 'utils/'
-import { hitsModel, sourcesModel } from 'models/'
+import { hitsModel } from 'models/'
 import { titles, analytics, FormDataPolyfill } from 'utils'
 import { handleError, showInfo } from 'routes/CoreLayout/modules/CoreLayout'
 import { startLoadingIndicator, stopLoadingIndicator } from 'routes/MainLayout/modules/MainLayout'
-import { setQuery, performSearch, setSources, setTags, updateSourceSelected } from 'routes/SearchPage/modules/SearchPage'
+import { setQuery, performSearch, setTags } from 'routes/SearchPage/modules/SearchPage'
 
 import * as Regexes from 'utils/regexes'
 import 'whatwg-fetch'
@@ -60,20 +60,20 @@ export const startStopHighlightLoadingIndicator = (fileId, fetching) => {
     }
 }
 
-export const addTagToFile = (fileId, tagName) => {
+export const addTagToFile = (fileId, tagType, tagName) => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-        dispatch(addTag(fileId, tagName))
+        dispatch(addTag(fileId, tagType, tagName))
 
-        fetch(urls.ambarWebApiAddTagToFile(fileId, tagName), {
+        fetch(urls.ambarWebApiAddTagToFile(fileId, tagType, tagName), {
             method: 'POST',
             ...defaultSettings
         })
             .then(resp => {
                 if (resp.status == 200 || resp.status == 201) {
-                    dispatch(markTagAsCreated(fileId, tagName))
+                    dispatch(markTagAsCreated(fileId, tagType, tagName))
                     analytics().event('TAGS.ADD', { name: tagName })
                     return resp.json()
                 }
@@ -89,14 +89,14 @@ export const addTagToFile = (fileId, tagName) => {
     }
 }
 
-export const removeTagFromFile = (fileId, tagName) => {
+export const removeTagFromFile = (fileId, tagType, tagName) => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
 
-        dispatch(removeTag(fileId, tagName))
+        dispatch(removeTag(fileId, tagType, tagName))
 
-        fetch(urls.ambarWebApiDeleteTagFromFile(fileId, tagName), {
+        fetch(urls.ambarWebApiDeleteTagFromFile(fileId, tagType, tagName), {
             method: 'DELETE',
             ...defaultSettings
         })
@@ -167,26 +167,29 @@ export const showFile = (fileId) => {
     }
 }
 
-const addTag = (fileId, tagName) => {
+const addTag = (fileId, tagType, tagName) => {
     return {
         type: ADD_TAG,
         tagName: tagName,
+        tagType: tagType,
         fileId: fileId
     }
 }
 
-const removeTag = (fileId, tagName) => {
+const removeTag = (fileId, tagType, tagName) => {
     return {
         type: REMOVE_TAG,
         tagName: tagName,
+        tagType: tagType,
         fileId: fileId
     }
 }
 
-const markTagAsCreated = (fileId, tagName) => {
+const markTagAsCreated = (fileId, tagType, tagName) => {
     return {
         type: MARK_TAG_AS_CREATED,
         tagName: tagName,
+        tagType: tagType,
         fileId: fileId
     }
 }
@@ -222,20 +225,20 @@ export const ACTION_HANDLERS = {
         return updateHits(state, action.fileId, hit)
     },
     [ADD_TAG]: (state, action) => {
-        const oldHit = getHit(state, action.fileId)        
-        const hit = { ...oldHit, tags: [...oldHit.tags, { name: action.tagName, isFetching: true }] }
+        const oldHit = getHit(state, action.fileId)
+        const hit = { ...oldHit, tags: [...oldHit.tags, { name: action.tagName, type: action.tagType, isFetching: true }] }
         return updateHits(state, action.fileId, hit)
     },
     [REMOVE_TAG]: (state, action) => {
         const oldHit = getHit(state, action.fileId)
-        const hit = { ...oldHit, tags: [...oldHit.tags.filter(t => t.name !== action.tagName)] }
+        const hit = { ...oldHit, tags: [...oldHit.tags.filter(t => !((t.name === action.tagName) && (t.type === action.tagType)))] }
         return updateHits(state, action.fileId, hit)
     },
     [MARK_TAG_AS_CREATED]: (state, action) => {
         const oldHit = getHit(state, action.fileId)
         const hit = { ...oldHit }
         hit.tags = hit.tags.map(tag => {
-            if (tag.name === action.tagName) {
+            if ((tag.name === action.tagName) && (tag.type === action.tagType)) {
                 tag.isFetching = false
             }
 

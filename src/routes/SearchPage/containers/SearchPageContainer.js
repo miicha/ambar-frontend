@@ -3,18 +3,17 @@ import { connect } from 'react-redux'
 import {
   performSearch,
   setQuery,
-  setScrolledDown,
-  toggleImagePreview,
+  setScrolledDown,  
   cleanUpSearchResult,
-  toggleRefineSearchModal,
-  toggleSourceSelected,
-  loadSourcesAndTags,
+  loadTags,
   performSearchByQuery,
-  performSearchBySource,
   performSearchBySize,
   performSearchByWhen,
   performSearchByShow,
-  setQueryFromGetParam
+  performSearchByTag,
+  setQueryFromGetParam,
+  setSearchResultView,
+  toggleImagePreview
 } from '../modules/SearchPage'
 
 import { toggleUploadModal } from '../modules/UploadModal'
@@ -24,19 +23,18 @@ import Search from 'components/Search'
 const mapDispatchToProps = {
   performSearch,
   performSearchByQuery,
-  performSearchBySource,
   performSearchBySize,
   performSearchByWhen,
   performSearchByShow,
-  loadSourcesAndTags,
+  performSearchByTag,
+  loadTags,
   setScrolledDown,
   toggleUploadModal,
-  toggleImagePreview,
   cleanUpSearchResult,
-  toggleRefineSearchModal,
-  toggleSourceSelected,
   setQueryFromGetParam,
-  setQuery
+  setQuery,
+  setSearchResultView,
+  toggleImagePreview
 }
 
 const mapStateToProps = (state) => {
@@ -50,8 +48,10 @@ const mapStateToProps = (state) => {
     mode: state['core'].mode,
     isImagePreviewOpen: state['searchPage'].isImagePreviewOpen,
     imagePreviewUrl: state['searchPage'].imagePreviewUrl,
-    sources: state['searchPage'].sources,
-    isRefineSearchModalOpen: state['searchPage'].isRefineSearchModalOpen,
+    searchView: state['searchPage'].searchView,
+    allTags: state['searchPage'].tags,
+    isTextPreviewOpen: state['searchPage'].isTextPreviewOpen,
+    textPreviewFileId: state['searchPage'].textPreviewFileId
   })
 }
 

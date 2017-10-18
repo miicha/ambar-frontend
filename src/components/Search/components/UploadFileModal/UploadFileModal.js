@@ -13,22 +13,13 @@ const UploadFileModal = (props) => {
     const {open,
         fetching,
         toggleModal,
-        sources,
         addFilesToUpload,
         removeFileToUpload,
         filesToUpload,
-        setBucketName,
-        bucketName,
-        bucketNameValidationMessage,
         uploadFiles} = props
 
-    const buckets = sources
-        ? Array.from(sources.values()).filter(source => source.type === 'bucket').map(source => source.id)
-        : []
-
-    const bucketsAutocomplete = (searchText, key) => searchText === '' || key.indexOf(searchText) !== -1
     const onDrop = (acceptedFiles, rejectedFiles) => addFilesToUpload(acceptedFiles)
-    const isUploadButtonDisabled = fetching || filesToUpload.length === 0 || bucketName === ''
+    const isUploadButtonDisabled = fetching || filesToUpload.length === 0
 
     const uploadFileModalActions = [
         <FlatButton
@@ -84,19 +75,6 @@ const UploadFileModal = (props) => {
                         <CircularProgress size={80} thickness={5} />
                     </div>}
                 </Dropzone>
-                <AutoComplete
-                    disabled={fetching}
-                    hintText="Type bucket name"
-                    dataSource={buckets}
-                    floatingLabelText="Bucket"
-                    fullWidth={true}
-                    filter={bucketsAutocomplete}
-                    openOnFocus={true}
-                    underlineStyle={{ color: '#00BCD4' }}
-                    searchText={bucketName}
-                    errorText={bucketNameValidationMessage}
-                    onUpdateInput={(searchText, dataSource, params) => setBucketName(searchText)}
-                    />
                 {filesToUpload.length > 0 && <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                     {filesToUpload.map((file, idx) =>
                         <Chip
@@ -122,13 +100,9 @@ UploadFileModal.propTypes = {
     fetching: React.PropTypes.bool.isRequired,
     uploadFiles: React.PropTypes.func.isRequired,
     toggleModal: React.PropTypes.func.isRequired,
-    sources: React.PropTypes.object.isRequired,
     addFilesToUpload: React.PropTypes.func.isRequired,
     removeFileToUpload: React.PropTypes.func.isRequired,
-    filesToUpload: React.PropTypes.array.isRequired,
-    setBucketName: React.PropTypes.func.isRequired,
-    bucketName: React.PropTypes.string.isRequired,
-    bucketNameValidationMessage: React.PropTypes.string.isRequired
+    filesToUpload: React.PropTypes.array.isRequired
 }
 
 export default UploadFileModal

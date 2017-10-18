@@ -1,5 +1,5 @@
 import { stateValueExtractor } from 'utils/'
-import { hitsModel, sourcesModel } from 'models/'
+import { hitsModel } from 'models/'
 import { titles, analytics, FormDataPolyfill } from 'utils'
 import { handleError, showInfo } from 'routes/CoreLayout/modules/CoreLayout'
 import { startLoadingIndicator, stopLoadingIndicator } from 'routes/MainLayout/modules/MainLayout'
@@ -9,13 +9,11 @@ import 'whatwg-fetch'
 export const FILL_HITS = 'SEARCH.FILL_HITS'
 export const UPDATE_SCROLLED_DOWN = 'SEARCH.UPDATE_SCROLLED_DOWN'
 export const TOGGLE_IMAGE_PREVIEW_MODAL = 'SEARCH.TOGGLE_IMAGE_PREVIEW_MODAL'
-export const SET_SOURCES = 'SEARCH.SET_SOURCES'
-export const SET_IS_REFINE_SEARCH_MODAL_OPEN = 'SEARCH.SET_IS_REFINE_SEARCH_MODAL_OPEN'
-export const TOGGLE_SOURCE_SELECTED = 'SEARCH.TOGGLE_SOURCE_SELECTED'
 export const UPDATE_QUERY = 'SEARCH.UPDATE_QUERY'
 export const SET_TAGS = 'SEARCH.SET_TAGS'
+export const SET_SEARCH_RESULT_VIEW = 'SEARCH.SET_SEARCH_RESULT_VIEW'
 
-const REQUEST_SIZE = 10
+const REQUEST_SIZE = 25
 
 const changeBrowserAddressStringToQuery = (query) => {
     if (history.pushState) {
@@ -143,20 +141,19 @@ export const performSearchByAuthor = (author) => {
     }
 }
 
-export const performSearchBySource = (sourceId) => {
+export const performSearchByTag = (tag) => {
     return (dispatch, getState) => {
-        dispatch(setSources(sourcesModel.fromSourcesDisabled(getState()['searchPage'].sources)))
-        dispatch(updateSourceSelected(sourceId))
-        const query = getState()['searchPage'].searchQuery
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.TAGS_QUERY_REGEX, '')
+        query = `${query} tags:${tag}`
         dispatch(setQuery(query))
         dispatch(performSearch(0, query))
     }
 }
 
-export const performSearchByTag = (tag) => {
+export const performSearchByNamedEntity = (namedEntity) => {
     return (dispatch, getState) => {
-        let query = getState()['searchPage'].searchQuery.replace(Regexes.TAGS_QUERY_REGEX, '')
-        query = `${query} tags:${tag}`
+        let query = getState()['searchPage'].searchQuery.replace(Regexes.NAMED_ENTITIES_QUERY_REGEX, '')
+        query = `${query} entities:"${namedEntity}"`
         dispatch(setQuery(query))
         dispatch(performSearch(0, query))
     }
@@ -189,52 +186,6 @@ export const performSearchByShow = (show) => {
     }
 }
 
-export const loadSourcesAndTags = () => {
-    return (dispatch, getState) => {
-        dispatch(loadSources())
-        dispatch(loadTags())
-    }
-}
-
-export const loadSources = () => {
-    return (dispatch, getState) => {
-        const urls = stateValueExtractor.getUrls(getState())
-        const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
-
-        //Do nothing if Search page hasn't been loaded yet
-        if (!getState()['searchPage']) {
-            return
-        }
-
-        const query = getState()['searchPage'].searchQuery
-
-        dispatch(startLoadingIndicator())
-
-        fetch(urls.ambarWebApiGetSources(), {
-            method: 'GET',
-            ...defaultSettings
-        })
-            .then(resp => {
-                if (resp.status == 200) {
-                    return resp.json()
-                }
-                else { throw resp }
-            })
-            .then(sources => {
-                const sourcesMap = sourcesModel.fromApi(sources, query)
-                dispatch(setSources(sourcesMap))
-                dispatch(stopLoadingIndicator())
-            })
-            .catch((errorPayload) => {
-                dispatch(stopLoadingIndicator())
-                dispatch(handleError(errorPayload))
-                console.error('loadSources', errorPayload)
-            })
-
-        dispatch(stopLoadingIndicator())
-    }
-}
-
 export const loadTags = () => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
@@ -252,7 +203,7 @@ export const loadTags = () => {
                 }
                 else { throw resp }
             })
-            .then(tags => {
+            .then(tags => {                
                 dispatch(setTags(tags))
                 dispatch(stopLoadingIndicator())
             })
@@ -266,27 +217,9 @@ export const loadTags = () => {
     }
 }
 
-export const toggleRefineSearchModal = () => {
-    return (dispatch, getState) => {
-        const isRefineSearchModalOpen = !getState()['searchPage'].isRefineSearchModalOpen
-        dispatch(setIsRefineSearchModalOpen(isRefineSearchModalOpen))
-        if (!isRefineSearchModalOpen) {
-            const query = getState()['searchPage'].searchQuery
-            dispatch(performSearch(0, query))
-        }
-    }
-}
-
-export const toggleSourceSelected = (sourceId) => {
-    return (dispatch, getState) => {
-        dispatch(updateSourceSelected(sourceId))
-    }
-}
-
 export const setQuery = (query) => {
     return (dispatch, getState) => {
-        dispatch(updateQuery(query))
-        dispatch(setSources(sourcesModel.fromSources(getState()['searchPage'].sources, query)))
+        dispatch(updateQuery(query))        
     }
 }
 
@@ -297,24 +230,10 @@ export const setTags = (tags) => {
     }
 }
 
-export const setSources = (sources) => {
+export const setSearchResultView = (view) => {
     return {
-        type: SET_SOURCES,
-        sources
-    }
-}
-
-const setIsRefineSearchModalOpen = (isRefineSearchModalOpen) => {
-    return {
-        type: SET_IS_REFINE_SEARCH_MODAL_OPEN,
-        isRefineSearchModalOpen
-    }
-}
-
-export const updateSourceSelected = (sourceId) => {
-    return {
-        type: TOGGLE_SOURCE_SELECTED,
-        sourceId
+        type: SET_SEARCH_RESULT_VIEW,
+        view: view
     }
 }
 
@@ -358,37 +277,15 @@ export const ACTION_HANDLERS = {
     [TOGGLE_IMAGE_PREVIEW_MODAL]: (state, action) => {
         const newState = { ...state, isImagePreviewOpen: !state.isImagePreviewOpen, imagePreviewUrl: action.imageUrl ? action.imageUrl : state.imagePreviewUrl }
         return newState
-    },
-    [SET_IS_REFINE_SEARCH_MODAL_OPEN]: (state, action) => {
-        const newState = { ...state, isRefineSearchModalOpen: action.isRefineSearchModalOpen }
-        return newState
-    },
-    [TOGGLE_SOURCE_SELECTED]: (state, action) => {
-        const sourceId = action.sourceId
-        const sources = new Map(state.sources)
-        const source = sources.get(sourceId)
-        sources.set(sourceId, { ...source, selected: !source.selected })
-
-        const selectedSourceIdList = Array.from(sources.values()).filter(source => source.selected).map(source => source.id)
-        let query = state.searchQuery
-        query = query.replace(Regexes.SOURCE_QUERY_REGEX, '').trim()
-
-        if (selectedSourceIdList.length > 0 && selectedSourceIdList.length != sources.size) {
-            query = `${query} source:${selectedSourceIdList.join(',')}`
-        }
-
-        const newState = { ...state, sources: sources, searchQuery: query }
-
-        return newState
-    },
-    [SET_SOURCES]: (state, action) => {
-        const newState = { ...state, sources: action.sources }
-        return newState
-    },
+    },       
     [UPDATE_QUERY]: (state, action) => {
         return ({ ...state, searchQuery: action.query })
     },
     [SET_TAGS]: (state, action) => {
         return ({ ...state, tags: action.tags })
+    },
+    [SET_SEARCH_RESULT_VIEW]: (state, action) => {
+        const newState = { ...state, searchView: action.view }
+        return newState
     }
 }

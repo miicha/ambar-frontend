@@ -31,7 +31,7 @@ export const createRoutes = (store) => ({
     SignupPage(store),
     SetPassword(store),
     ResetPassword(store),
-    {
+    {      
       path: '/check-email',
       component: CheckEmail
     }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import classes from './ImagePreview.scss'
 
 const ImagePreview = (props) => {
-    const {toggle, imageUrl, visible} = props
+    const { toggle, imageUrl, visible } = props
 
     const className = visible ? 'imagePreviewOverlayDiv' : 'imagePreviewOverlayDiv invisible'
 
@@ -10,7 +10,7 @@ const ImagePreview = (props) => {
         return (
             <div className={className}
                 onTouchTap={() => toggle()}>
-                <img className={classes.imagePreview} src={imageUrl}/>
+                <img className={classes.imagePreview} src={imageUrl} />
             </div>
         )
     }

@@ -1,8 +1,11 @@
 import { connect } from 'react-redux'
 
 import {
-  loadHighlight,
-  toggleImagePreview,
+  openTextPreview
+} from '../modules/TextPreviewModal'
+
+import {
+  loadHighlight,  
   addTagToFile,
   removeTagFromFile,
   hideFile,
@@ -10,17 +13,16 @@ import {
 } from '../modules/SearchCard'
 
 import {
-  performSearchBySource,
   performSearchByPathToFile,
   performSearchByAuthor,
   performSearchByQuery,
-  performSearchByTag
+  performSearchByTag,
+  toggleImagePreview
 } from '../modules/SearchPage'
 
-import SearchCard from 'components/Search/components/SearchResultCard'
+import SearchCard from 'components/Search/components/SearchResultContainer/components/SearchResultCard'
 
 const mapDispatchToProps = {
-  performSearchBySource,
   performSearchByPathToFile,
   performSearchByAuthor,
   performSearchByQuery,
@@ -30,17 +32,23 @@ const mapDispatchToProps = {
   addTagToFile,
   removeTagFromFile,
   hideFile,
-  showFile
+  showFile,
+  openTextPreview
 }
 
 const mapStateToProps = (state, ownProps) => {
   const hit = state['searchPage'].hits.get(ownProps.fileId)
+  const urls = state['core'].urls
+  const thumbnailUri = urls.ambarWebApiGetThumbnail(hit.sha256)
+  const downloadUri = urls.ambarWebApiGetFile(hit.meta.download_uri)
 
   return ({ 
     hit: hit,
+    thumbnailUri: thumbnailUri,
+    downloadUri: downloadUri,
     showFilePreview: state['core'].showFilePreview,
-    urls: state['core'].urls,
-    allTags: state['searchPage'].tags
+    allTags: state['searchPage'].tags,
+    searchQuery: state['searchPage'].searchQuery       
   })
 }
 

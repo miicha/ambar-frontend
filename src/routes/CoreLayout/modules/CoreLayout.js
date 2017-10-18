@@ -26,7 +26,8 @@ export const loadConfig = () => {
                 dispatch(changeField('integrations', apiInfo.integrations))
                 dispatch(changeField('showFilePreview', apiInfo.showFilePreview === 'true'))                
                 dispatch(changeField('auth', apiInfo.auth))                
-                
+                dispatch(changeField('namedEntityTypes', apiInfo.namedEntityTypes))   
+
                 analytics(apiInfo.analytics.token)
                 analytics().register({ apiUrl: urls.apiHost })
                 analytics().register({ mode: apiInfo.mode })
@@ -139,6 +140,7 @@ const initialState = {
     urls: {},
     crawlerJsonTemplate: '',
     integrations: {},
+    namedEntityTypes: [],
     mode: 'ce',
     version: '0.0',
     fetching: true,

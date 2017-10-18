@@ -4,7 +4,6 @@ import {
   toggleUploadModal,
   addFilesToUpload,
   removeFileToUpload,
-  setBucketName,
   uploadFiles 
 } from '../modules/UploadModal'
 
@@ -14,18 +13,14 @@ const mapDispatchToProps = {
   toggleModal: toggleUploadModal,
   addFilesToUpload,
   removeFileToUpload,
-  setBucketName,
   uploadFiles
 }
 
 const mapStateToProps = (state, ownProps) => {
   return ({ 
     fetching: state['searchPage'].isFilesUploading,
-    sources: state['searchPage'].sources,
     open: state['searchPage'].isUploadModalOpen,
-    filesToUpload: state['searchPage'].filesToUpload,
-    bucketNameValidationMessage: state['searchPage'].bucketNameValidationMessage,
-    bucketName: state['searchPage'].bucketName
+    filesToUpload: state['searchPage'].filesToUpload
   })
 }
 

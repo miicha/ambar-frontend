@@ -2,7 +2,6 @@ import { stateValueExtractor } from 'utils/'
 import { crawlersModel } from 'models/'
 import { handleError } from 'routes/CoreLayout/modules/CoreLayout'
 import { startLoadingIndicator, stopLoadingIndicator } from 'routes/MainLayout/modules/MainLayout'
-import { loadSources } from 'routes/SearchPage/modules/SearchPage'
 import 'whatwg-fetch'
 
 const UPDATE_CRAWLER = 'SETTINGS.UPDATE_CRAWLER'
@@ -312,16 +311,23 @@ export const createNewCrawler = (newCrawler) => {
             body: newCrawler.json
         })
             .then((resp) => {
-                if (resp.status === 201) {
+                if ((resp.status === 201) || (resp.status === 200)) {
                     const crawlerJsonTemplate = getState()['core'].crawlerJsonTemplate
-                    dispatch(updateNewCrawler({ ...newCrawler, json: crawlerJsonTemplate, fetching: false, jsonTouched: false, isCreateCrawlerModalOpen: false }))
+                    dispatch(updateNewCrawler({ ...newCrawler, json: crawlerJsonTemplate, fetching: false, jsonTouched: false, errorMessage: null, isCreateCrawlerModalOpen: false }))
                     dispatch(loadCrawlers())
-                    dispatch(loadSources())
                 }
-                else { throw resp }
+                else if (resp.status === 400) {
+                    return resp.json()
+                        .then(respJson => {
+                            dispatch(updateNewCrawler({ ...newCrawler, fetching: false, errorMessage: `${respJson.message}`, jsonTouched: false }))
+                        })
+                }
+                else { 
+                    throw 'Server error' 
+                }
             })
             .catch((errorPayload) => {
-                dispatch(updateNewCrawler({ ...newCrawler, fetching: false, errorMessage: `Error: ${errorPayload.message}`, jsonTouched: false }))
+                dispatch(updateNewCrawler({ ...newCrawler, fetching: false, errorMessage: `Error: ${errorPayload}`, jsonTouched: false }))
                 console.error('createNewCrawler', errorPayload)
             })
     }

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { titles } from 'utils/'
 
-import { SearchResultTable, ImagePreview, SearchInput, SideMenu } from './components'
+import { SearchResultContainer, ImagePreview, TextPreview, SearchInput, SideMenu } from './components'
 import { InfiniteScroll } from 'components/BasicComponents'
 import UploadModal from 'routes/SearchPage/containers/UploadModalContainer'
+import TextPreviewModal from 'routes/SearchPage/containers/TextPreviewModalContainer'
 
 import { cyan100, cyan300, cyan400 } from 'material-ui/styles/colors'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
@@ -23,7 +24,7 @@ class Search extends Component {
     timeoutId = null
 
     componentDidMount() {
-        const { setPageTitle, setAppHeader, loadSourcesAndTags, performSearch, toggleRefineSearchModal, searchQuery, setQueryFromGetParam, setQuery } = this.props
+        const { setPageTitle, setAppHeader, loadTags, performSearch, searchQuery, setQueryFromGetParam, setQuery } = this.props
 
         setPageTitle('Search')
         setAppHeader({
@@ -37,7 +38,7 @@ class Search extends Component {
                     />)
             }
         })
-        loadSourcesAndTags()
+        loadTags()
         setQueryFromGetParam()
     }
 
@@ -48,6 +49,7 @@ class Search extends Component {
 
     render() {
         const {
+            searchView,
             fetching,
             hits,
             searchQuery,
@@ -59,19 +61,17 @@ class Search extends Component {
             currentPage,
             mode,
             toggleUploadModal,
-            sources,
             toggleImagePreview,
             isImagePreviewOpen,
             imagePreviewUrl,
-            isRefineSearchModalOpen,
-            toggleRefineSearchModal,
-            toggleSourceSelected,
             setAppHeader,
             performSearchByQuery,
-            performSearchBySource,
             performSearchBySize,
             performSearchByWhen,
-            performSearchByShow
+            performSearchByShow,
+            performSearchByTag,
+            setSearchResultView,
+            allTags
          } = this.props
 
         return (
@@ -88,12 +88,14 @@ class Search extends Component {
                     }}>
                         <SideMenu
                             performSearchByQuery={performSearchByQuery}
-                            performSearchBySource={performSearchBySource}
                             performSearchBySize={performSearchBySize}
                             performSearchByWhen={performSearchByWhen}
                             performSearchByShow={performSearchByShow}
+                            performSearchByTag={performSearchByTag}
                             toggleUploadModal={toggleUploadModal}
-                            sources={sources}
+                            setSearchResultView={setSearchResultView}
+                            searchView={searchView}
+                            allTags={allTags}
                         />
                     </div>
                 </Desktop>
@@ -102,7 +104,8 @@ class Search extends Component {
                         (matches) => {
                             return (<div style={{ marginLeft: matches ? '200px' : '0', height: '100%', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.05)' }}
                                 ref={(container) => { this.containerNode = container }}>
-                                <SearchResultTable
+                                <SearchResultContainer
+                                    searchView={searchView}
                                     fetching={fetching}
                                     hits={hits}
                                     searchQuery={searchQuery}
@@ -132,15 +135,17 @@ class Search extends Component {
                             <ArrowUpward />
                         </FloatingActionButton>
                     </div>
-                    <UploadModal />
                 </div>
+                <UploadModal />
                 <ImagePreview visible={isImagePreviewOpen} imageUrl={imagePreviewUrl} toggle={toggleImagePreview} />
+                <TextPreviewModal />
             </div>
         )
     }
 }
 
 Search.propTypes = {
+    searchView: React.PropTypes.string.isRequired,
     setPageTitle: React.PropTypes.func.isRequired,
 
     setScrolledDown: React.PropTypes.func.isRequired,
@@ -154,26 +159,22 @@ Search.propTypes = {
     searchQuery: React.PropTypes.string.isRequired,
     hits: React.PropTypes.object.isRequired,
 
-    loadSourcesAndTags: React.PropTypes.func.isRequired,
+    loadTags: React.PropTypes.func.isRequired,
+    allTags: React.PropTypes.array.isRequired,
 
     toggleUploadModal: React.PropTypes.func.isRequired,
-    sources: React.PropTypes.object.isRequired,
 
     toggleImagePreview: React.PropTypes.func.isRequired,
     isImagePreviewOpen: React.PropTypes.bool.isRequired,
     imagePreviewUrl: React.PropTypes.string.isRequired,
 
-    isRefineSearchModalOpen: React.PropTypes.bool.isRequired,
-    toggleRefineSearchModal: React.PropTypes.func.isRequired,
-
-    toggleSourceSelected: React.PropTypes.func.isRequired,
-
     setQuery: React.PropTypes.func.isRequired,
     performSearchByQuery: React.PropTypes.func.isRequired,
-    performSearchBySource: React.PropTypes.func.isRequired,
     performSearchBySize: React.PropTypes.func.isRequired,
     performSearchByWhen: React.PropTypes.func.isRequired,
-    performSearchByShow: React.PropTypes.func.isRequired
+    performSearchByShow: React.PropTypes.func.isRequired,
+    performSearchByTag: React.PropTypes.func.isRequired,
+    setSearchResultView: React.PropTypes.func.isRequired
 }
 
 export default Search

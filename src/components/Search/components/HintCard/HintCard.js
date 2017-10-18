@@ -14,19 +14,19 @@ const HintCard = (props) => {
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John') }}>
                 John
-                    </span> - search for "John" word in file content, fullname, source and author
+                    </span> - search for "John" word in file content, fullname and author
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John Smith') }}>
                 John Smith
-                    </span> - search for both "John" and "Smith" words in file content, fullname, source and author
+                    </span> - search for both "John" and "Smith" words in file content, fullname and author
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('"John Smith"') }}>
                 "John Smith"
-                    </span> - search for "John Smith" phrase in file content, fullname, source and author
+                    </span> - search for "John Smith" phrase in file content, fullname and author
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('"John Smith"~10') }}>
                 "John Smith"~10
-                    </span> - search for both "John" and "Smith" words with maximum distance of 10 words in file content, fullname, source and author
+                    </span> - search for both "John" and "Smith" words with maximum distance of 10 words in file content, fullname and author
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John~3') }}>
                 John~3
@@ -63,15 +63,20 @@ const HintCard = (props) => {
                 </span> - search only in file author field, can be combined with other queries
             </li>
             <li>
-                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('tags:ocr') }}>
-                    tags:ocr
-                </span> - search for file tagged with ocr tag
+                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('tags:ocr,ui-upload') }}>
+                    tags:ocr,ui-upload
+                </span> - search for files tagged with ocr and ui-upload tag
             </li>
             <li>
-                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:hidden') }}>
-                    show:hidden
-                </span> - search in hidden files (available options are:&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:hidden') }}>hidden</span>,&nbsp;
+                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('entities:"hello@ambar.cloud"') }}>
+                    entities:"hello@ambar.cloud"
+                </span> - search for files containing "hello@ambar.cloud" named entity 
+            </li>
+            <li>
+                <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:removed') }}>
+                    show:removed
+                </span> - search in removed files (available options are:&nbsp;
+                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:removed') }}>removed</span>,&nbsp;
                     <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:all') }}>all</span>
                 )
             </li>
@@ -79,9 +84,7 @@ const HintCard = (props) => {
     </div>)
 
     const emailText = (<p>
-        Have any questions? <span className={classes.link} onTouchTap={(e) => { 
-            document.getElementById('linkedchat-button').click(false) 
-        }}>Drop us a message on chat</span>
+        Have any questions? <a className={classes.link} href='mailto:hello@ambar.cloud'>Drop us a message</a>
     </p>)
 
     const textElement = (<div>

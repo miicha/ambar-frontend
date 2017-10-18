@@ -1,0 +1,45 @@
+.link, .link:hover,.link:visited {
+    color: #00acc1;
+}
+
+.searchResultRowCard {
+    margin: 10px;
+}
+
+.textPreviewDialogBody {
+    border-top: 1px solid rgb(224, 224, 224);
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;        
+    max-height: inherit;
+}
+
+.contentPreview {
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-y: scroll;
+    
+    em {
+        background-color: #fff6a9;
+        border: 1px solid #e6d9c4;
+        border-radius: 3px;
+        font-style: normal;
+    }
+
+  :global {
+    em.entity {    
+        background-color: #b2ebf2;
+        border: 1px solid #C4D1E6; 
+    }
+} 
+    
+}
+
+.sidebar {
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.4);
+    width: 25%;
+    min-width: 10em;
+}
+
+
