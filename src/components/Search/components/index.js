@@ -2,7 +2,7 @@ import HintCard from './HintCard'
 import ImagePreview from './ImagePreview'
 import TextPreview from './TextPreview'
 import SearchInput from './SearchInput'
-import SearchResultContainer from './SearchResultContainer'
+import SearchResults from './SearchResults'
 import SideMenu from './SideMenu'
 import UploadFileModal from './UploadFileModal'
 
@@ -11,7 +11,7 @@ export {
     ImagePreview,
     TextPreview,
     SearchInput,
-    SearchResultContainer,
+    SearchResults,
     SideMenu,
     UploadFileModal
 }

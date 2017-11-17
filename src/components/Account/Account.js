@@ -9,9 +9,9 @@ import classes from './Account.scss'
 class Account extends Component {
 
     componentDidMount() {
-        const { setPageTitle, loadUserInfo, setAppHeader } = this.props
-        setPageTitle('Account')
-        setAppHeader({left: () => 'Account'})
+        const { setPageTitle, loadUserInfo, setAppHeader, localization } = this.props
+        setPageTitle(localization.accountPage.pageTitle)
+        setAppHeader({ left: () => localization.accountPage.pageTitle })
         loadUserInfo()
     }
 
@@ -44,9 +44,11 @@ class Account extends Component {
             dropboxCrawler,
             initDropboxCrawler,
             deleteDropboxCrawler,
-            
-            auth
-            
+
+            auth,
+
+            localization
+
         } = this.props
 
         return (
@@ -65,6 +67,7 @@ class Account extends Component {
                     toggleRemoveUserAccountDialog={toggleRemoveUserAccountDialog}
                     removeUserAccount={removeUserAccount}
                     auth={auth}
+                    localization={localization}
                 />
                 <ChangePasswordCard
                     fetching={fetching}
@@ -78,6 +81,7 @@ class Account extends Component {
                     changeOldPassword={changeOldPassword}
                     changeNewPassword={changeNewPassword}
                     changeNewPasswordConfirmation={changeNewPasswordConfirmation}
+                    localization={localization}
                 />
                 {mode === 'cloud' && <DropboxCard
                     dropboxCrawler={dropboxCrawler}
@@ -121,7 +125,8 @@ Account.propTypes = {
 
     toggleRemoveUserAccountDialog: React.PropTypes.func.isRequired,
     removeUserAccount: React.PropTypes.func.isRequired,
-    auth: React.PropTypes.string.isRequired
+    auth: React.PropTypes.string.isRequired,
+    localization: React.PropTypes.object.isRequired
 }
 
 export default Account

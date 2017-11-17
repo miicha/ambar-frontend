@@ -24,16 +24,17 @@ const UserInfoCard = ({
 	showRemoveUserAccountDialog,
 	toggleRemoveUserAccountDialog,
 	removeUserAccount,
-	auth
+	auth,
+	localization
  }) => {
 	const actions = [
 		<FlatButton
-			label="Cancel"
+			label={localization.accountPage.cancelLabel}
 			primary={true}
 			onTouchTap={toggleRemoveUserAccountDialog}
 		/>,
 		<FlatButton
-			label="Delete"
+			label={localization.accountPage.deleteLabel}
 			secondary={true}
 			onTouchTap={removeUserAccount}
 			icon={<DeleteIcon />}
@@ -42,24 +43,24 @@ const UserInfoCard = ({
 
 	return (<Paper zDepth={1} className={classes.accountCard}>
 		<Card>
-			<CardTitle title='Information' />
+			<CardTitle title={localization.accountPage.informationLabel} />
 			<CardText style={{ paddingTop: '0', height: '170px' }}>
 				<div className={classes.userInfo} style={{ display: 'flex', flexDirection: 'column' }}>
-					<p><b>Name:</b> {name}</p>
-					<p><b>Email:</b> {email}</p>
-					<p><b>Plan:</b> {plan}</p>
-					<p><b>Uploaded:</b> {files.formatFileSize(storageUsed)} {storageMax != -1 && ` / ${files.formatFileSize(storageMax)}`}</p>
-					<p><b>Language Analyzer:</b> {langAnalyzer}</p>
+					<p><b>{localization.accountPage.nameLabel}:</b> {name}</p>
+					<p><b>{localization.accountPage.emailLabel}:</b> {email}</p>
+					<p><b>{localization.accountPage.planLabel}:</b> {plan}</p>
+					<p><b>{localization.accountPage.uploadedLabel}:</b> {files.formatFileSize(storageUsed)} {storageMax != -1 && ` / ${files.formatFileSize(storageMax)}`}</p>
+					<p><b>{localization.accountPage.langAnalyzerLabel}:</b> {langAnalyzer}</p>
 				</div>
 			</CardText>
 			<CardActions>
 				<RaisedButton
-					label="Log Out"
+					label={localization.accountPage.logOutLabel}
 					disabled={fetching || auth == 'none'}
 					secondary={true}
 					onTouchTap={performLogout} />
 				{!isDefaultUser && <FlatButton
-					label="Delete Account"
+					label={localization.accountPage.accountDeletionLabel}
 					disabled={fetching}
 					secondary={true}
 					onTouchTap={toggleRemoveUserAccountDialog}
@@ -67,19 +68,14 @@ const UserInfoCard = ({
 			</CardActions>
 		</Card>
 		<Dialog
-			title="Are you sure?"
+			title={localization.accountPage.accountDeletionModalTitle}
 			actions={actions}			
 			open={showRemoveUserAccountDialog}			
 			bodyStyle={{ paddingBottom: 0 }}
 			onRequestClose={toggleRemoveUserAccountDialog}
 		>
 			<div className={classes.dropDataDescriptionText}>
-				<p>
-					Your Ambar account and all your data will be deleted. Nobody, even Ambar support team will not be able to recover it.
-				</p>
-				<p>
-					Click 'DELETE' button to delete your Ambar account forever.
-				</p>
+				<p>{localization.accountPage.accountDeletionWarnLabel}</p>
 			</div>
 		</Dialog>
 	</Paper>)
@@ -98,7 +94,8 @@ UserInfoCard.propTypes = {
 	showRemoveUserAccountDialog: React.PropTypes.bool.isRequired,
 	toggleRemoveUserAccountDialog: React.PropTypes.func.isRequired,
 	removeUserAccount: React.PropTypes.func.isRequired,
-	auth: React.PropTypes.string.isRequired
+	auth: React.PropTypes.string.isRequired,
+	localization: React.PropTypes.object.isRequired
 }
 
 export default UserInfoCard

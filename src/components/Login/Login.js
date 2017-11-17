@@ -9,13 +9,13 @@ import classes from './Login.scss'
 
 export class Login extends React.Component {
   componentDidMount() {
-    const { setPageTitle } = this.props
+    const { setPageTitle, localization } = this.props
 
     if (this.refs.emailInputField) {
       this.refs.emailInputField.focus()
     }
 
-    setPageTitle('Ambar Login')
+    setPageTitle(localization.loginPage.pageTitle)
   }
 
   render() {
@@ -28,11 +28,13 @@ export class Login extends React.Component {
       changeEmail,
       emailError,
       passwordError,
-      location} = this.props
+      location,
+      localization 
+    } = this.props
 
     const doLogin = () => {
       if (location.query.url) {
-        performLogin(decodeURI(location.query.url.replace('|','&')))
+        performLogin(decodeURI(location.query.url.replace('|', '&')))
       } else {
         performLogin()
       }
@@ -41,10 +43,10 @@ export class Login extends React.Component {
     return (
       <AuthPageTemplate>
         <CardText style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-          <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>Login</h2>
+          <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>{localization.loginPage.loginLabel}</h2>
           <TextField
             fullWidth={true}
-            hintText="Email"
+            hintText={localization.loginPage.emailLabel}
             type="email"
             ref='emailInputField'
             value={email}
@@ -56,7 +58,7 @@ export class Login extends React.Component {
           <br />
           <TextField
             fullWidth={true}
-            hintText="Password"
+            hintText={localization.loginPage.passwordLabel}
             type="password"
             value={password}
             disabled={fetching}
@@ -70,20 +72,20 @@ export class Login extends React.Component {
             secondary={true}
             fullWidth={true}
             disabled={fetching}
-            label='Login'
+            label={localization.loginPage.performLoginLabel}
             onTouchTap={() => doLogin()}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-            <Link className={classes.link} to={`/reset-password?email=${encodeURI(email)}`}>Forgot password?</Link>
-            <Link className={classes.link} to="/signup">Signup</Link>
+            <Link className={classes.link} to={`/reset-password?email=${encodeURI(email)}`}>{localization.loginPage.forgotPasswordLabel}</Link>
+            <Link className={classes.link} to="/signup">{localization.loginPage.signupLabel}</Link>
           </div>
         </CardText>
       </AuthPageTemplate>
-      )
+    )
   }
 }
 
-Login.propTypes = {  
+Login.propTypes = {
   performLogin: React.PropTypes.func.isRequired,
   fetching: React.PropTypes.bool,
   email: React.PropTypes.string,
@@ -91,7 +93,8 @@ Login.propTypes = {
   changeEmail: React.PropTypes.func.isRequired,
   changePassword: React.PropTypes.func.isRequired,
   emailError: React.PropTypes.string.isRequired,
-  passwordError: React.PropTypes.string.isRequired
+  passwordError: React.PropTypes.string.isRequired,
+  localization: React.PropTypes.object.isRequired
 }
 
 export default Login

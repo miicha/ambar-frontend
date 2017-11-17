@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { titles } from 'utils/'
 
-import { SearchResultContainer, ImagePreview, TextPreview, SearchInput, SideMenu } from './components'
+import { SearchResults, ImagePreview, TextPreview, SearchInput, SideMenu } from './components'
 import { InfiniteScroll } from 'components/BasicComponents'
-import UploadModal from 'routes/SearchPage/containers/UploadModalContainer'
-import TextPreviewModal from 'routes/SearchPage/containers/TextPreviewModalContainer'
+import UploadContainer from 'routes/SearchPage/containers/UploadModalContainer'
+import TextPreviewContainer from 'routes/SearchPage/containers/TextPreviewModalContainer'
+import ImagePreviewContainer from 'routes/SearchPage/containers/ImagePreviewContainer'
 
 import { cyan100, cyan300, cyan400 } from 'material-ui/styles/colors'
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz'
@@ -24,17 +25,18 @@ class Search extends Component {
     timeoutId = null
 
     componentDidMount() {
-        const { setPageTitle, setAppHeader, loadTags, performSearch, searchQuery, setQueryFromGetParam, setQuery } = this.props
+        const { setPageTitle, setAppHeader, loadTags, search, searchQuery, setQueryFromGetParam, setQuery, localization } = this.props
 
-        setPageTitle('Search')
+        setPageTitle(localization.searchPage.pageTitle)
         setAppHeader({
-            left: () => <Desktop>Search</Desktop>,
+            left: () => <Desktop>{localization.searchPage.pageTitle}</Desktop>,
             center: (state) => {
                 return (
                     <SearchInput
                         setQuery={setQuery}
                         query={state['searchPage'].searchQuery}
-                        performSearch={performSearch}
+                        search={search}
+                        localization={localization}
                     />)
             }
         })
@@ -49,11 +51,10 @@ class Search extends Component {
 
     render() {
         const {
+            search,
             searchView,
             fetching,
-            hits,
             searchQuery,
-            performSearch,
             hasMore,
             scrolledDown,
             setScrolledDown,
@@ -61,9 +62,6 @@ class Search extends Component {
             currentPage,
             mode,
             toggleUploadModal,
-            toggleImagePreview,
-            isImagePreviewOpen,
-            imagePreviewUrl,
             setAppHeader,
             performSearchByQuery,
             performSearchBySize,
@@ -71,7 +69,8 @@ class Search extends Component {
             performSearchByShow,
             performSearchByTag,
             setSearchResultView,
-            allTags
+            allTags,
+            localization
          } = this.props
 
         return (
@@ -96,6 +95,7 @@ class Search extends Component {
                             setSearchResultView={setSearchResultView}
                             searchView={searchView}
                             allTags={allTags}
+                            localization={localization}
                         />
                     </div>
                 </Desktop>
@@ -104,20 +104,13 @@ class Search extends Component {
                         (matches) => {
                             return (<div style={{ marginLeft: matches ? '200px' : '0', height: '100%', overflowY: 'auto', backgroundColor: 'rgba(0,0,0,0.05)' }}
                                 ref={(container) => { this.containerNode = container }}>
-                                <SearchResultContainer
-                                    searchView={searchView}
-                                    fetching={fetching}
-                                    hits={hits}
-                                    searchQuery={searchQuery}
-                                    toggleImagePreview={toggleImagePreview}
-                                    performSearchByQuery={performSearchByQuery}
-                                />
+                                <SearchResults searchView={searchView} />
                                 {this.containerNode && <InfiniteScroll
                                     anchorEl={this.containerNode}
                                     currentPage={currentPage}
                                     threshold={100}
                                     loadMore={(newPage) => {
-                                        performSearch(newPage, searchQuery)
+                                        search(newPage, searchQuery)
                                     }}
                                     hasMore={hasMore}
                                     onScrollDown={(isFirstPage) => setScrolledDown(!isFirstPage)}
@@ -136,9 +129,9 @@ class Search extends Component {
                         </FloatingActionButton>
                     </div>
                 </div>
-                <UploadModal />
-                <ImagePreview visible={isImagePreviewOpen} imageUrl={imagePreviewUrl} toggle={toggleImagePreview} />
-                <TextPreviewModal />
+                <UploadContainer />
+                <ImagePreviewContainer />
+                <TextPreviewContainer />
             </div>
         )
     }
@@ -157,24 +150,22 @@ Search.propTypes = {
     hasMore: React.PropTypes.bool.isRequired,
 
     searchQuery: React.PropTypes.string.isRequired,
-    hits: React.PropTypes.object.isRequired,
 
     loadTags: React.PropTypes.func.isRequired,
     allTags: React.PropTypes.array.isRequired,
 
     toggleUploadModal: React.PropTypes.func.isRequired,
 
-    toggleImagePreview: React.PropTypes.func.isRequired,
-    isImagePreviewOpen: React.PropTypes.bool.isRequired,
-    imagePreviewUrl: React.PropTypes.string.isRequired,
-
     setQuery: React.PropTypes.func.isRequired,
+    search: React.PropTypes.func.isRequired,
     performSearchByQuery: React.PropTypes.func.isRequired,
     performSearchBySize: React.PropTypes.func.isRequired,
     performSearchByWhen: React.PropTypes.func.isRequired,
     performSearchByShow: React.PropTypes.func.isRequired,
     performSearchByTag: React.PropTypes.func.isRequired,
-    setSearchResultView: React.PropTypes.func.isRequired
+
+    setSearchResultView: React.PropTypes.func.isRequired,
+    localization: React.PropTypes.object.isRequired
 }
 
 export default Search

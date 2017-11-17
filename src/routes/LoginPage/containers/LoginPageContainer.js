@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { changePassword, changeEmail, performLogin } from '../modules/LoginPage'
+import { stateValueExtractor } from 'utils/'
 import Login from 'components/Login'
 
 const mapDispatchToProps = {
@@ -14,7 +15,8 @@ const mapStateToProps = (state) => {
     password: state['login'].password,
     fetching: state['login'].fetching,
     emailError: state['login'].emailError,
-    passwordError: state['login'].passwordError
+    passwordError: state['login'].passwordError,
+    localization: stateValueExtractor.getLocalization(state)
   })
 }
 

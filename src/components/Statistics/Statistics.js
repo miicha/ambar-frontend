@@ -40,14 +40,14 @@ const ChartCard = ({ children }) => {
 class Statistics extends Component {
 
     componentDidMount() {
-        const { loadStatistics, setPageTitle, setAppHeader, mode } = this.props
-        setPageTitle('Statistics')
-        setAppHeader({left: () => 'Statistics'})
+        const { loadStatistics, setPageTitle, setAppHeader, localization } = this.props
+        setPageTitle(localization.statisticsPage.pageTitle)
+        setAppHeader({left: () => localization.statisticsPage.pageTitle})
         loadStatistics()
     }
 
     render() {
-        const { fetching, data, mode } = this.props
+        const { fetching, data, localization } = this.props
 
         const chartCardStyle = { display: 'flex', minWidth: '50%', maxWidth: '100%' }
 
@@ -58,18 +58,18 @@ class Statistics extends Component {
                         <div style={{ display: 'flex', width: '100%' }}>
                             <Paper zDepth={1} className={classes.statisticsCard}>
                                 <Card>
-                                    <CardTitle title={"Summary"} />
+                                    <CardTitle title={localization.statisticsPage.summaryLabel} />
                                     <CardText style={{ paddingTop: "0" }} >
                                         <p style={{ marginTop: 0 }}>
-                                            Files ready for search:&nbsp;
+                                        {localization.statisticsPage.filesCountLabel}:&nbsp;
                                                     <b>{data.procTotal.totalCount} ({files.formatFileSize(data.procTotal.sizeDataInBytes.sum)})</b>
                                         </p>
                                         <p>
-                                            Average file size:&nbsp;
+                                        {localization.statisticsPage.averageFileSizeLabel}:&nbsp;
                                                     <b>{files.formatFileSize(data.procTotal.sizeDataInBytes.avg)}</b>
                                         </p>
                                         <p>
-                                            Maximum file size:&nbsp;
+                                        {localization.statisticsPage.maximumFileSizeLabel}:&nbsp;
                                                     <b>{files.formatFileSize(data.procTotal.sizeDataInBytes.max)}</b>
                                         </p>
                                     </CardText>
@@ -77,12 +77,12 @@ class Statistics extends Component {
                             </Paper>
                         </div>
                         <ChartCard>
-                            <StatisticsCard title='Content Types'>
+                            <StatisticsCard title={localization.statisticsPage.contentTypesLabel}>
                                 <ContentTypeChart data={data.contentType} />
                             </StatisticsCard>
                         </ChartCard>
                         <ChartCard>
-                            <StatisticsCard title='Processing Rate'>
+                            <StatisticsCard title={localization.statisticsPage.processingRateLabel}>
                                 <ProcessingRateChart data={data.procRate} />
                             </StatisticsCard>
                         </ChartCard>
@@ -90,12 +90,11 @@ class Statistics extends Component {
                 }
                 {!fetching && data.procTotal.totalCount === 0 &&
                     <div className={classes.statisticsCardsContainer}>
-                        <StatisticsCard title='No documents - No statistics'>
+                        <StatisticsCard title={localization.statisticsPage.emptyStatisticsLabel}>
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <img style={{ maxHeight: '150px' }} src='/animated-owl.gif' alt='Oops' />
                             </div>
-                            <p>Oops, your Ambar is empty...</p>
-                            {mode === 'cloud' && <p>Upload files manually on <Link to='/' className={classes.link}>Search Page</Link> or integrate your <Link to='/account' className={classes.link}>Dropbox account</Link></p>}
+                            <p>{localization.statisticsPage.emptyStatisticsDescriptionLabel}</p>                            
                         </StatisticsCard>
                     </div>
                 }
@@ -109,7 +108,7 @@ Statistics.propTypes = {
     data: React.PropTypes.object.isRequired,
     loadStatistics: React.PropTypes.func.isRequired,
     setPageTitle: React.PropTypes.func.isRequired,
-    mode: React.PropTypes.string.isRequired
+    localization: React.PropTypes.object.isRequired
 }
 
 export default Statistics

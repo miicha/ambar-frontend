@@ -18,6 +18,7 @@ export const performSignup = () => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+        const localization = stateValueExtractor.getLocalization(getState())
 
         dispatch(changeField('fetching', true))
         dispatch(changeField('nameError', ''))
@@ -31,15 +32,15 @@ export const performSignup = () => {
         }
 
         if (!signupData.name) {
-            dispatch(changeField('nameError', 'Name is required'))    
+            dispatch(changeField('nameError', localization.signupPage.nameRequiredLabel))    
             isValid = false        
         }
 
         if (!signupData.email) {
-            dispatch(changeField('emailError', 'Email is required'))
+            dispatch(changeField('emailError', localization.signupPage.emailRequiredLabel))
             isValid = false
         } else if (!validators.isValidEmail(signupData.email)) {
-            dispatch(changeField('emailError', 'Email address is invalid'))
+            dispatch(changeField('emailError', localization.signupPage.emailAddressInvalidLabel))
             isValid = false
         }
 

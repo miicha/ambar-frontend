@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { changePassword, changePasswordConfirmation, performPasswordSet, checkThatLinkIsValid } from '../modules/SetPasswordPage'
+import { stateValueExtractor } from 'utils/'
 import SetPassword from 'components/SetPassword'
 
 const mapDispatchToProps = {
@@ -16,7 +17,8 @@ const mapStateToProps = (state) => {
     passwordConfirmation: state['setPassword'].passwordConfirmation,
     fetching: state['setPassword'].fetching,
     passwordError: state['setPassword'].passwordError,
-    passwordConfirmationError: state['setPassword'].passwordConfirmationError
+    passwordConfirmationError: state['setPassword'].passwordConfirmationError,
+    localization: stateValueExtractor.getLocalization(state)
   })
 }
 

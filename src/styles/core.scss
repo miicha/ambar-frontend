@@ -1,3 +1,4 @@
+
 :global {
     
   // Some best-practice CSS that's useful for most apps
@@ -17,17 +18,5 @@
   *:before,
   *:after {
     box-sizing: inherit;
-  }
-
-  @media  (max-height: 600px ) {
-    div#linkedchat-button {
-      display: none;
-    }
-  }
-  
-  @media (max-width: 768px){
-    div#linkedchat-button {
-      display: none;
-    }
-  }
+  }  
 }

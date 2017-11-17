@@ -10,15 +10,15 @@ import classes from './ResetPassword.scss'
 
 export class ResetPassword extends React.Component {
   componentDidMount() {
-    const {setPageTitle} = this.props
-    setPageTitle('Reset Password')
+    const { setPageTitle, localization } = this.props
+    setPageTitle(localization.resetPasswordPage.pageTitle)
 
     if (this.refs.emailInputField) {
       this.refs.emailInputField.focus()
     }
 
     const email = this.props.location.query.email
-    const {changeEmail} = this.props
+    const { changeEmail } = this.props
 
     if (email) {
       changeEmail(email)
@@ -31,28 +31,30 @@ export class ResetPassword extends React.Component {
       performPasswordReset,
       email,
       changeEmail,
-      error} = this.props
+      error,
+      localization
+     } = this.props
 
     return (<AuthPageTemplate>
       <CardText style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-        <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>Reset Password</h2>        
+        <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>{localization.resetPasswordPage.pageTitle}</h2>
         <TextField
           fullWidth={true}
-          hintText="Your Account Email"
+          hintText={localization.resetPasswordPage.emailLabel}
           value={email}
           disabled={fetching}
           ref='emailInputField'
           errorText={error}
           onKeyPress={(target) => { if (target.charCode === 13) { performPasswordReset() } }}
           onChange={(event, value) => changeEmail(value)}
-        />        
+        />
       </CardText>
       <CardText style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingTop: '0' }}>
         <RaisedButton
           secondary={true}
           fullWidth={true}
           disabled={fetching}
-          label='Reset'
+          label={localization.resetPasswordPage.resetLabel}
           onTouchTap={() => performPasswordReset()}
         />
       </CardText>

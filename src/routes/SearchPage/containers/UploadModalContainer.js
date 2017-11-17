@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { stateValueExtractor } from 'utils/'
 
 import {
   toggleUploadModal,
@@ -20,7 +21,8 @@ const mapStateToProps = (state, ownProps) => {
   return ({ 
     fetching: state['searchPage'].isFilesUploading,
     open: state['searchPage'].isUploadModalOpen,
-    filesToUpload: state['searchPage'].filesToUpload
+    filesToUpload: state['searchPage'].filesToUpload,
+    localization: stateValueExtractor.getLocalization(state)
   })
 }
 

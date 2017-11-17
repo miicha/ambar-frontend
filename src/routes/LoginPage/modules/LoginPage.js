@@ -11,6 +11,7 @@ export const performLogin = (nextUrl = '/') => {
 
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+        const localization = stateValueExtractor.getLocalization(getState())
 
         dispatch(changeField('fetching', true))
         dispatch(changeField('emailError', ''))        
@@ -22,11 +23,11 @@ export const performLogin = (nextUrl = '/') => {
         }        
 
         if (!loginData.email) {
-            dispatch(changeField('emailError', 'Email is requried'))           
+            dispatch(changeField('emailError', localization.loginPage.emailRequiredLabel))           
         }
 
         if (!loginData.password) {
-            dispatch(changeField('passwordError', 'Password is requried'))            
+            dispatch(changeField('passwordError', localization.loginPage.passwordRequiredLabel))            
         }
 
         if (!loginData.password || !loginData.email) {

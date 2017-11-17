@@ -1,14 +1,12 @@
 import { connect } from 'react-redux'
-
-import {  
-  closeModal
-} from '../modules/TextPreviewModal'
+import { stateValueExtractor } from 'utils/'
+import { closeModal } from '../modules/TextPreviewModal'
 
 import {
     performSearchByPathToFile,
     performSearchByAuthor,
     performSearchByNamedEntity
-  } from '../modules/SearchPage'
+  } from '../modules/SearchReducer'
 
 import TextPreview from 'components/Search/components/TextPreview'
 
@@ -26,7 +24,7 @@ const mapStateToProps = (state, ownProps) => {
     fileId: state['searchPage'].textPreviewFileId,
     query: state['searchPage'].searchQuery,
     hit: state['searchPage'].textPreviewHit,
-    namedEntityTypes: state['core'].namedEntityTypes
+    localization: stateValueExtractor.getLocalization(state)
   })
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Dialog from 'material-ui/Dialog'
 import { Card, CardText } from 'material-ui/Card'
-import DetailedCardHeader from 'components/Search/components/SearchResultContainer/components/DetailedView/components/DetailedCard/components/DetailedCardHeader'
+import DetailedCardHeader from 'components/Search/components/Views/DetailedView/components/DetailedCard/components/DetailedCardHeader'
 import FlatButton from 'material-ui/FlatButton'
 import { LoadingIndicator, TagsInput } from 'components/BasicComponents'
 
@@ -16,12 +16,59 @@ const StyledListItem = (props) => <ListItem innerDivStyle={listItemStyle} {...pr
 
 const SecondaryText = (props) => <div {...props} style={{ fontSize: '11px', color: '#aaaaaa', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} />
 
-const subHeaderStyle = { fontSize: '15px', color: '#777777', lineHeight: '20px', cursor: 'default', fontFamily: 'Roboto, sans-serif' }
+const subHeaderStyle = { fontSize: '15px', color: '#777777', lineHeight: '20px', cursor: 'default', fontFamily: 'Roboto, sans-serif', textTransform: 'capitalize' }
 const MenuLabel = ({ children, ...props }) => <Subheader {...props} style={subHeaderStyle}>{children}</Subheader>
+
 
 class TextPreview extends React.Component {
     render() {
-        const { isOpened, closeModal, query, fetching, hit, performSearchByPathToFile, performSearchByAuthor, performSearchByNamedEntity, namedEntityTypes } = this.props
+        const { hit, searchByNamedEntity } = this.props
+        const types = [...new Set(hit.named_entities_distinct.map(ne => ne.type))]
+
+        return (
+            <div className={classes.textPreviewDialogBody}>
+                {types.length > 0 && <div className={classes.sidebar}>
+                    {types.map((type) => {
+                        return (
+                            <List key={type}>
+                                <MenuLabel>{type}</MenuLabel>
+                                <TagsInput
+                                    tags={hit.named_entities_distinct.filter(ne => ne.type == type)}
+                                    showRemoveIcon={false}
+                                    showAddField={false}
+                                    performSearchByTag={(tag) => searchByNamedEntity(tag)}
+                                    style={{ cursor: 'pointer', paddingLeft: '23px' }}
+                                />
+                            </List>)
+                    })}
+                </div>}
+                <div className={classes.contentPreview}>
+                    <CardText>
+                        <span dangerouslySetInnerHTML={{ __html: hit.content.highlight.text[0] }}></span>
+                    </CardText>
+                </div>
+            </div>)
+    }
+}
+
+TextPreview.propTypes = {
+    hit: React.PropTypes.object,
+    searchByNamedEntity: React.PropTypes.func.isRequired
+}
+
+class TextPreviewDialog extends React.Component {
+    render() {
+        const {
+            isOpened,
+            closeModal,
+            query,
+            fetching,
+            hit,
+            performSearchByPathToFile,
+            performSearchByAuthor,
+            performSearchByNamedEntity,
+            localization
+        } = this.props
 
         const closeModalAndRunFunction = (ctx, func) => {
             closeModal()
@@ -35,6 +82,7 @@ class TextPreview extends React.Component {
                 content={hit.content}
                 performSearchByPathToFile={(filePath) => closeModalAndRunFunction(filePath, performSearchByPathToFile)}
                 performSearchByAuthor={(author) => closeModalAndRunFunction(author, performSearchByAuthor)}
+                localization={localization}
             />
             : null
 
@@ -46,49 +94,23 @@ class TextPreview extends React.Component {
             bodyStyle={{ padding: '0' }}
         >
             {isOpened && fetching && <LoadingIndicator large />}
-            {isOpened && !fetching &&
-                <div className={classes.textPreviewDialogBody}>
-                    {hit.named_entities_distinct.length > 0 && <div className={classes.sidebar}>
-                        {namedEntityTypes.map(neType => {
-                            if (hit.named_entities_distinct.some(ne => ne.type === neType.name))
-                                return (
-                                    <List key={neType.name}>
-                                        <MenuLabel>{neType.description}</MenuLabel>
-                                        <TagsInput
-                                            tags={hit.named_entities_distinct.filter(ne => ne.type == neType.name)}
-                                            showRemoveIcon={false}
-                                            showAddField={false}
-                                            performSearchByTag={(tag) => {
-                                                closeModalAndRunFunction(tag, performSearchByNamedEntity)
-                                            }}
-                                            style={{ cursor: 'pointer', paddingLeft: '23px' }}
-                                        />
-                                    </List>)
-                        })}
-                    </div>}
-                    <div className={classes.contentPreview}>
-                        <CardText>
-                            <span dangerouslySetInnerHTML={{ __html: hit.content.highlight.text[0] }}></span>
-                        </CardText>
-                    </div>
-                </div>
-            }
+            {isOpened && !fetching && <TextPreview hit={hit} searchByNamedEntity={(tag) => closeModalAndRunFunction(tag, performSearchByNamedEntity)} />}
         </Dialog>
         )
     }
 
 }
 
-TextPreview.propTypes = {
+TextPreviewDialog.propTypes = {
     isOpened: React.PropTypes.bool.isRequired,
     fileId: React.PropTypes.string,
     query: React.PropTypes.string.isRequired,
     hit: React.PropTypes.object,
-    namedEntityTypes: React.PropTypes.array.isRequired,
     closeModal: React.PropTypes.func.isRequired,
     performSearchByPathToFile: React.PropTypes.func.isRequired,
     performSearchByAuthor: React.PropTypes.func.isRequired,
-    performSearchByNamedEntity: React.PropTypes.func.isRequired
+    performSearchByNamedEntity: React.PropTypes.func.isRequired,
+    localization: React.PropTypes.object.isRequired
 }
 
-export default TextPreview
+export default TextPreviewDialog

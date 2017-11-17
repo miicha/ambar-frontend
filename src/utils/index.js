@@ -5,8 +5,8 @@ import * as files from './files'
 import * as dom from './dom'
 import * as stateValueExtractor from './stateValueExtractor'
 import * as titles from './titles'
-import * as errors from './errors'
+import * as constants from './constants'
 import FormDataPolyfill from './formDataPolyfill'
 import analytics from './analytics'
 
-export { validators, urls, dates, files, dom, stateValueExtractor, titles, errors, analytics, FormDataPolyfill }
+export { validators, urls, dates, files, dom, stateValueExtractor, titles, constants, analytics, FormDataPolyfill }

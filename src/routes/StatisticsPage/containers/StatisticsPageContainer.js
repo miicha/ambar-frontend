@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { loadStatistics } from '../modules/StatisticsPage'
+import { stateValueExtractor } from 'utils/'
 import Statistics from 'components/Statistics'
 
 const mapDispatchToProps = {    
@@ -10,7 +11,7 @@ const mapStateToProps = (state) => {
   return ({   
     fetching: state['statisticsPage'].fetching,
     data: state['statisticsPage'].data,
-    mode: state['core'].mode
+    localization: stateValueExtractor.getLocalization(state)
   })
 }
 

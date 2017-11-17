@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { stateValueExtractor } from 'utils/'
 import {
   performLogout,
   performPasswordChange,
@@ -48,7 +49,8 @@ const mapStateToProps = (state) => {
     showRemoveUserAccountDialog: state['accountPage'].showRemoveUserAccountDialog,
     dropboxCrawler: state['accountPage'].dropboxCrawler,
     isDefaultUser: state['accountPage'].isDefaultUser,
-    auth: state['core'].auth
+    auth: state['core'].auth,
+    localization: stateValueExtractor.getLocalization(state)
   })
 }
 

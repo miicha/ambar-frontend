@@ -18,14 +18,15 @@ const ChangePasswordCard = ({
 	newPasswordConfirmation,
 	newPasswordConfirmationError,
 	changeNewPasswordConfirmation,
-	performPasswordChange }) => (
+	performPasswordChange,
+	localization }) => (
 		<Paper zDepth={1} className={classes.accountCard}>
 			<Card>
-				<CardTitle title='Change Password' />
+				<CardTitle title={localization.accountPage.changePasswordLabel} />
 				<CardText style={{ paddingTop: '0', height: '170px' }}>
 					<div style={{ display: 'flex', flexDirection: 'column' }}>
 						<TextField
-							hintText="Old Password"
+							hintText={localization.accountPage.oldPasswordLabel}
 							type='password'
 							disabled={fetching}
 							value={oldPassword}
@@ -34,7 +35,7 @@ const ChangePasswordCard = ({
 						/>
 						<div>
 							<TextField
-								hintText="New Password"
+								hintText={localization.accountPage.newPasswordLabel}
 								type='password'
 								disabled={fetching}
 								value={newPassword}
@@ -45,7 +46,7 @@ const ChangePasswordCard = ({
 						</div>
 						<div>
 							<TextField
-								hintText="Confirm New Password"
+								hintText={localization.accountPage.newPasswordConfirmationLabel}
 								type='password'
 								disabled={fetching}
 								value={newPasswordConfirmation}
@@ -58,7 +59,7 @@ const ChangePasswordCard = ({
 				</CardText>
 				<CardActions>
 					<RaisedButton
-						label="Change Password"
+						label={localization.accountPage.performPasswordChangeLabel}
 						primary={true}
 						disabled={fetching}
 						onTouchTap={performPasswordChange}

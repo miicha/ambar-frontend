@@ -28,7 +28,8 @@ class MainLayout extends Component {
             toggleRateUsModal,
             auth,
             performLogout,
-            state
+            state,
+            localization
         } = this.props
 
         return (
@@ -53,6 +54,7 @@ class MainLayout extends Component {
                             allowedRoutes={allowedRoutes} 
                             auth={auth}
                             performLogout={performLogout}
+                            localization={localization}
                         />}
                         iconElementLeft={<div style={{ display: 'flex', flexDirection: 'row' }}>
                             {mode !== 'ee' && <MediaQuery query='(min-width: 1024px)'>

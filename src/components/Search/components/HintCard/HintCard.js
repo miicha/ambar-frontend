@@ -4,87 +4,67 @@ import EmptyCard from '../EmptyCard'
 import classes from './HintCard.scss'
 
 const HintCard = (props) => {
-    const { title, description, performSearchByQuery } = props
+    const { title, description, performSearchByQuery, localization } = props
 
-    const hintText = (<div><p>Try these tips to refine your search</p>
+    const hintText = (<div><p>{localization.searchPage.refineTipsLabel}</p>
         <ul>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('*') }}>
                 *
-                    </span> - show all files
-                </li>
-            <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John') }}>
-                John
-                    </span> - search for "John" word in file content, fullname and author
-                </li>
+                    </span> - {localization.searchPage.allFilesQueryLabel}
+            </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John Smith') }}>
                 John Smith
-                    </span> - search for both "John" and "Smith" words in file content, fullname and author
-                </li>
+                    </span> - {localization.searchPage.simpleQueryLabel}
+            </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('"John Smith"') }}>
                 "John Smith"
-                    </span> - search for "John Smith" phrase in file content, fullname and author
+                    </span> - {localization.searchPage.pharseQueryLabel}
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('"John Smith"~10') }}>
                 "John Smith"~10
-                    </span> - search for both "John" and "Smith" words with maximum distance of 10 words in file content, fullname and author
+                    </span> - {localization.searchPage.pharseQueryWithDistanceLabel}
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('John~3') }}>
                 John~3
-                    </span> - fuzzy search for word "John" in all files with maximum of 3 replacements
+                    </span> - {localization.searchPage.fuzzyQueryLabel}
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.txt') }}>
                 filename:*.txt
-                    </span> - search for ".txt" in file fullname, can be combined with other queries (examples:&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.pdf') }}>*.pdf</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.doc*') }}>*.doc*</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('filename:*.rtf') }}>*.rtf</span>
-                )
+                    </span> - {localization.searchPage.filenameQueryLabel}                
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size>1M') }}>
                 size>1M
-                    </span> - search for all files larger than 1 MB, can be combined with other queries (available options are:&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size<1M') }}>size&lt;1M</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('size>100K') }}>size&gt;100K</span>
-                )
+                    </span> - {localization.searchPage.sizeQueryLabel}
                 </li>
             <li><span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:today') }}>
                 when:today
-                    </span> - search for all files modified today (available options are:&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:today') }}>today</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:yesterday') }}>yesterday</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thisweek') }}>thisweek</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thismonth') }}>thismonth</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('when:thisyear') }}>thisyear</span>
-                )
+                    </span> - {localization.searchPage.whenQueryLabel}
                 </li>
             <li>
                 <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('author:*') }}>
                     author:*
-                </span> - search only in file author field, can be combined with other queries
+                </span> - {localization.searchPage.authorQueryLabel}
             </li>
             <li>
                 <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('tags:ocr,ui-upload') }}>
                     tags:ocr,ui-upload
-                </span> - search for files tagged with ocr and ui-upload tag
+                </span> - {localization.searchPage.tagsQueryLabel}
             </li>
             <li>
                 <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('entities:"hello@ambar.cloud"') }}>
                     entities:"hello@ambar.cloud"
-                </span> - search for files containing "hello@ambar.cloud" named entity 
+                </span> - {localization.searchPage.entitiesQueryLabel}
             </li>
             <li>
                 <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:removed') }}>
                     show:removed
-                </span> - search in removed files (available options are:&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:removed') }}>removed</span>,&nbsp;
-                    <span className={classes.clickableSpan} onTouchTap={() => { performSearchByQuery('show:all') }}>all</span>
-                )
+                </span> - {localization.searchPage.removedQueryLabel}
             </li>
         </ul>
     </div>)
 
     const emailText = (<p>
-        Have any questions? <a className={classes.link} href='mailto:hello@ambar.cloud'>Drop us a message</a>
+        {localization.searchPage.haveQuestionsLabel}&nbsp;<a className={classes.link} href='mailto:hello@ambar.cloud'>{localization.searchPage.dropMessageLabel}</a>
     </p>)
 
     const textElement = (<div>
@@ -103,7 +83,8 @@ const HintCard = (props) => {
 HintCard.propTypes = {
     title: React.PropTypes.string.isRequired,
     description: React.PropTypes.object.isRequired,
-    performSearchByQuery: React.PropTypes.func.isRequired
+    performSearchByQuery: React.PropTypes.func.isRequired,
+    localization: React.PropTypes.object.isRequired
 }
 
 export default HintCard

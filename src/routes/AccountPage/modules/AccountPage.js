@@ -11,6 +11,7 @@ export const performPasswordChange = () => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+        const localization = stateValueExtractor.getLocalization(getState())
 
         const changePasswordData = {
             password: getState()['accountPage'].oldPassword,
@@ -25,23 +26,23 @@ export const performPasswordChange = () => {
         let isValid = true
 
         if (!changePasswordData.password) {
-            dispatch(changeField('oldPasswordError', 'Field is required'))
+            dispatch(changeField('oldPasswordError', localization.accountPage.fieldRequiredLabel))
             isValid = false
         }
 
         if (!changePasswordData.newPassword) {
-            dispatch(changeField('newPasswordError', 'Field is required'))
+            dispatch(changeField('newPasswordError', localization.accountPage.fieldRequiredLabel))
             isValid = false
         } else if (!validators.isStrongPassword(changePasswordData.newPassword)) {
-            dispatch(changeField('newPasswordError', 'Password is too weak'))
+            dispatch(changeField('newPasswordError', localization.accountPage.weakPasswordLabel))
             isValid = false
         }
 
         if (!changePasswordData.newPasswordConfirmation) {
-            dispatch(changeField('newPasswordConfirmationError', 'Field is required'))
+            dispatch(changeField('newPasswordConfirmationError', localization.accountPage.fieldRequiredLabel))
             isValid = false
         } else if (changePasswordData.newPassword !== changePasswordData.newPasswordConfirmation) {
-            dispatch(changeField('newPasswordConfirmationError', 'Passwords are not equal'))
+            dispatch(changeField('newPasswordConfirmationError', localization.accountPage.differentPasswordsLabel))
             isValid = false
         }
 
@@ -72,7 +73,7 @@ export const performPasswordChange = () => {
                     dispatch(changeField('oldPassword', ''))
                     dispatch(changeField('newPassword', ''))
                     dispatch(changeField('newPasswordConfirmation', ''))
-                    dispatch(showInfo('Password successfully changed'))
+                    dispatch(showInfo(localization.accountPage.passwordChangedLabel))
                     analytics().event('ACCOUNT.PASSWORD_CHANGED')
                 }
             })
@@ -298,6 +299,7 @@ export const changeOldPassword = (value) => changeField('oldPassword', value)
 
 export const changeNewPassword = (value) => {
     return (dispatch, getState) => {
+        const localization = stateValueExtractor.getLocalization(getState())
         dispatch(changeField('newPassword', value))
 
         if (!value) {
@@ -305,27 +307,27 @@ export const changeNewPassword = (value) => {
         }
 
         if (!validators.doesPasswordHaveOneDigit(value)) {
-            dispatch(changeField('newPasswordError', `Add at least one digit [0-9]`))
+            dispatch(changeField('newPasswordError', localization.accountPage.addDigitsLabel))
             return
         }
 
         if (!validators.doesPasswordHaveOneLowerChar(value)) {
-            dispatch(changeField('newPasswordError', `Add at least one lower-case char [a-z]`))
+            dispatch(changeField('newPasswordError', localization.accountPage.addLowerCaseCharLabel))
             return
         }
 
         if (!validators.doesPasswordHaveOneUpperChar(value)) {
-            dispatch(changeField('newPasswordError', `Add at least one upper-case char [A-Z]`))
+            dispatch(changeField('newPasswordError', localization.accountPage.addUpperCaseCharLabel))
             return
         }
 
         if (!validators.doesPasswordHaveMinLength(value)) {
-            dispatch(changeField('newPasswordError', `Password should be at least 8 characters long`))
+            dispatch(changeField('newPasswordError', localization.accountPage.tooShortPasswordLabel))
             return
         }
 
         if (!validators.isStrongPassword(value)) {
-            dispatch(changeField('newPasswordError', 'Password is too weak'))
+            dispatch(changeField('newPasswordError', localization.accountPage.weakPasswordLabel))
             return
         }
 
@@ -337,13 +339,14 @@ export const changeNewPasswordConfirmation = (value) => {
     return (dispatch, getState) => {
         dispatch(changeField('newPasswordConfirmation', value))
         const newPassword = getState()['accountPage'].newPassword
+        const localization = stateValueExtractor.getLocalization(getState())
 
         if (!value || !newPassword) {
             return
         }
 
         if (value !== newPassword) {
-            dispatch(changeField('newPasswordConfirmationError', 'Passwords are not equal'))
+            dispatch(changeField('newPasswordConfirmationError', localization.accountPage.differentPasswordsLabel))
         } else {
             dispatch(changeField('newPasswordConfirmationError', ''))
         }

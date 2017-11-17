@@ -10,9 +10,9 @@ import classes from './SetPassword.scss'
 
 export class SetPassword extends React.Component {
   componentDidMount() {
-    const {setPageTitle} = this.props
-    setPageTitle('Set Password')
-    
+    const { setPageTitle, localization } = this.props
+    setPageTitle(localization.setPasswordPage.pageTitle)
+
     if (this.refs.passwordInputField) {
       this.refs.passwordInputField.focus()
     }
@@ -33,26 +33,23 @@ export class SetPassword extends React.Component {
       changePassword,
       changePasswordConfirmation,
       passwordError,
-      passwordConfirmationError } = this.props
-
-    const passwordHint = <div>
-      <div>Minimum password length is 8 symbols</div>
-      <div>Password should contain at least 1 uppercase letters, 1 digit, 1 letter</div>
-    </div>
+      passwordConfirmationError,
+      localization
+    } = this.props
 
     return (<AuthPageTemplate>
       <CardText style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-        <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>Set Password</h2>
+        <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>{localization.setPasswordPage.pageTitle}</h2>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <TextField
-            hintText="Email"
+            hintText={localization.setPasswordPage.emailLabel}
             value={email}
             disabled={true}
             onChange={(event, value) => changeEmail(value)}
-          />          
+          />
           <div>
             <TextField
-              hintText="Password"
+              hintText={localization.setPasswordPage.passwordLabel}
               type='password'
               ref='passwordInputField'
               disabled={fetching}
@@ -65,7 +62,7 @@ export class SetPassword extends React.Component {
           </div>
           <div>
             <TextField
-              hintText="Password Confirmation"
+              hintText={localization.setPasswordPage.passwordConfirmationLabel}
               type='password'
               disabled={fetching}
               value={passwordConfirmation}
@@ -82,7 +79,7 @@ export class SetPassword extends React.Component {
           secondary={true}
           fullWidth={true}
           disabled={fetching}
-          label='Submit'
+          label={localization.setPasswordPage.setPasswordLabel}
           onTouchTap={() => performPasswordSet()}
         />
       </CardText>

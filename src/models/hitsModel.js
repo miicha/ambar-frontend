@@ -15,3 +15,14 @@ export const fromApi = (resp) => {
 export const contentHighlightFromApi = (resp) => {
     return resp.highlight
 }
+
+export const getHit = (state, fileId) => {
+    const hit = state.hits.get(fileId)
+    return hit
+}
+
+export const updateHits = (state, fileId, hit) => {
+    const newState = { ...state, hits: new Map(state.hits) }
+    newState.hits.set(fileId, hit)
+    return newState
+}

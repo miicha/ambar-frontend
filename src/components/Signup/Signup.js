@@ -12,8 +12,8 @@ import classes from './Signup.scss'
 
 export class Signup extends React.Component {
   componentDidMount() {
-    const { setPageTitle, tryToIdentifyUser, location } = this.props
-    setPageTitle('Ambar Signup')    
+    const { setPageTitle, tryToIdentifyUser, location, localization } = this.props
+    setPageTitle(localization.signupPage.pageTitle)
     tryToIdentifyUser(location.query.id)
 
     if (this.refs.emailInputField) {
@@ -33,14 +33,16 @@ export class Signup extends React.Component {
       changeName,
       changeLangAnalyzer,
       nameError,
-      emailError } = this.props
+      emailError,
+      localization 
+    } = this.props
 
     return (<AuthPageTemplate>
       <CardText style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', paddingBottom: '0' }}>
-        <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>Signup</h2>
+        <h2 style={{ textAlign: 'center', color: '#00acc1', marginTop: 0 }}>{localization.signupPage.pageTitle}</h2>
         <TextField
           fullWidth={true}
-          hintText="Email"
+          hintText={localization.signupPage.emailLabel}
           value={email}
           disabled={fetching}
           errorText={emailError}
@@ -50,7 +52,7 @@ export class Signup extends React.Component {
         />
         <TextField
           fullWidth={true}
-          hintText="Name"
+          hintText={localization.signupPage.nameLabel}
           value={name}
           disabled={fetching}
           errorText={nameError}
@@ -58,7 +60,7 @@ export class Signup extends React.Component {
           onKeyPress={(target) => { if (target.charCode === 13) { performSignup() } }}
         />
         {mode === 'cloud' && <SelectField
-          floatingLabelText="Language Analyzer"
+          floatingLabelText={localization.signupPage.langAnalyzerLabel}
           fullWidth={true}
           value={langAnalyzer}
           onChange={(event, index, value) => changeLangAnalyzer(value)}>
@@ -76,11 +78,11 @@ export class Signup extends React.Component {
           secondary={true}
           fullWidth={true}
           disabled={fetching}
-          label='Signup'
+          label={localization.signupPage.performSignupLabel}
           onTouchTap={() => performSignup()}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-          <Link className={classes.link} to="/login">Already have an account?</Link>
+          <Link className={classes.link} to="/login">{localization.signupPage.haveAccountLabel}</Link>
         </div>
       </CardText>
     </AuthPageTemplate>)
@@ -99,7 +101,8 @@ Signup.propTypes = {
   changeName: React.PropTypes.func.isRequired,
   changeLangAnalyzer: React.PropTypes.func.isRequired,
   nameError: React.PropTypes.string.isRequired,
-  emailError: React.PropTypes.string.isRequired
+  emailError: React.PropTypes.string.isRequired,
+  localization: React.PropTypes.object.isRequired,
 }
 
 export default Signup

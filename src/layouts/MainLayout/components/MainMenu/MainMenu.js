@@ -20,11 +20,11 @@ const menuItemStyle = { WebkitAppearance: 'none' }
 const selectedMenuItemStyle = { color: '#212121', fontWeight: '600' }
 
 const SEARCH_PAGE_LOCATION = '/'
-const SETTINGS_PAGE_LOCATION = '/crawlers'
+const SETTINGS_PAGE_LOCATION = '/settings'
 const STAT_PAGE_LOCATION = '/statistics'
 const ACCOUNT_PAGE_LOCATION = '/account'
 
-export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMenu, allowedRoutes, auth, performLogout }) => (
+export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMenu, allowedRoutes, auth, performLogout, localization }) => (
   <IconMenu
     iconButtonElement={<IconButton><MenuIcon color='white' /></IconButton>}
     anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
@@ -48,7 +48,7 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMe
           leftIcon={<SearchIcon />}
           innerDivStyle={innerMenuItemStyle}
           style={menuItemStyle}>
-          Search
+          {localization.mainMenu.searchLabel}
         </MenuItem>
       }
       {allowedRoutes.includes(SETTINGS_PAGE_LOCATION) &&
@@ -58,7 +58,7 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMe
           leftIcon={<SettingsIcon />}
           innerDivStyle={innerMenuItemStyle}
           style={menuItemStyle}>
-          Settings
+          {localization.mainMenu.settingsLabel}
         </MenuItem>
       }
       {allowedRoutes.includes(STAT_PAGE_LOCATION) &&
@@ -68,7 +68,7 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMe
           leftIcon={<StatisticsIcon />}
           innerDivStyle={innerMenuItemStyle}
           style={menuItemStyle}>
-          Statistics
+          {localization.mainMenu.statisticsLabel}          
         </MenuItem>
       }
       {allowedRoutes.includes(ACCOUNT_PAGE_LOCATION) &&
@@ -78,7 +78,7 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMe
           leftIcon={<AccountIcon />}
           innerDivStyle={innerMenuItemStyle}
           style={menuItemStyle}>
-          Account
+          {localization.mainMenu.accountLabel}          
         </MenuItem>
       }
       { 
@@ -89,7 +89,7 @@ export const SideMenu = ({ isOpen, currentLocation, changeLocation, toggleMainMe
             onTouchTap={() => performLogout()}            
             innerDivStyle={innerMenuItemStyle}
             style={menuItemStyle}>
-            Log Out
+            {localization.mainMenu.logOutLabel}
           </MenuItem>
         </div>
       }
@@ -104,7 +104,8 @@ SideMenu.propTypes = {
   changeLocation: React.PropTypes.func.isRequired,
   toggleMainMenu: React.PropTypes.func.isRequired,
   auth: React.PropTypes.string.isRequired,
-  performLogout: React.PropTypes.func.isRequired
+  performLogout: React.PropTypes.func.isRequired,
+  localization: React.PropTypes.object.isRequired
 }
 
 export default SideMenu

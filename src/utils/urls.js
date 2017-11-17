@@ -41,10 +41,13 @@ const init = (apiHost) => {
 
         ambarWebApiAddTagToFile: (fileId, tagType, tagName) => `${apiHost}/api/tags/${fileId}/${tagType}/${tagName}`,
         ambarWebApiDeleteTagFromFile: (fileId, tagType, tagName) => `${apiHost}/api/tags/${fileId}/${tagType}/${tagName}`,
-        ambarWebApiGetAllTags: () => `${apiHost}/api/tags`,
+        ambarWebApiGetAllTags: () => `${apiHost}/api/tags`,        
 
         ambarWebApiHideFile: (fileId) => `${apiHost}/api/files/hide/${fileId}`,
         ambarWebApiUnhideFile: (fileId) => `${apiHost}/api/files/unhide/${fileId}`,
+
+        ambarWebApiSearchTree: (query) => `${apiHost}/api/search/tree?query=${query}`,
+        ambarWebApiSearchStats: (query) => `${apiHost}/api/search/stats?query=${query}`,
 
         getParamsFromQuery: (query) => {
             if (!query) {

@@ -18,11 +18,11 @@ class SearchInput extends Component {
     }
 
     render() {
-        const { performSearch, setQuery, query } = this.props
+        const { search, setQuery, query, localization } = this.props
 
         const hintText = <span>
-            <MediaQuery query='(min-width: 1024px)'>Type query here and hit "Enter"</MediaQuery>
-            <MediaQuery query='(max-width: 1023px)'>Search</MediaQuery>
+            <MediaQuery query='(min-width: 1024px)'>{localization.searchPage.searchInputHintLabel}</MediaQuery>
+            <MediaQuery query='(max-width: 1023px)'>{localization.searchPage.pageTitle}</MediaQuery>
         </span>
 
         return (
@@ -31,7 +31,7 @@ class SearchInput extends Component {
                 ref={(container) => this.search_container = container}
             >
                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: '15px', marginRight: '3px' }}>
-                    <SearchIcon style={{ color: 'white', height: '100%' }} onTouchTap={() => performSearch(0, query)} />
+                    <SearchIcon style={{ color: 'white', height: '100%' }} onTouchTap={() => search(0, query)} />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', width: '100%' }} >
                     <TextField                        
@@ -46,7 +46,7 @@ class SearchInput extends Component {
                         value={query}                        
                         onKeyPress={(event) => {
                             if (event.charCode === 13) {
-                                performSearch(0, query)
+                                search(0, query)
                                 return
                             }
                         }}
@@ -58,7 +58,7 @@ class SearchInput extends Component {
                             setQuery(newValue)
 
                             this.timeoutId = setTimeout(() => {
-                                performSearch(0, newValue)
+                                search(0, newValue)
                             }, 500)
                         }}                        
                         underlineShow={false}                                                      
@@ -71,8 +71,9 @@ class SearchInput extends Component {
 
 SearchInput.propTypes = {
     query: React.PropTypes.string.isRequired,
-    performSearch: React.PropTypes.func.isRequired,
-    setQuery: React.PropTypes.func.isRequired
+    search: React.PropTypes.func.isRequired,
+    setQuery: React.PropTypes.func.isRequired,
+    localization: React.PropTypes.object.isRequired
 }
 
 export default SearchInput

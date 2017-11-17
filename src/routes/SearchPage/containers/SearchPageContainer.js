@@ -1,27 +1,30 @@
 import { connect } from 'react-redux'
+import { stateValueExtractor, constants } from 'utils/'
+
+import { loadTags } from '../modules/TagsReducer'
+import { toggleUploadModal } from '../modules/UploadModal'
 
 import {
-  performSearch,
-  setQuery,
   setScrolledDown,  
+  setQueryFromGetParam,
+  setSearchResultView
+} from '../modules/SearchPage'
+
+import {
+  setQuery,
+  search,
   cleanUpSearchResult,
-  loadTags,
   performSearchByQuery,
   performSearchBySize,
   performSearchByWhen,
   performSearchByShow,
-  performSearchByTag,
-  setQueryFromGetParam,
-  setSearchResultView,
-  toggleImagePreview
-} from '../modules/SearchPage'
-
-import { toggleUploadModal } from '../modules/UploadModal'
+  performSearchByTag
+} from '../modules/SearchReducer'
 
 import Search from 'components/Search'
 
 const mapDispatchToProps = {
-  performSearch,
+  search,
   performSearchByQuery,
   performSearchBySize,
   performSearchByWhen,
@@ -33,8 +36,7 @@ const mapDispatchToProps = {
   cleanUpSearchResult,
   setQueryFromGetParam,
   setQuery,
-  setSearchResultView,
-  toggleImagePreview
+  setSearchResultView
 }
 
 const mapStateToProps = (state) => {
@@ -42,16 +44,14 @@ const mapStateToProps = (state) => {
     hasMore: state['searchPage'].hasMore,
     searchQuery: state['searchPage'].searchQuery,
     fetching: state['global'].fetching,
-    hits: state['searchPage'].hits,
+    hits: Array.from(state['searchPage'].hits.values()),
+    folderHits: state['searchPage'].folderHits,
     scrolledDown: state['searchPage'].scrolledDown,
     currentPage: state['searchPage'].currentPage,
     mode: state['core'].mode,
-    isImagePreviewOpen: state['searchPage'].isImagePreviewOpen,
-    imagePreviewUrl: state['searchPage'].imagePreviewUrl,
     searchView: state['searchPage'].searchView,
     allTags: state['searchPage'].tags,
-    isTextPreviewOpen: state['searchPage'].isTextPreviewOpen,
-    textPreviewFileId: state['searchPage'].textPreviewFileId
+    localization: stateValueExtractor.getLocalization(state)    
   })
 }
 

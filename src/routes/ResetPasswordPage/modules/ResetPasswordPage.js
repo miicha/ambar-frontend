@@ -9,6 +9,7 @@ export const performPasswordReset = () => {
     return (dispatch, getState) => {
         const urls = stateValueExtractor.getUrls(getState())
         const defaultSettings = stateValueExtractor.getDefaultSettings(getState())
+        const localization = stateValueExtractor.getLocalization(getState())
 
         dispatch(changeField('fetching', true))
         dispatch(changeField('error', ''))
@@ -17,10 +18,10 @@ export const performPasswordReset = () => {
         let isValid = true
 
         if (!email) {
-            dispatch(changeField('error', 'Email is required'))
+            dispatch(changeField('error', localization.resetPasswordPage.emailRequiredLabel))
             isValid = false
         } else if (!validators.isValidEmail(email)) {
-            dispatch(changeField('error', 'Email address is invalid'))
+            dispatch(changeField('error', localization.resetPasswordPage.emailAddressInvalidLabel))
             isValid = false
         }
 

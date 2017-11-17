@@ -1,4 +1,4 @@
-import { titles, stateValueExtractor, urls, errors, analytics } from 'utils'
+import { titles, stateValueExtractor, urls, constants, analytics } from 'utils'
 import 'whatwg-fetch'
 
 const CHANGE_FIELD = 'CORE.CHANGE_FIELD'
@@ -14,6 +14,8 @@ export const loadConfig = () => {
             .then(apiUrl => dispatch(changeField('urls', urls(apiUrl))))
             .then(() => getCrawlerJsonTemplate())
             .then(crawlerJsonTemplate => dispatch(changeField('crawlerJsonTemplate', crawlerJsonTemplate)))
+            .then(() => getLocalizationsJson())
+            .then(localizations => dispatch(changeField('localizations', JSON.parse(localizations))))
             .then(() => {
                 const urls = stateValueExtractor.getUrls(getState())
                 return getWebApiInfo(urls.ambarWebApiGetInfo())
@@ -24,9 +26,9 @@ export const loadConfig = () => {
                 dispatch(changeField('mode', apiInfo.mode))
                 dispatch(changeField('version', apiInfo.version))
                 dispatch(changeField('integrations', apiInfo.integrations))
-                dispatch(changeField('showFilePreview', apiInfo.showFilePreview === 'true'))                
                 dispatch(changeField('auth', apiInfo.auth))                
-                dispatch(changeField('namedEntityTypes', apiInfo.namedEntityTypes))   
+                dispatch(changeField('lang', apiInfo.uiLang))   
+                dispatch(changeField('preserveOriginals', apiInfo.preserveOriginals))   
 
                 analytics(apiInfo.analytics.token)
                 analytics().register({ apiUrl: urls.apiHost })
@@ -69,6 +71,14 @@ const getApiUrl = () => new Promise((resolve, reject) => {
 
 const getCrawlerJsonTemplate = () => new Promise((resolve, reject) => {
     fetch('crawlerJsonTemplate.json', {
+        method: 'GET'
+    })
+        .then(resp => resolve(resp.text()))
+        .catch(err => reject(err))
+})
+
+const getLocalizationsJson = () => new Promise((resolve, reject) => {
+    fetch('localizations.json', {
         method: 'GET'
     })
         .then(resp => resolve(resp.text()))
@@ -126,7 +136,7 @@ const ACTION_HANDLERS = {
         return newState
     },
     [HANDLE_ERROR]: (state, action) => {
-        return ({ ...state, isNotificationOpen: true, fetching: false, notificationMessage: action.showErrorMessage ? action.error : errors.errorMessage, notificationReason: 'error' })
+        return ({ ...state, isNotificationOpen: true, fetching: false, notificationMessage: action.showErrorMessage ? action.error : constants.errorMessage, notificationReason: 'error' })
     },
     [SHOW_INFO]: (state, action) => {
         return ({ ...state, isNotificationOpen: true, fetching: false, notificationMessage: action.message, notificationReason: 'info' })
@@ -139,8 +149,9 @@ const ACTION_HANDLERS = {
 const initialState = {
     urls: {},
     crawlerJsonTemplate: '',
+    localizations: {},
+    lang: 'en',
     integrations: {},
-    namedEntityTypes: [],
     mode: 'ce',
     version: '0.0',
     fetching: true,

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { stateValueExtractor } from 'utils/'
 import {
   postConfigRequest,
   checkIfAllowed,
@@ -32,7 +33,8 @@ const mapStateToProps = (state, ownProps) => {
     version: state['core'].version,
     showRateUsModal: state['global'].showRateUsModal,
     auth: state['core'].auth,
-    state: state
+    state: state,
+    localization: stateValueExtractor.getLocalization(state)
   })
 }
 
