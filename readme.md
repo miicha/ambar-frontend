@@ -1,2 +1,2 @@
 useful commands before docker build:
-- ```npm run-script deploy```
+- ```npm run-script deploy:prod```
